@@ -449,16 +449,24 @@ public class BasePage {
     private long longTimeOut = GlobalConstants.LONG_TIMEOUT;
 
     /**
-     * Input a text to a text box by Name of the locator
-     * @param driver
-     * @param name
-     * @param text
+     * Inputs text into a textbox located by its name attribute.
+     *
+     * @param driver WebDriver instance
+     * @param name   name attribute of the textbox
+     * @param text   text to input
      */
     @Step("In the '{1}' field, input the value '{2}'")
     public void inputToTextBoxByName(WebDriver driver, String name, String text){
         waitElementVisible(driver, BasePageUI.TEXTBOX_BY_NAME, name);
         sendKeyToElement(driver, BasePageUI.TEXTBOX_BY_NAME,text, name);
     }
+
+    /**
+     * Get the error message of a field its name attribute
+     * @param driver WebDriver instance
+     * @param name name attribute of the textbox
+     * @return String
+     */
     @Step("Get the error message of the field {1}")
     public String getErrorMessageByName(WebDriver driver, String name){
         waitElementVisible(driver,BasePageUI.ERROR_MESSAGE_BY_NAME,name);
