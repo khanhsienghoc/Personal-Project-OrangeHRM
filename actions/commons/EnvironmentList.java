@@ -1,2 +1,5 @@
-package PACKAGE_NAME;public enum EnvironmentList {
+package commons;
+
+public enum EnvironmentList {
+    TEST, DEV
 }

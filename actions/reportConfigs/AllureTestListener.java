@@ -1,18 +1,13 @@
 package reportConfigs;
 
 import commons.BaseTest;
-import commons.GlobalConstants;
-import io.qameta.allure.Allure;
+import io.qameta.allure.Attachment;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
-
-import io.qameta.allure.Attachment;
-
-import java.io.File;
 
 public class AllureTestListener implements ITestListener {
 

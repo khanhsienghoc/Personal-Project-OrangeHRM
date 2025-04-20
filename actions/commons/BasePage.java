@@ -1,21 +1,18 @@
 package commons;
+import interfaces.BasePageUI;
 import io.qameta.allure.Step;
-import org.junit.jupiter.api.Assertions;
-import pageObject.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import pageUIsMeganto.*;
+
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Supplier;
 
 
 public class BasePage {
@@ -297,7 +294,7 @@ public class BasePage {
         action.sendKeys(getElement(driver,getDynamicXpath(locatorType,dynamicValue)), key).perform();
     }
     protected void uploadOneFile(WebDriver driver, String locatorType, String filePath){
-        getElement(driver, locatorType).sendKeys(GlobalConstants.UPLOAD_FILE);
+        getElement(driver, locatorType).sendKeys(commons.GlobalConstants.UPLOAD_FILE);
     }
 //    protected void uploadMultipleFiles(WebDriver driver, String locatorType, String...fileNames){
 //        String filePath = GlobalConstants.UPLOAD_FILE;
@@ -436,10 +433,6 @@ public class BasePage {
             e.printStackTrace();
         }
     }
-    public void openPageAtMyAccountByName(WebDriver driver,String className, String pageName){
-        waitForElementClickable(driver, BasePageUI.DYNAMIC_LINK_SIDEBAR,className,pageName);
-        clickToElement(driver,BasePageUI.DYNAMIC_LINK_SIDEBAR,className,pageName);
-    }
     public void refreshCurrentPage(WebDriver driver){
         driver.navigate().refresh();
     }
@@ -453,179 +446,25 @@ public class BasePage {
         }
         sleepInSecond(3);
     }
-    
-    @Step("Click the arrow next to the name")
-    public void clickOnProfileDropdownArrow(WebDriver driver){
-        clickToElement(driver, BasePageUI.PROFILE_DROPDOWN_ARROW);
-    }
-    @Step("Click Logout")
-    public HomePageObject clickLogout(WebDriver driver){
-        waitElementVisible(driver, BasePageUI.LOGOUT_BUTTON);
-        clickToElement(driver, BasePageUI.LOGOUT_BUTTON);
-        return PageGeneratorManager.getHomePage(driver);
-    }
-    @Step("Click on the Profile Arrow and click My Account")
-    public MyAccountObject clickMyAccountHeader(WebDriver driver){
-        clickOnProfileDropdownArrow(driver);
-        waitElementVisible(driver, BasePageUI.MY_ACCOUNT_HEADER);
-        clickToElement(driver, BasePageUI.MY_ACCOUNT_HEADER);
-        return PageGeneratorManager.getMyAccountPage(driver);
-    }
-    public HomePageObject clickLogoToHomePage(WebDriver driver){
-        waitElementVisible(driver,BasePageUI.LOGO_TO_HOMEPAGE_HYPERLINK);
-        clickToElement(driver,BasePageUI.LOGO_TO_HOMEPAGE_HYPERLINK);
-        return PageGeneratorManager.getHomePage(driver);
-    }
-    public void openURLFooter(WebDriver driver, String dynamicValues){
-        waitListElementVisible(driver, getDynamicXpath(BasePageUI.DYNAMIC_FOOTER_HYPERLINK,dynamicValues));
-        clickToElement(driver,getDynamicXpath(BasePageUI.DYNAMIC_FOOTER_HYPERLINK,dynamicValues));
-    }
-    public void inputSearchTextbox(WebDriver driver, String text){
-        waitElementVisible(driver, BasePageUI.SEARCH_TEXT_BOX);
-        sendKeyToElement(driver, BasePageUI.SEARCH_TEXT_BOX, text);
-
-    }
-    public SearchResultPageObject searchAProduct(WebDriver driver, String text){
-        inputSearchTextbox(driver, text);
-        clickSearchButton(driver);
-        return PageGeneratorManager.getSearchResult(driver);
-    }
-    public SearchResultPageObject clickSearchButton(WebDriver driver){
-        waitForElementClickable(driver,BasePageUI.SEARCH_SUBMIT_BUTTON);
-        clickToElement(driver,BasePageUI.SEARCH_SUBMIT_BUTTON);
-        return PageGeneratorManager.getSearchResult(driver);
-    }
-    public void clickToMenuHeaderLevel1 (WebDriver driver, String dynamicValues){
-        waitElementVisible(driver,BasePageUI.DYNAMIC_MENU_ONE_LEVEL_HEADER, dynamicValues);
-        moveToElement(driver, BasePageUI.DYNAMIC_MENU_ONE_LEVEL_HEADER,dynamicValues);
-        clickToElement(driver, BasePageUI.DYNAMIC_MENU_ONE_LEVEL_HEADER,dynamicValues);
-    }
-    public void clickToMenuHeaderLevel2 (WebDriver driver, String...dynamicValues){
-        waitElementVisible(driver,BasePageUI.DYNAMIC_MENU_ONE_LEVEL_HEADER, dynamicValues);
-        moveToElement(driver, BasePageUI.DYNAMIC_MENU_ONE_LEVEL_HEADER,dynamicValues);
-        moveToElement(driver, BasePageUI.DYNAMIC_MENU_TWO_LEVEL_HEADER,dynamicValues);
-        clickToElement(driver, BasePageUI.DYNAMIC_MENU_TWO_LEVEL_HEADER,dynamicValues);
-    }
-    public void clickToMenuHeaderLevel3 (WebDriver driver, String...dynamicValues){
-        waitElementVisible(driver,BasePageUI.DYNAMIC_MENU_ONE_LEVEL_HEADER, dynamicValues);
-        moveToElement(driver, BasePageUI.DYNAMIC_MENU_ONE_LEVEL_HEADER,dynamicValues);
-        moveToElement(driver, BasePageUI.DYNAMIC_MENU_TWO_LEVEL_HEADER,dynamicValues);
-        moveToElement(driver, BasePageUI.DYNAMIC_MENU_THREE_LEVEL_HEADER,dynamicValues);
-        clickToElement(driver, BasePageUI.DYNAMIC_MENU_THREE_LEVEL_HEADER,dynamicValues);
-    }
-    public int getNumberofProductInCart(WebDriver driver){
-        waitElementVisible(driver,BasePageUI.NUMBER_OF_PRODUCTS_IN_CART);
-        String text = getElementText(driver, BasePageUI.NUMBER_OF_PRODUCTS_IN_CART).trim();
-        int num = Integer.parseInt(text);
-        return num;
-    }
-    public ProductDetailPageObject clickOnAProduct(WebDriver driver, String productName){
-        waitElementVisible(driver,BasePageUI.DYNAMIC_PRODUCT_HYPERLINK, productName);
-        clickToElement(driver,BasePageUI.DYNAMIC_PRODUCT_HYPERLINK, productName);
-        return PageGeneratorManager.getProductDetail(driver);
-    }
-    public void clickAddToWishListOrAddToCompare(WebDriver driver,String productname, String addValue){
-        waitElementVisible(driver,BasePageUI.DYNAMIC_PRODUCT_HYPERLINK,productname);
-        moveToElement(driver,BasePageUI.DYNAMIC_PRODUCT_HYPERLINK,productname);
-        waitElementVisible(driver,BasePageUI.DYNAMIC_ADD_TO_WISHLIST_COMPARE,productname,addValue);
-        clickToElement(driver,BasePageUI.DYNAMIC_ADD_TO_WISHLIST_COMPARE,productname,addValue);
-
-    }
-    public String getAddProductCompareSuccessMessage(WebDriver driver){
-        waitElementVisible(driver, BasePageUI.ADD_PRODUCT_COMPARE_SUCCESS_MESSAGE);
-        return getElementText(driver, BasePageUI.ADD_PRODUCT_COMPARE_SUCCESS_MESSAGE);
-    }
-    public CompareListPageObject clickCompareListHyperlink(WebDriver driver){
-        waitElementVisible(driver, BasePageUI.ADD_PRODUCT_COMPARE_SUCCESS_MESSAGE);
-        clickToElement(driver, BasePageUI.COMPARE_LIST_HYPERLINK);
-        return PageGeneratorManager.getCompareListPage(driver);
-    }
-    public String getProductName(WebDriver driver, String productName){
-        waitElementVisible(driver,BasePageUI.DYNAMIC_PRODUCT_HYPERLINK, productName);
-        return getElementText(driver,BasePageUI.DYNAMIC_PRODUCT_HYPERLINK, productName);
-    }
-    public String getProductPrice(WebDriver driver, String productName){
-        waitElementVisible(driver,BasePageUI.DYNAMIC_PRODUCT_PRICE, productName);
-        return getElementText(driver,BasePageUI.DYNAMIC_PRODUCT_PRICE, productName);
-    }
-    public WebElement getLatestRemoveButton(WebDriver driver) {
-        WebElement removeButton = null;
-
-        for (int i = 0; i < 3; i++) { // Thử tối đa 3 lần nếu gặp lỗi stale
-            try {
-                removeButton = getElement(driver, CompareListPageUI.REMOVE_ALL_COMPARE_PRODUCT_BUTTON);
-                return removeButton; // Nếu lấy thành công, trả về ngay
-            } catch (StaleElementReferenceException e) {
-                System.out.println("Lỗi stale, thử lại lần " + (i + 1));
-            }
-        }
-
-        throw new NoSuchElementException("Không tìm thấy phần tử Remove Button sau 3 lần thử!");
-    }
-
     private long longTimeOut = GlobalConstants.LONG_TIMEOUT;
 
     /**
-     * Click to a Hyperlink by text of the locator (for example: "Create an Account", "Sign In" hyperlink)
+     * Input a text to a text box by Name of the locator
      * @param driver
-     * @param field
+     * @param name
+     * @param text
      */
-    @Step("Click to {0} link")
-    @SuppressWarnings("unchecked")
-    public <T extends BasePage> T clickToHyperlinkByText(WebDriver driver, String field){
-        waitForElementClickable(driver, BasePageUI.DYNAMIC_LINK_BY_TEXT,field);
-        clickToElement(driver, BasePageUI.DYNAMIC_LINK_BY_TEXT, field);
-        if(field == "Sign In"){
-            return (T) PageGeneratorManager.getLoginPage(driver);
-        } else if (field == "Create an Account"){
-            return (T) PageGeneratorManager.getRegisterPage(driver);
-        }
-        return (T) this;
+    @Step("In the '{1}' field, input the value '{2}'")
+    public void inputToTextBoxByName(WebDriver driver, String name, String text){
+        waitElementVisible(driver, BasePageUI.TEXTBOX_BY_NAME, name);
+        sendKeyToElement(driver, BasePageUI.TEXTBOX_BY_NAME,text, name);
+    }
+    @Step("Get the error message of the field {1}")
+    public String getErrorMessageByName(WebDriver driver, String name){
+        waitElementVisible(driver,BasePageUI.ERROR_MESSAGE_BY_NAME,name);
+        return getElementText(driver,BasePageUI.ERROR_MESSAGE_BY_NAME,name);
     }
 
-    /**
-     * Input text in a field by id of the locator (for example: field "firstname" with value "admin"
-     * @param driver
-     * @param id (input id of the locator)
-     * @param text (input the text to sendkey)
-     */
-    @Step("Input the '{1}' field with value: '{2}'")
-    public void inputToTextboxByID(WebDriver driver, String id, String text){
-        waitElementVisible(driver, BasePageUI.DYNAMIC_TEXTBOX_BY_ID, id);
-        sendKeyToElement(driver, BasePageUI.DYNAMIC_TEXTBOX_BY_ID,text, id);
-    }
-
-    /**
-     * Get the error message when the text box is empty
-     * @param driver
-     * @param id
-     * @return text
-     */
-    public String getErrorMessageForTextbox(WebDriver driver, String id){
-        waitElementVisible(driver, BasePageUI.DYNAMIC_TEXTBOX_ERROR_BY_ID,id);
-        return getElementText(driver, BasePageUI.DYNAMIC_TEXTBOX_ERROR_BY_ID, id);
-    }
-    /**
-     *Asseert Equal for the expected and actual text when leave the field empty
-     * @param expectedText
-     * @param field
-     */
-    @Step("Verify the error message for the invalid input with expected text '{1}' for the field '{2}'")
-    public void assertEqualErrorMessageForTextBox(WebDriver driver, String expectedText, String field){
-        Assertions.assertEquals(expectedText,getErrorMessageForTextbox(driver, field));
-    }
-
-    /**
-     * Assert Equals for the Page title by inputting the expected Page title
-     * @param driver
-     * @param expectedTitle
-     */
-    @Step("Assert Equals the page title to be : '{1}'")
-    public void assertPageTitle(WebDriver driver, String expectedTitle){
-        waitForPageLoad(driver);
-        sleepInSecond(5);
-        Assertions.assertEquals(expectedTitle, getPageTitle(driver));
-    }
 
 }
 
