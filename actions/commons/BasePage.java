@@ -427,10 +427,19 @@ public class BasePage {
     public void refreshCurrentPage(WebDriver driver) {
         driver.navigate().refresh();
     }
-
+    /**
+     * Get all cookies at the current page
+     * @param driver
+     * @return
+     */
     public Set<Cookie> getAllCookies(WebDriver driver) {
         return driver.manage().getCookies();
     }
+    /**
+     * Set cookies to the current page
+     * @param driver
+     * @param cookies
+     */
     public void setCookies(WebDriver driver, Set<Cookie> cookies) {
         for (Cookie cookie : cookies) {
             driver.manage().addCookie(cookie);
@@ -448,8 +457,8 @@ public class BasePage {
      */
     @Step("In the '{1}' field, input the value '{2}'")
     public void inputToTextBoxByName(WebDriver driver, String name, String text) {
-        waitElementVisible(driver, BasePageUI.TEXTBOX_BY_NAME, name);
-        sendKeyToElement(driver, BasePageUI.TEXTBOX_BY_NAME, text, name);
+        waitElementVisible(driver, BasePageUI.TEXTBOX_BY_TEXT, name);
+        sendKeyToElement(driver, BasePageUI.TEXTBOX_BY_TEXT, text, name);
     }
 
     /**
@@ -461,8 +470,8 @@ public class BasePage {
      */
     @Step("Get the error message of the field {1}")
     public String getErrorMessageByName(WebDriver driver, String name) {
-        waitElementVisible(driver, BasePageUI.ERROR_MESSAGE_BY_NAME, name);
-        return getElementText(driver, BasePageUI.ERROR_MESSAGE_BY_NAME, name);
+        waitElementVisible(driver, BasePageUI.ERROR_MESSAGE_BY_TEXTBOX_NAME, name);
+        return getElementText(driver, BasePageUI.ERROR_MESSAGE_BY_TEXTBOX_NAME, name);
     }
 
     /**
@@ -490,10 +499,9 @@ public class BasePage {
      */
     @Step("Click to {1} button")
     public void clickToButtonByText(WebDriver driver, String text){
-        waitElementVisible(driver, BasePageUI.BUTTON_BY_NAME, text);
-        clickToElement(driver, BasePageUI.BUTTON_BY_NAME, text);
+        waitElementVisible(driver, BasePageUI.BUTTON_BY_TEXT, text);
+        clickToElement(driver, BasePageUI.BUTTON_BY_TEXT, text);
     }
-
     /**
      * Check whether the success pop up shows
      * @param driver
@@ -504,7 +512,6 @@ public class BasePage {
         waitElementVisible(driver, BasePageUI.SUCCESS_SAVE_POPUP);
         return isElementDisplayed(driver, BasePageUI.SUCCESS_SAVE_POPUP);
     }
-
     /**
      * Click on Profile Dropdown
      * @param driver
@@ -514,7 +521,6 @@ public class BasePage {
         waitForElementClickable(driver, BasePageUI.PROFILE_DROPDOWN);
         clickToElement(driver, BasePageUI.PROFILE_DROPDOWN);
     }
-
     /**
      * Click on Profile Option by text
      * @param driver
@@ -524,6 +530,18 @@ public class BasePage {
     public void clickOnProfileOptionByText(WebDriver driver, String text){
         waitForElementClickable(driver, BasePageUI.PROFILE_OPTION_BY_TEXT, text);
         clickToElement(driver, BasePageUI.PROFILE_OPTION_BY_TEXT, text);
+    }
+    /**
+     * Get property of a locator by text box
+     * @param driver
+     * @param text (text of the TextBox locator)
+     * @param property (property that want to get)
+     * @return
+     */
+    @Step("Get {1} attribute the {2} textbox")
+    public String getPropertyOfTextBoxByName(WebDriver driver,String property, String text){
+        waitElementVisible(driver, BasePageUI.TEXTBOX_BY_TEXT, text);
+        return getAttributeValue(driver, BasePageUI.TEXTBOX_BY_TEXT,property,text);
     }
 }
 

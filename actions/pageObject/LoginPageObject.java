@@ -5,15 +5,11 @@ import interfaces.LoginPageUI;
 import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 
-import java.util.Objects;
-
 public class LoginPageObject extends BasePage {
     private final WebDriver driver;
-
     public LoginPageObject(WebDriver driver){
         this.driver = driver;
     }
-
     /**
      * Click to Login Button
      *
@@ -23,8 +19,14 @@ public class LoginPageObject extends BasePage {
         waitForElementClickable(driver, LoginPageUI.LOGIN_BUTTON);
         clickToElement(driver, LoginPageUI.LOGIN_BUTTON);
     }
-
-
-
-
+    /**
+     * Click 'Forgot Your Password?' Hyperlink
+     *
+     */
+    @Step("Click 'Forgot your password?'")
+    public ResetPasswordPageObject clickForgotPasswordHyperlink(){
+        waitForElementClickable(driver, LoginPageUI.FORGOT_PASSWORD_HYPERLINK);
+        clickToElement(driver, LoginPageUI.FORGOT_PASSWORD_HYPERLINK);
+        return PageGeneratorManager.getResetPassPage(driver);
+    }
 }
