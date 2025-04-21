@@ -9,4 +9,10 @@ public class PageGeneratorManager {
     public static LoginPageObject getLoginPage (WebDriver driver){
         return new LoginPageObject(driver);
     }
+    public static PIMPageObject getPIMPage (WebDriver driver){
+        return new PIMPageObject(driver);
+    }
+    public static AddEmployeePageObject getAddEmployee (WebDriver driver){
+        return new AddEmployeePageObject(driver);
+    }
 }

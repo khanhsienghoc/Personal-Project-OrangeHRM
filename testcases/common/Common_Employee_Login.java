@@ -1,0 +1,110 @@
+package common;
+
+import commons.BaseTest;
+import commons.GlobalConstants;
+import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.Cookie;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.devtools.v85.page.Page;
+import org.testng.annotations.*;
+import pageObject.*;
+
+import java.util.Set;
+
+public class Common_Employee_Login extends BaseTest {
+    @Parameters("browser")
+    @BeforeTest
+    public void beforeClass(String browserName) {
+        log.info("Pre-conditon- Step 01 - Open Browser " + browserName + " and navigate to the URL");
+
+        driver = getBrowserDriver(browserName);
+        loginPage = PageGeneratorManager.getLoginPage(driver);
+
+        username = "employee" + randomNum();
+        password = "employee123aaa@i33i2u32i";
+        firstName = "employeeFN";
+        middleName = "employeeMN";
+        lastName = "employeeLN";
+
+        log.info("Pre-conditon - Step 02 - Input username of the admin with value: " + GlobalConstants.ADMIN_USERNAME);
+        loginPage.inputToTextBoxByName(driver, "Username", GlobalConstants.ADMIN_USERNAME);
+
+        log.info("Pre-conditon - Step 03 - Input password of the admin with value: " + GlobalConstants.ADMIN_PASSWORD);
+        loginPage.inputToTextBoxByName(driver, "Password", GlobalConstants.ADMIN_PASSWORD);
+
+        log.info("Pre-conditon - Step 04 - Click Login button");
+        loginPage.clickToLoginButton();
+        homePage = PageGeneratorManager.getHomePage(driver);
+
+        log.info("Pre-conditon - Step 05 - Verify the page title");
+        Assertions.assertEquals("OrangeHRM", loginPage.getPageTitle(driver));
+
+        log.info("Pre-conditon - Step 06 - Click the PIM tab");
+        pimPage = homePage.clickToMenuByText(driver, "PIM");
+
+        log.info("Pre-conditon - Step 07 - Click Add button to add new employee");
+        pimPage.clickToButtonByText(driver, "Add");
+        getAddEmployeePage= PageGeneratorManager.getAddEmployee(driver);
+
+        log.info("Pre-conditon - Step 08 - Input Employee First Name");
+        getAddEmployeePage.InputEmployeeInformationByName("firstName", firstName);
+
+        log.info("Pre-conditon - Step 09 - Input Employee Middle Name");
+        getAddEmployeePage.InputEmployeeInformationByName("middleName", middleName);
+
+        log.info("Pre-conditon - Step 10 - Input Employee Last Name");
+        getAddEmployeePage.InputEmployeeInformationByName("lastName", lastName);
+
+        log.info("Pre-conditon - Step 11 - Click on the toggle 'Create Login Details'");
+        getAddEmployeePage.checkToCreateLoginDetailsToggle();
+
+        log.info("Pre-conditon - Step 12 - Input Username with value: " + username);
+        getAddEmployeePage.inputToTextBoxByName(driver, "Username", username);
+
+        log.info("Pre-conditon - Step 13 - Input Password and Confirm Password with value: " + password);
+        getAddEmployeePage.inputToTextBoxByName(driver, "Password", password);
+        getAddEmployeePage.inputToTextBoxByName(driver, "Confirm Password", password);
+
+        log.info("Pre-conditon - Step 14 - Click Save Button");
+        getAddEmployeePage.clickToButtonByText(driver, "Save");
+        pimPage = PageGeneratorManager.getPIMPage(driver);
+
+        log.info("Pre-conditon - Step 15 - Verify a success pop up show");
+        Assertions.assertTrue(pimPage.isSuccessPopUpShow(driver));
+
+        log.info("Pre-conditon - Step 16 - Click on Profile Options and click Logout");
+        pimPage.clickOnProfileDropdown(driver);
+        pimPage.clickOnProfileOptionByText(driver, "Logout");
+        loginPage = PageGeneratorManager.getLoginPage(driver);
+
+        log.info("Pre-conditon - Step 17 - Input username of the employee with value: " +username);
+        loginPage.inputToTextBoxByName(driver, "Username", username);
+
+        log.info("Pre-conditon - Step 18 - Input password of the employee with value: "+ password);
+        loginPage.inputToTextBoxByName(driver, "Password", password);
+
+        log.info("Pre-conditon - Step 19 - Click Login");
+        loginPage.clickToLoginButton();
+        homePage = PageGeneratorManager.getHomePage(driver);
+
+        log.info("Pre-conditon - Step 19 - Verify Page Title");
+        Assertions.assertEquals("OrangeHRM", homePage.getPageTitle(driver));
+
+        log.info("Pre-conditon - Step 20 - After login successfully, get cookies");
+        LoggedCookkies = homePage.getAllCookies(driver);
+
+    }
+    @AfterTest(alwaysRun = true)
+    public void afterTest(){
+        closeBrowserAndDriver();
+    }
+    private WebDriver driver;
+    public static String username, password;
+    private LoginPageObject loginPage;
+    private HomePageObject homePage;
+    private PIMPageObject pimPage;
+    private AddEmployeePageObject getAddEmployeePage;
+    private String firstName, middleName, lastName;
+    public static Set<Cookie> LoggedCookkies;
+
+}
