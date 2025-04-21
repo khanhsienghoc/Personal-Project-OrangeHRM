@@ -10,5 +10,5 @@ public class GlobalConstants {
     public static final String JAVA_VERSION = System.getProperty("java.version");
     public static final String ADMIN_USERNAME = "Admin";
     public static final String ADMIN_PASSWORD ="admin123";
-
+    public static final String REQUIRED_ERROR_MESSAGE = "Required";
 }
