@@ -8,4 +8,5 @@ public class BasePageUI {
     public static final String SUCCESS_SAVE_POPUP ="xpath=//div[@id='oxd-toaster_1']";
     public static final String PROFILE_DROPDOWN = "xpath=//p[@class='oxd-userdropdown-name']//parent::span//i";
     public static final String PROFILE_OPTION_BY_TEXT ="xpath=//a[text()='%s']";
+    public static final String HEADER_PAGE_BY_TEXT="xpath=//h6[text()='%s']";
 }

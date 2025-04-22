@@ -29,4 +29,14 @@ public class LoginPageObject extends BasePage {
         clickToElement(driver, LoginPageUI.FORGOT_PASSWORD_HYPERLINK);
         return PageGeneratorManager.getResetPassPage(driver);
     }
+
+    /**
+     * Get the Login failed error message
+     * @return boolean
+     */
+    @Step("Get the Failed Login error message")
+    public boolean isLoginFailedErrorMessage(){
+        waitElementVisible(driver, LoginPageUI.INVALID_CREDENTIALS_ERROR_MESSAGE);
+        return isElementDisplayed(driver, LoginPageUI.INVALID_CREDENTIALS_ERROR_MESSAGE);
+    }
 }

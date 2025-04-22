@@ -12,7 +12,10 @@ public class PageGeneratorManager {
     public static PIMPageObject getPIMPage (WebDriver driver){
         return new PIMPageObject(driver);
     }
-    public static AddEmployeePageObject getAddEmployee (WebDriver driver){
+    public static AddEmployeePageObject getAddEmployeePage(WebDriver driver){
         return new AddEmployeePageObject(driver);
+    }
+    public static ResetPasswordPageObject getResetPassPage (WebDriver driver){
+        return new ResetPasswordPageObject(driver);
     }
 }

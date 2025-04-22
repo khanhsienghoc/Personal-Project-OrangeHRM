@@ -20,7 +20,7 @@ public class Common_Employee_Login extends BaseTest {
         loginPage = PageGeneratorManager.getLoginPage(driver);
 
         username = "employee" + randomNum();
-        password = "employee123aaa@i33i2u32i";
+        password = "employee123aaa@" + randomNum();
         firstName = "employeeFN";
         middleName = "employeeMN";
         lastName = "employeeLN";
@@ -91,6 +91,12 @@ public class Common_Employee_Login extends BaseTest {
 
         log.info("Pre-conditon - Step 21 - After login successfully, get cookies");
         LoggedCookkies = homePage.getAllCookies(driver);
+
+        log.info("Pre-conditon - Step 22 - Click Profile Option");
+        pimPage.clickOnProfileDropdown(driver);
+
+        log.info("Pre-conditon - Step 22 - Click Logout");
+        pimPage.clickOnProfileOptionByText(driver, "Logout");
 
     }
     @AfterTest(alwaysRun = true)

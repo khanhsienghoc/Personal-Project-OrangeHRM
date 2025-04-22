@@ -13,20 +13,22 @@ public class ResetPasswordPageObject extends BasePage {
     }
     /**
      * Get title of the form
-     * @return
+     * @return String
      */
     @Step("Get title of Reset Password form")
     public String getTitleOfResetPassword(){
         waitElementVisible(driver, ResetPasswordUI.FORGOT_PASSWORD_TITLE);
         return getElementText(driver, ResetPasswordUI.FORGOT_PASSWORD_TITLE);
     }
+
     /**
-     * Get body text of the form
-     * @return
+     * Get the body text of the form by text
+     * @param text
+     * @return String
      */
     @Step("Get body text of Reset Password form")
-    public String getBodyTextOfResetPassword(){
-        waitElementVisible(driver, ResetPasswordUI.FORGOT_PASSWORD_BODY_TEXT);
-        return getElementText(driver, ResetPasswordUI.FORGOT_PASSWORD_BODY_TEXT);
+    public String getBodyTextOfResetPassword(String text){
+        waitElementVisible(driver, ResetPasswordUI.FORGOT_PASSWORD_BODY_BY_TEXT, text);
+        return getElementText(driver, ResetPasswordUI.FORGOT_PASSWORD_BODY_BY_TEXT, text);
     }
 }

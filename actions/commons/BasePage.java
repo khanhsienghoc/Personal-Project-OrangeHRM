@@ -499,8 +499,8 @@ public class BasePage {
      */
     @Step("Click to {1} button")
     public void clickToButtonByText(WebDriver driver, String text){
-        waitElementVisible(driver, BasePageUI.BUTTON_BY_TEXT, text);
-        clickToElement(driver, BasePageUI.BUTTON_BY_TEXT, text);
+        waitForElementClickable(driver, BasePageUI.BUTTON_BY_TEXT, text);
+        clickToElementByJavascript(driver, BasePageUI.BUTTON_BY_TEXT, text);
     }
     /**
      * Check whether the success pop up shows
@@ -555,6 +555,25 @@ public class BasePage {
         waitElementVisible(driver, BasePageUI.MENU_BY_TEXT, text);
         return isElementDisplayed(driver, BasePageUI.MENU_BY_TEXT, text);
     }
+
+    /**
+     * Get Page Header by text
+     * @param driver
+     * @param text (text of the locator)
+     * @return
+     */
+    @Step("Get the Page header of '{1}' page")
+    public String getPageHeaderByText(WebDriver driver, String text){
+        waitElementVisible(driver, BasePageUI.HEADER_PAGE_BY_TEXT, text);
+        return getElementText(driver, BasePageUI.HEADER_PAGE_BY_TEXT, text);
+    }
+    public int getListMenuTabSize(WebDriver driver, String text){
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
+        int size = getElementsSize(driver, BasePageUI.MENU_BY_TEXT, text);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(GlobalConstants.LONG_TIMEOUT));
+        return size;
+    }
+
 }
 
 
