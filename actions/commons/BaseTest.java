@@ -184,11 +184,13 @@ public class BaseTest {
             log.info(e.getMessage());
         } finally {
             try {
-                Process process = Runtime.getRuntime().exec(cmd);
-                process.waitFor();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
+                if (!cmd.isEmpty()) {
+                    Process process = Runtime.getRuntime().exec(cmd);
+                    process.waitFor();
+                } else {
+                    log.info("No valid kill command found to execute.");
+                }
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
         }
