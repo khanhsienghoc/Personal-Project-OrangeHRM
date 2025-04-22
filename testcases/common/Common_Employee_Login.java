@@ -26,10 +26,10 @@ public class Common_Employee_Login extends BaseTest {
         lastName = "employeeLN";
 
         log.info("Pre-conditon - Step 02 - Input username of the admin with value: " + GlobalConstants.ADMIN_USERNAME);
-        loginPage.inputToTextBoxByName(driver, "Username", GlobalConstants.ADMIN_USERNAME);
+        loginPage.inputToTextBoxByText(driver, "Username", GlobalConstants.ADMIN_USERNAME);
 
         log.info("Pre-conditon - Step 03 - Input password of the admin with value: " + GlobalConstants.ADMIN_PASSWORD);
-        loginPage.inputToTextBoxByName(driver, "Password", GlobalConstants.ADMIN_PASSWORD);
+        loginPage.inputToTextBoxByText(driver, "Password", GlobalConstants.ADMIN_PASSWORD);
 
         log.info("Pre-conditon - Step 04 - Click Login button");
         loginPage.clickToLoginButton();
@@ -58,11 +58,11 @@ public class Common_Employee_Login extends BaseTest {
         getAddEmployeePage.checkToCreateLoginDetailsToggle();
 
         log.info("Pre-conditon - Step 12 - Input Username with value: " + username);
-        getAddEmployeePage.inputToTextBoxByName(driver, "Username", username);
+        getAddEmployeePage.inputToTextBoxByText(driver, "Username", username);
 
         log.info("Pre-conditon - Step 13 - Input Password and Confirm Password with value: " + password);
-        getAddEmployeePage.inputToTextBoxByName(driver, "Password", password);
-        getAddEmployeePage.inputToTextBoxByName(driver, "Confirm Password", password);
+        getAddEmployeePage.inputToTextBoxByText(driver, "Password", password);
+        getAddEmployeePage.inputToTextBoxByText(driver, "Confirm Password", password);
 
         log.info("Pre-conditon - Step 14 - Click Save Button");
         getAddEmployeePage.clickToButtonByText(driver, "Save");
@@ -77,10 +77,10 @@ public class Common_Employee_Login extends BaseTest {
         loginPage = PageGeneratorManager.getLoginPage(driver);
 
         log.info("Pre-conditon - Step 17 - Input username of the employee with value: " +username);
-        loginPage.inputToTextBoxByName(driver, "Username", username);
+        loginPage.inputToTextBoxByText(driver, "Username", username);
 
         log.info("Pre-conditon - Step 18 - Input password of the employee with value: "+ password);
-        loginPage.inputToTextBoxByName(driver, "Password", password);
+        loginPage.inputToTextBoxByText(driver, "Password", password);
 
         log.info("Pre-conditon - Step 19 - Click Login");
         loginPage.clickToLoginButton();

@@ -452,13 +452,13 @@ public class BasePage {
      * Inputs text into a textbox located by its name attribute.
      *
      * @param driver WebDriver instance
-     * @param name   name attribute of the textbox
+     * @param texbox   text attribute of the textbox
      * @param text   text to input
      */
     @Step("In the '{1}' field, input the value '{2}'")
-    public void inputToTextBoxByName(WebDriver driver, String name, String text) {
-        waitElementVisible(driver, BasePageUI.TEXTBOX_BY_TEXT, name);
-        sendKeyToElement(driver, BasePageUI.TEXTBOX_BY_TEXT, text, name);
+    public void inputToTextBoxByText(WebDriver driver, String texbox, String text) {
+        waitElementVisible(driver, BasePageUI.TEXTBOX_BY_TEXT, texbox);
+        sendKeyToElement(driver, BasePageUI.TEXTBOX_BY_TEXT, text, texbox);
     }
 
     /**
@@ -505,7 +505,7 @@ public class BasePage {
     /**
      * Check whether the success pop up shows
      * @param driver
-     * @return
+     * @return boolean
      */
     @Step("Check whether the success pop up show")
     public boolean isSuccessPopUpShow(WebDriver driver){
@@ -536,12 +536,24 @@ public class BasePage {
      * @param driver
      * @param text (text of the TextBox locator)
      * @param property (property that want to get)
-     * @return
+     * @return String
      */
     @Step("Get {1} attribute the {2} textbox")
     public String getPropertyOfTextBoxByName(WebDriver driver,String property, String text){
         waitElementVisible(driver, BasePageUI.TEXTBOX_BY_TEXT, text);
         return getAttributeValue(driver, BasePageUI.TEXTBOX_BY_TEXT,property,text);
+    }
+
+    /**
+     * Check whether element displays
+     * @param driver
+     * @param text (text of the locator)
+     * @return boolean
+     */
+    @Step("Verify whether the menu tab name {1} displays")
+    public boolean isMenuTabDislaysByText(WebDriver driver, String text){
+        waitElementVisible(driver, BasePageUI.MENU_BY_TEXT, text);
+        return isElementDisplayed(driver, BasePageUI.MENU_BY_TEXT, text);
     }
 }
 
