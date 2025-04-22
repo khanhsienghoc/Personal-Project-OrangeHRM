@@ -5,7 +5,6 @@ import commons.GlobalConstants;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.devtools.v85.page.Page;
 import org.testng.annotations.*;
 import pageObject.*;
 
@@ -44,7 +43,7 @@ public class Common_Employee_Login extends BaseTest {
 
         log.info("Pre-conditon - Step 07 - Click Add button to add new employee");
         pimPage.clickToButtonByText(driver, "Add");
-        getAddEmployeePage= PageGeneratorManager.getAddEmployee(driver);
+        getAddEmployeePage= PageGeneratorManager.getAddEmployeePage(driver);
 
         log.info("Pre-conditon - Step 08 - Input Employee First Name");
         getAddEmployeePage.InputEmployeeInformationByName("firstName", firstName);
@@ -87,10 +86,10 @@ public class Common_Employee_Login extends BaseTest {
         loginPage.clickToLoginButton();
         homePage = PageGeneratorManager.getHomePage(driver);
 
-        log.info("Pre-conditon - Step 19 - Verify Page Title");
+        log.info("Pre-conditon - Step 20 - Verify Page Title");
         Assertions.assertEquals("OrangeHRM", homePage.getPageTitle(driver));
 
-        log.info("Pre-conditon - Step 20 - After login successfully, get cookies");
+        log.info("Pre-conditon - Step 21 - After login successfully, get cookies");
         LoggedCookkies = homePage.getAllCookies(driver);
 
     }

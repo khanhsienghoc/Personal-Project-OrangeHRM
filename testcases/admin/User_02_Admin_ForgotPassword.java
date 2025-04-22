@@ -7,6 +7,7 @@ import io.qameta.allure.SeverityLevel;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -36,21 +37,39 @@ public class User_02_Admin_ForgotPassword extends BaseTest {
         Assertions.assertEquals(GlobalConstants.REQUIRED_ERROR_MESSAGE, resetPasswordPage.getErrorMessageByName(driver,"Username"));
     }
     @Description("Verify placeholder of the Username field")
-    @Severity(SeverityLevel.MINOR)
+    @Severity(SeverityLevel.TRIVIAL)
     @Test
     public void Login_02_VerifyPlaceholders(){
         log.info("Login_02_VerifyPlaceholders - Step 01 - Verify the placeholder of the Username field");
         Assertions.assertEquals("Username", resetPasswordPage.getPropertyOfTextBoxByName(driver, "placeholder","Username"));
     }
     @Description("Verify navigate to Reset password page and text")
-    @Severity(SeverityLevel.BLOCKER)
+    @Severity(SeverityLevel.TRIVIAL)
     @Test
     public void Login_03_ForgotPasswordLink(){
         log.info("Login_03_ForgotPasswordLink - Step 01 - Verify the title of the Reset Password page");
         Assertions.assertEquals("Reset Password", resetPasswordPage.getTitleOfResetPassword());
 
         log.info("Login_03_ForgotPasswordLink - Step 02 - Verify the body text of the Reset Password page");
-        Assertions.assertEquals("Please enter your username to identify your account to reset your password", resetPasswordPage.getBodyTextOfResetPassword());
+        Assertions.assertEquals("Please enter your username to identify your account to reset your password", resetPasswordPage.getBodyTextOfResetPassword("Please enter your username"));
+
+        log.info("Login_03_ForgotPasswordLink - Step 03 - Input username");
+        resetPasswordPage.inputToTextBoxByName(driver, "Username", GlobalConstants.ADMIN_USERNAME);
+
+        log.info("Login_03_ForgotPasswordLink - Step 04 - Leave the UserName empty and click Reset Password");
+        resetPasswordPage.clickToButtonByText(driver,"Reset Password");
+
+        log.info("Login_03_ForgotPasswordLink - Step 05 - Verify the title when reset password link sent to email successfully");
+        Assertions.assertEquals("Reset Password link sent successfully", resetPasswordPage.getTitleOfResetPassword());
+
+        log.info("Login_03_ForgotPasswordLink - Step 06 - Verify the body text when reset password link sent to email successfully");
+        Assertions.assertEquals("A reset password link has been sent to you via email.", resetPasswordPage.getBodyTextOfResetPassword("A reset password"));
+        Assertions.assertEquals("You can follow that link and select a new password.", resetPasswordPage.getBodyTextOfResetPassword("select a new password."));
+        Assertions.assertEquals("Note:\nIf the email does not arrive, please contact your OrangeHRM Administrator.", resetPasswordPage.getBodyTextOfResetPassword("If the email does not arrive"));
+    }
+    @AfterTest
+    public void afterTest(){
+        closeBrowserAndDriver();
     }
     private WebDriver driver;
     private LoginPageObject loginPage;
