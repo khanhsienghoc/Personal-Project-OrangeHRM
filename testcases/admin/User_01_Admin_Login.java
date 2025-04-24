@@ -1,16 +1,14 @@
 package admin;
 
-import common.Common_Employee_Login;
 import commons.BaseTest;
 import commons.GlobalConstants;
-import io.qameta.allure.Severity;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.*;
 import pageObject.LoginPageObject;
 import pageObject.PageGeneratorManager;
 
-public class User01_Admin_Login extends BaseTest {
+public class User_01_Admin_Login extends BaseTest {
     @Parameters("browser")
     @BeforeClass
     public void beforeClass(String browserName){

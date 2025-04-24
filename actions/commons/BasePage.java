@@ -415,7 +415,6 @@ public class BasePage {
         } catch (Exception e) {
             return false;
         }
-
     }
     public void sleepInSecond(long time) {
         try {

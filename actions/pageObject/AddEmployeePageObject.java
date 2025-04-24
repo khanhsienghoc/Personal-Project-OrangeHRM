@@ -12,7 +12,6 @@ public class AddEmployeePageObject extends BasePage {
         this.driver = driver;
 
     }
-
     /**
      * Input the text box by Name
      * @param name (name of the locator)
@@ -23,17 +22,12 @@ public class AddEmployeePageObject extends BasePage {
         waitElementVisible(driver, AddEmployeeUI.TEXTBOX_BY_NAME, name);
         sendKeyToElement(driver, AddEmployeeUI.TEXTBOX_BY_NAME,text, name);
     }
-
     /**
      * Check the toggle "Create Login Details"
      */
-    @Step("Check the 'Create Login Details'toggle")
+    @Step("Check the 'Create Login Details' toggle")
     public void checkToCreateLoginDetailsToggle(){
         waitForElementClickable(driver, AddEmployeeUI.CREATE_LOGIN_DETAILS_TOGGLE);
         clickToElementByJavascript(driver, AddEmployeeUI.CREATE_LOGIN_DETAILS_TOGGLE);
     }
-
-
-
-
 }
