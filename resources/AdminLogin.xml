@@ -1,13 +1,13 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Admin- Login Test Suite">
     <listeners>
-        <listener class-name="commons.MethodListener"></listener>
+        <listener class-name="reportConfigs.MethodListener"></listener>
         <listener class-name="reportConfigs.AllureTestListener"></listener>
     </listeners>
     <test name="Run on chrome">
         <parameter name="browser" value="chrome"/>
         <classes>
-            <class name="admin.User01_Admin_Login"/>
+            <class name="admin.User_01_Admin_Login"/>
         </classes>
     </test>
 </suite>

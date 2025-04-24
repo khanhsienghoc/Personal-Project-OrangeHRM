@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.testng.Reporter;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Listeners;
+import reportConfigs.VerificationFailures;
 
 import java.io.File;
 import java.io.IOException;
