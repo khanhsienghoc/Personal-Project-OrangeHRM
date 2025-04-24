@@ -15,6 +15,7 @@ import org.testng.annotations.Test;
 import pageObject.HomePageObject;
 import pageObject.LoginPageObject;
 import pageObject.PageGeneratorManager;
+import ultilities.DataUltilities;
 
 public class User_01_Employee_Login extends BaseTest {
     @Parameters("browser")
@@ -23,9 +24,10 @@ public class User_01_Employee_Login extends BaseTest {
         log.info("Pre-conditon: Open Browser "+ browserName + " and navigate to the URL");
         driver = getBrowserDriver(browserName);
         loginPage = PageGeneratorManager.getLoginPage(driver);
+        fakeData = DataUltilities.getData();
 
-        invalidPassword = "12343232";
-        invalidUsername = "kddde12321";
+        invalidPassword = fakeData.getPassword();
+        invalidUsername = fakeData.getUsername();
     }
     @Description("Verify login with valid employee username and invalid password")
     @Severity(SeverityLevel.NORMAL)
@@ -142,4 +144,5 @@ public class User_01_Employee_Login extends BaseTest {
     private LoginPageObject loginPage;
     private HomePageObject homePage;
     private String invalidPassword, invalidUsername;
+    private DataUltilities fakeData;
 }

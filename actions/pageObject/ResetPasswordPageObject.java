@@ -6,10 +6,8 @@ import org.openqa.selenium.WebDriver;
 
 public class ResetPasswordPageObject extends BasePage {
     private final WebDriver driver;
-
     public ResetPasswordPageObject(WebDriver driver){
         this.driver = driver;
-
     }
     /**
      * Get title of the form
@@ -20,7 +18,6 @@ public class ResetPasswordPageObject extends BasePage {
         waitElementVisible(driver, ResetPasswordUI.FORGOT_PASSWORD_TITLE);
         return getElementText(driver, ResetPasswordUI.FORGOT_PASSWORD_TITLE);
     }
-
     /**
      * Get the body text of the form by text
      * @param text

@@ -7,6 +7,7 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.*;
 import pageObject.*;
+import ultilities.DataUltilities;
 
 import java.util.Set;
 
@@ -18,12 +19,13 @@ public class Common_Employee_Login extends BaseTest {
 
         driver = getBrowserDriver(browserName);
         loginPage = PageGeneratorManager.getLoginPage(driver);
+        fakeDate = DataUltilities.getData();
 
-        username = "employee" + randomNum();
-        password = "employee123aaa@" + randomNum();
-        firstName = "employeeFN";
-        middleName = "employeeMN";
-        lastName = "employeeLN";
+        username = fakeDate.getUsername();
+        password = fakeDate.getPassword();
+        firstName = fakeDate.getFirstName();
+        middleName = fakeDate.getMiddleName();
+        lastName = fakeDate.getLastName();
 
         log.info("Pre-conditon - Step 02 - Input username of the admin with value: " + GlobalConstants.ADMIN_USERNAME);
         loginPage.inputToTextBoxByText(driver, "Username", GlobalConstants.ADMIN_USERNAME);
@@ -45,13 +47,13 @@ public class Common_Employee_Login extends BaseTest {
         pimPage.clickToButtonByText(driver, "Add");
         getAddEmployeePage= PageGeneratorManager.getAddEmployeePage(driver);
 
-        log.info("Pre-conditon - Step 08 - Input Employee First Name");
+        log.info("Pre-conditon - Step 08 - Input Employee First Name with value: '"+ firstName +"'" );
         getAddEmployeePage.InputEmployeeInformationByName("firstName", firstName);
 
-        log.info("Pre-conditon - Step 09 - Input Employee Middle Name");
+        log.info("Pre-conditon - Step 09 - Input Employee Middle Name with value: '" + middleName + "'");
         getAddEmployeePage.InputEmployeeInformationByName("middleName", middleName);
 
-        log.info("Pre-conditon - Step 10 - Input Employee Last Name");
+        log.info("Pre-conditon - Step 10 - Input Employee Last Name with value: '" + lastName + "'");
         getAddEmployeePage.InputEmployeeInformationByName("lastName", lastName);
 
         log.info("Pre-conditon - Step 11 - Click on the toggle 'Create Login Details'");
@@ -95,7 +97,7 @@ public class Common_Employee_Login extends BaseTest {
         log.info("Pre-conditon - Step 22 - Click Profile Option");
         pimPage.clickOnProfileDropdown(driver);
 
-        log.info("Pre-conditon - Step 22 - Click Logout");
+        log.info("Pre-conditon - Step 23 - Click Logout");
         pimPage.clickOnProfileOptionByText(driver, "Logout");
 
     }
@@ -111,5 +113,6 @@ public class Common_Employee_Login extends BaseTest {
     private AddEmployeePageObject getAddEmployeePage;
     private String firstName, middleName, lastName;
     public static Set<Cookie> LoggedCookkies;
+    private DataUltilities fakeDate;
 
 }
