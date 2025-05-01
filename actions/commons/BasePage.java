@@ -426,25 +426,6 @@ public class BasePage {
     public void refreshCurrentPage(WebDriver driver) {
         driver.navigate().refresh();
     }
-    /**
-     * Get all cookies at the current page
-     * @param driver
-     * @return
-     */
-    public Set<Cookie> getAllCookies(WebDriver driver) {
-        return driver.manage().getCookies();
-    }
-    /**
-     * Set cookies to the current page
-     * @param driver
-     * @param cookies
-     */
-    public void setCookies(WebDriver driver, Set<Cookie> cookies) {
-        for (Cookie cookie : cookies) {
-            driver.manage().addCookie(cookie);
-        }
-        sleepInSecond(3);
-    }
     private long longTimeOut = GlobalConstants.LONG_TIMEOUT;
 
     /**
@@ -459,7 +440,6 @@ public class BasePage {
         waitElementVisible(driver, BasePageUI.TEXTBOX_BY_TEXT, texbox);
         sendKeyToElement(driver, BasePageUI.TEXTBOX_BY_TEXT, text, texbox);
     }
-
     /**
      * Get the error message of a field its name attribute
      *
@@ -472,7 +452,6 @@ public class BasePage {
         waitElementVisible(driver, BasePageUI.ERROR_MESSAGE_BY_TEXTBOX_NAME, name);
         return getElementText(driver, BasePageUI.ERROR_MESSAGE_BY_TEXTBOX_NAME, name);
     }
-
     /**
      * Click to the Menu tab by Name
      * @param driver
@@ -483,7 +462,6 @@ public class BasePage {
     public <T extends BasePage> T clickToMenuByText(WebDriver driver, String text) {
         waitElementVisible(driver, BasePageUI.MENU_BY_TEXT, text);
         clickToElement(driver, BasePageUI.MENU_BY_TEXT, text);
-
         if (text.equals("PIM")) {
             return (T) PageGeneratorManager.getPIMPage(driver);
         }

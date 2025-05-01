@@ -3,13 +3,10 @@ package common;
 import commons.BaseTest;
 import commons.GlobalConstants;
 import org.junit.jupiter.api.Assertions;
-import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.*;
 import pageObject.*;
 import ultilities.DataUltilities;
-
-import java.util.Set;
 
 public class Common_Employee_Login extends BaseTest {
     @Parameters("browser")
@@ -19,13 +16,13 @@ public class Common_Employee_Login extends BaseTest {
 
         driver = getBrowserDriver(browserName);
         loginPage = PageGeneratorManager.getLoginPage(driver);
-        fakeDate = DataUltilities.getData();
+        fakeData = DataUltilities.getData();
 
-        username = fakeDate.getUsername();
-        password = fakeDate.getPassword();
-        firstName = fakeDate.getFirstName();
-        middleName = fakeDate.getMiddleName();
-        lastName = fakeDate.getLastName();
+        username = fakeData.getUsername();
+        password = fakeData.getValidPassword();
+        firstName = fakeData.getFirstName();
+        middleName = fakeData.getMiddleName();
+        lastName = fakeData.getLastName();
 
         log.info("Pre-conditon - Step 02 - Input username of the admin with value: " + GlobalConstants.ADMIN_USERNAME);
         loginPage.inputToTextBoxByText(driver, "Username", GlobalConstants.ADMIN_USERNAME);
@@ -50,49 +47,49 @@ public class Common_Employee_Login extends BaseTest {
         log.info("Pre-conditon - Step 08 - Input Employee First Name with value: '"+ firstName +"'" );
         getAddEmployeePage.InputEmployeeInformationByName("firstName", firstName);
 
-        log.info("Pre-conditon - Step 09 - Input Employee Middle Name with value: '" + middleName + "'");
+        log.info("Pre-conditon - Step 09 - Get the value of 'Employee ID'");
+        employeeID = getAddEmployeePage.getPropertyOfTextBoxByName(driver, "value","Employee Id");
+
+        log.info("Pre-conditon - Step 10 - Input Employee Middle Name with value: '" + middleName + "'");
         getAddEmployeePage.InputEmployeeInformationByName("middleName", middleName);
 
-        log.info("Pre-conditon - Step 10 - Input Employee Last Name with value: '" + lastName + "'");
+        log.info("Pre-conditon - Step 11 - Input Employee Last Name with value: '" + lastName + "'");
         getAddEmployeePage.InputEmployeeInformationByName("lastName", lastName);
 
-        log.info("Pre-conditon - Step 11 - Click on the toggle 'Create Login Details'");
+        log.info("Pre-conditon - Step 12 - Click on the toggle 'Create Login Details'");
         getAddEmployeePage.checkToCreateLoginDetailsToggle();
 
-        log.info("Pre-conditon - Step 12 - Input Username with value: " + username);
+        log.info("Pre-conditon - Step 13 - Input Username with value: " + username);
         getAddEmployeePage.inputToTextBoxByText(driver, "Username", username);
 
-        log.info("Pre-conditon - Step 13 - Input Password and Confirm Password with value: " + password);
+        log.info("Pre-conditon - Step 14 - Input Password and Confirm Password with value: " + password);
         getAddEmployeePage.inputToTextBoxByText(driver, "Password", password);
         getAddEmployeePage.inputToTextBoxByText(driver, "Confirm Password", password);
 
-        log.info("Pre-conditon - Step 14 - Click Save Button");
+        log.info("Pre-conditon - Step 15 - Click Save Button");
         getAddEmployeePage.clickToButtonByText(driver, "Save");
         pimPage = PageGeneratorManager.getPIMPage(driver);
 
-        log.info("Pre-conditon - Step 15 - Verify a success pop up show");
+        log.info("Pre-conditon - Step 16 - Verify a success pop up show");
         Assertions.assertTrue(pimPage.isSuccessPopUpShow(driver));
 
-        log.info("Pre-conditon - Step 16 - Click on Profile Options and click Logout");
+        log.info("Pre-conditon - Step 17 - Click on Profile Options and click Logout");
         pimPage.clickOnProfileDropdown(driver);
         pimPage.clickOnProfileOptionByText(driver, "Logout");
         loginPage = PageGeneratorManager.getLoginPage(driver);
 
-        log.info("Pre-conditon - Step 17 - Input username of the employee with value: " +username);
+        log.info("Pre-conditon - Step 18 - Input username of the employee with value: " +username);
         loginPage.inputToTextBoxByText(driver, "Username", username);
 
-        log.info("Pre-conditon - Step 18 - Input password of the employee with value: "+ password);
+        log.info("Pre-conditon - Step 19 - Input password of the employee with value: "+ password);
         loginPage.inputToTextBoxByText(driver, "Password", password);
 
-        log.info("Pre-conditon - Step 19 - Click Login");
+        log.info("Pre-conditon - Step 20 - Click Login");
         loginPage.clickToLoginButton();
         homePage = PageGeneratorManager.getHomePage(driver);
 
-        log.info("Pre-conditon - Step 20 - Verify Page Title");
+        log.info("Pre-conditon - Step 21 - Verify Page Title");
         Assertions.assertEquals("OrangeHRM", homePage.getPageTitle(driver));
-
-        log.info("Pre-conditon - Step 21 - After login successfully, get cookies");
-        LoggedCookkies = homePage.getAllCookies(driver);
 
         log.info("Pre-conditon - Step 22 - Click Profile Option");
         pimPage.clickOnProfileDropdown(driver);
@@ -111,8 +108,7 @@ public class Common_Employee_Login extends BaseTest {
     private HomePageObject homePage;
     private PIMPageObject pimPage;
     private AddEmployeePageObject getAddEmployeePage;
-    private String firstName, middleName, lastName;
-    public static Set<Cookie> LoggedCookkies;
-    private DataUltilities fakeDate;
+    public static String firstName, middleName, lastName, employeeID;
+    private DataUltilities fakeData;
 
 }
