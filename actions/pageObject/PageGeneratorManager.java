@@ -18,4 +18,10 @@ public class PageGeneratorManager {
     public static ResetPasswordPageObject getResetPassPage (WebDriver driver){
         return new ResetPasswordPageObject(driver);
     }
+    public static MyInfoPageObject getMyInfoPage (WebDriver driver){
+        return new MyInfoPageObject(driver);
+    }
+    public static PersonalDetailsPageObject getPersonalDetails(WebDriver driver){
+        return new PersonalDetailsPageObject(driver);
+    }
 }

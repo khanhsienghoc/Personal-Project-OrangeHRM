@@ -11,4 +11,5 @@ public class GlobalConstants {
     public static final String ADMIN_USERNAME = "Admin";
     public static final String ADMIN_PASSWORD ="admin123";
     public static final String REQUIRED_ERROR_MESSAGE = "Required";
+    public static final String TEST_DATA= PROJECT_PATH + File.separator +"testdata" + File.separator;
 }
