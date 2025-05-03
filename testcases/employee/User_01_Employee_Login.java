@@ -2,7 +2,6 @@ package employee;
 
 import common.Common_Employee_Login;
 import commons.BaseTest;
-import commons.GlobalConstants;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import jdk.jfr.Description;
@@ -15,6 +14,7 @@ import org.testng.annotations.Test;
 import pageObject.HomePageObject;
 import pageObject.LoginPageObject;
 import pageObject.PageGeneratorManager;
+import testdata.Employee;
 import ultilities.DataUltilities;
 
 public class User_01_Employee_Login extends BaseTest {
@@ -26,8 +26,8 @@ public class User_01_Employee_Login extends BaseTest {
         loginPage = PageGeneratorManager.getLoginPage(driver);
         fakeData = DataUltilities.getData();
 
-        invalidPassword = fakeData.getPassword();
-        invalidUsername = fakeData.getUsername();
+        invalidPassword = fakeData.getInvalidPassword();
+        invalidUsername = fakeData.getInvalidUsername();
     }
     @Description("Verify login with valid employee username and invalid password")
     @Severity(SeverityLevel.NORMAL)
@@ -37,7 +37,7 @@ public class User_01_Employee_Login extends BaseTest {
         loginPage.inputToTextBoxByText(driver,"Username", Common_Employee_Login.username );
 
         log.info("Login_01_Employee_ValidUsername_And_InvalidPassword - Step 02 - Input invalid password");
-        loginPage.inputToTextBoxByText(driver,"Password", invalidPassword );
+        loginPage.inputToTextBoxByText(driver,"Password", invalidPassword);
 
         log.info("Login_01_Employee_ValidUsername_And_InvalidPassword - Step 03 - Click Login");
         loginPage.clickToLoginButton();
@@ -50,7 +50,7 @@ public class User_01_Employee_Login extends BaseTest {
     @Test
     public void Login_02_Employee_InvalidUsername_And_ValidPassword(){
         log.info("Login_02_Employee_InvalidUsername_And_ValidPassword - Step 01 - Input invalid username");
-        loginPage.inputToTextBoxByText(driver,"Username", invalidPassword);
+        loginPage.inputToTextBoxByText(driver,"Username", invalidUsername);
 
         log.info("Login_02_Employee_InvalidUsername_And_ValidPassword - Step 02 - Input valid password");
         loginPage.inputToTextBoxByText(driver,"Password", Common_Employee_Login.password );
@@ -66,7 +66,7 @@ public class User_01_Employee_Login extends BaseTest {
     @Test
     public void Login_03_Employee_InvalidUsername_And_InvalidPassword(){
         log.info("Login_03_Employee_InvalidUsername_And_InvalidPassword - Step 01 - Input invalid username");
-        loginPage.inputToTextBoxByText(driver,"Username", invalidPassword);
+        loginPage.inputToTextBoxByText(driver,"Username", invalidUsername);
 
         log.info("Login_03_Employee_InvalidUsername_And_InvalidPassword - Step 02 - Input invalid password");
         loginPage.inputToTextBoxByText(driver,"Password", invalidPassword);

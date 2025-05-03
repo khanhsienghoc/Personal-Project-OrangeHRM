@@ -28,6 +28,6 @@ public class AddEmployeePageObject extends BasePage {
     @Step("Check the 'Create Login Details' toggle")
     public void checkToCreateLoginDetailsToggle(){
         waitForElementClickable(driver, AddEmployeeUI.CREATE_LOGIN_DETAILS_TOGGLE);
-        clickToElementByJavascript(driver, AddEmployeeUI.CREATE_LOGIN_DETAILS_TOGGLE);
+        clickToElementByJS(driver, AddEmployeeUI.CREATE_LOGIN_DETAILS_TOGGLE);
     }
 }

@@ -41,7 +41,7 @@ public class User_02_Admin_ForgotPassword extends BaseTest {
     @Test
     public void Login_02_VerifyPlaceholders(){
         log.info("Login_02_VerifyPlaceholders - Step 01 - Verify the placeholder of the Username field");
-        Assertions.assertEquals("Username", resetPasswordPage.getPropertyOfTextBoxByName(driver, "placeholder","Username"));
+        Assertions.assertEquals("Username", resetPasswordPage.getPropertyOfTextBoxByText(driver, "placeholder","Username"));
     }
     @Description("Verify navigate to Reset password page and text")
     @Severity(SeverityLevel.TRIVIAL)
