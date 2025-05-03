@@ -48,7 +48,7 @@ public class Common_Employee_Login extends BaseTest {
         getAddEmployeePage.InputEmployeeInformationByName("firstName", firstName);
 
         log.info("Pre-conditon - Step 09 - Get the value of 'Employee ID'");
-        employeeID = getAddEmployeePage.getPropertyOfTextBoxByName(driver, "value","Employee Id");
+        employeeID = getAddEmployeePage.getPropertyOfTextBoxByText(driver, "value","Employee Id");
 
         log.info("Pre-conditon - Step 10 - Input Employee Middle Name with value: '" + middleName + "'");
         getAddEmployeePage.InputEmployeeInformationByName("middleName", middleName);
@@ -96,7 +96,7 @@ public class Common_Employee_Login extends BaseTest {
 
         log.info("Pre-conditon - Step 23 - Click Logout");
         pimPage.clickOnProfileOptionByText(driver, "Logout");
-
+        closeBrowserAndDriver();
     }
     @AfterTest(alwaysRun = true)
     public void afterTest(){
