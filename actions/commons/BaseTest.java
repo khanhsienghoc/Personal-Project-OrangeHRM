@@ -165,15 +165,15 @@ public class BaseTest {
                 } else {
                     cmd = "pkill geckodriver";
                 }
-            } else if (driverInstanceName.contains("opera")) {
-                if (osName.contains("windows")) {
-                    cmd = "taskkill /F /FI \"IMAGENAME eq operadriver*\"";
-                } else {
-                    cmd = "pkill operadriver";
-                }
             } else if (driverInstanceName.contains("safari")) {
                 if (osName.contains("mac")) {
                     cmd = "pkill safaridriver";
+                }
+            }else if (driverInstanceName.contains("edge")) {
+                if (osName.contains("windows")) {
+                    cmd = "taskkill /F /FI \"IMAGENAME eq msedgedriver*\"";
+                } else {
+                    cmd = "pkill msedgedriver";
                 }
             }
 
