@@ -4,17 +4,17 @@ import commons.BaseTest;
 import commons.GlobalConstants;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
-import jdk.jfr.Description;
+import io.qameta.allure.Description;
+import io.qameta.allure.testng.AllureTestNg;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Parameters;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import pageObject.LoginPageObject;
 import pageObject.PageGeneratorManager;
 import pageObject.ResetPasswordPageObject;
+import reportConfigs.AllureTestListener;
 
+@Listeners({AllureTestNg.class, AllureTestListener.class})
 public class User_02_Admin_ForgotPassword extends BaseTest {
     @Parameters("browser")
     @BeforeClass
@@ -51,7 +51,7 @@ public class User_02_Admin_ForgotPassword extends BaseTest {
         Assertions.assertEquals("Reset Password", resetPasswordPage.getTitleOfResetPassword());
 
         log.info("Login_03_ForgotPasswordLink - Step 02 - Verify the body text of the Reset Password page");
-        Assertions.assertEquals("Please enter your username to identify your account to reset your password", resetPasswordPage.getBodyTextOfResetPassword("Please enter your username"));
+        Assertions.assertEquals("Please enter your username to identify your account to reset your password ewfef", resetPasswordPage.getBodyTextOfResetPassword("Please enter your username"));
 
         log.info("Login_03_ForgotPasswordLink - Step 03 - Input username");
         resetPasswordPage.inputToTextBoxByText(driver, "Username", GlobalConstants.ADMIN_USERNAME);

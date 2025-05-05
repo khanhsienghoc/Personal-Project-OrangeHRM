@@ -1,0 +1,23 @@
+<component name="libraryTable">
+  <library name="libWebDriverManager">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libWebDriverManager/commons-compress-1.27.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libWebDriverManager/httpcore5-h2-5.3.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libWebDriverManager/commons-lang3-3.17.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libWebDriverManager/httpcore5-5.3.4 (1).jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libWebDriverManager/commons-collections4-4.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libWebDriverManager/commons-io-2.16.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libWebDriverManager/slf4j-api-1.7.32.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libWebDriverManager/webdrivermanager-6.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libWebDriverManager/gson-2.10.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libWebDriverManager/jsoup-1.18.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libWebDriverManager/httpclient5-5.4.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libWebDriverManager/jarchivelib-1.2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libWebDriverManager/brotli-1.3.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libWebDriverManager/dec-0.1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libWebDriverManager/commons-codec-1.17.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

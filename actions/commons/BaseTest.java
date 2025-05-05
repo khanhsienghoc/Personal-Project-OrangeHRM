@@ -1,6 +1,7 @@
 package commons;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.qameta.allure.Step;
+import io.qameta.allure.testng.AllureTestNg;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.testng.Reporter;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Listeners;
+import reportConfigs.AllureTestListener;
 import reportConfigs.VerificationFailures;
 
 import java.io.File;
@@ -28,10 +30,9 @@ public class BaseTest {
     protected final Logger log = LoggerFactory.getLogger(getClass());
     @BeforeSuite
     public void initBeforeSuite(){
+        System.setProperty("allure.results.directory", GlobalConstants.PROJECT_PATH + "/allure-results");
         deleteAllureReport();
     }
-
-
     protected WebDriver getBrowserDriver(String browserName){
         BrowserList browserList = BrowserList.valueOf(browserName.toUpperCase());
         if(browserList == BrowserList.CHROME){
@@ -68,7 +69,6 @@ public class BaseTest {
         driver.manage().window().maximize();
         driver.get(GlobalConstants.PORTAL_TESTING_URL);
         return driver;
-
     }
     public WebDriver getDriverInstance() {
         return this.driver;
@@ -138,7 +138,6 @@ public class BaseTest {
         } catch (Exception e) {
             System.out.print(e.getMessage());
         }
-
     }
     protected void closeBrowserAndDriver() {
         String cmd = "";
@@ -176,7 +175,6 @@ public class BaseTest {
                     cmd = "pkill msedgedriver";
                 }
             }
-
             if (driver != null) {
                 driver.manage().deleteAllCookies();
                 driver.quit();

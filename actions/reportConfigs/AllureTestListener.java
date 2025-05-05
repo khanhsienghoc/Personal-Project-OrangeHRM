@@ -1,7 +1,7 @@
 package reportConfigs;
 
 import commons.BaseTest;
-import io.qameta.allure.Attachment;
+import io.qameta.allure.Allure;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -9,32 +9,49 @@ import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
+import io.qameta.allure.Attachment;
+
+
 public class AllureTestListener implements ITestListener {
 
     private static String getTestMethodName(ITestResult iTestResult) {
         return iTestResult.getMethod().getConstructorOrMethod().getName();
     }
 
-    // Screenshot attachments for Allure
     @Attachment(value = "Screenshot of {0}", type = "image/png")
     public static byte[] saveScreenshotPNG(String testName, WebDriver driver) {
         return (byte[]) ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
     }
 
 
-    @Override
-    public void onTestFailure(ITestResult iTestResult) {
-        Object testClass = iTestResult.getInstance();
-        WebDriver driver = ((BaseTest) testClass).getDriverInstance();
-        if (driver != null) {
-            if (iTestResult != null && iTestResult.getTestContext() != null) {
-                saveScreenshotPNG(iTestResult.getName(), driver);
-            }
-        } else {
-            System.out.println("🚨 WebDriver is null, skipping screenshot.");
-        }
+//    @Override
+//    public void onTestFailure(ITestResult iTestResult) {
+//        Object testClass = iTestResult.getInstance();
+//        WebDriver driver = ((BaseTest) testClass).getDriverInstance();
+//        if (driver != null) {
+//            if (iTestResult != null && iTestResult.getTestContext() != null) {
+//                System.out.println("📸 Capturing screenshot for " + iTestResult.getName());
+//                saveScreenshotPNG(iTestResult.getName(), driver);
+//            }
+//        } else {
+//            System.out.println("🚨 WebDriver is null, skipping screenshot.");
+//        }
+//
+//    }
+@Override
+public void onTestFailure(ITestResult result) {
+    Object testClass = result.getInstance();
+    WebDriver driver = ((BaseTest) testClass).getDriverInstance();
+    if (driver != null) {
+        byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
 
+        // Add screenshot manually to current test
+        Allure.getLifecycle().addAttachment("Screenshot on failure", "image/png", "png", screenshot);
+        System.out.println("✅ Screenshot attached via Allure lifecycle API");
+    } else {
+        System.out.println("🚨 WebDriver is null, skipping screenshot.");
     }
+}
 
     @Override
     public void onStart(ITestContext iTestContext) {
@@ -58,7 +75,7 @@ public class AllureTestListener implements ITestListener {
 
     @Override
     public void onTestStart(ITestResult arg0) {
-        System.out.println("TEST STARTED"+ arg0.getName());
+        System.out.println("TEST STARTED: "+ arg0.getName());
     }
 
     @Override

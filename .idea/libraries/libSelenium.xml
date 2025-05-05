@@ -1,0 +1,21 @@
+<component name="libraryTable">
+  <library name="libSelenium">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libSelenium/selenium-edge-driver-4.31.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libSelenium/testng-7.11.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libSelenium/selenium-chrome-driver-4.31.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libSelenium/guava-33.4.8-jre.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libSelenium/selenium-support-4.31.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libSelenium/commons-codec-1.18.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libSelenium/jsr305-3.0.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libSelenium/selenium-firefox-driver-4.31.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libSelenium/commons-exec-1.4.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libSelenium/selenium-chromium-driver-4.31.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libSelenium/slf4j-simple-2.0.17.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libSelenium/selenium-java-4.31.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libSelenium/selenium-api-4.31.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

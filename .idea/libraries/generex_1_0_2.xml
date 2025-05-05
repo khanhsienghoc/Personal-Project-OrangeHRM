@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="generex-1.0.2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libFaker/generex-1.0.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libFaker/snakeyaml-2.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

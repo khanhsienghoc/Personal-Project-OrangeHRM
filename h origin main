@@ -1,0 +1,22 @@
+[33mcommit ad0b8ddad46adae5e1079948c5682f2112a5fc76[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Khanh <khanhhhh245@gmail.com>
+Date:   Sun Apr 20 20:37:36 2025 +0700
+
+    AdminLogin.xml: update the name of the test suit
+    BasePage.java: update document
+    BasePageUI: update the dynamic locator (for reuse better)
+    GlobalConstants.java: remove some unnecessary variables
+    LoginPageObject.java: add step for clickToLoginButton
+    User01_Admin_Login.java: update test suit
+
+[33mcommit 1f77bff6a149f992164a554a998c4bf75aeebce5[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: Khanh <khanhhhh245@gmail.com>
+Date:   Sun Apr 20 13:37:01 2025 +0700
+
+    update libraries, write testcase Login_01_Admin_Empty_Username_And_Password in AUser01_Admin_Login test suit
+
+[33mcommit 61706afb947bd7a690df896921868cdd64ad6548[m
+Author: Khanh <khanhhhh245@gmail.com>
+Date:   Sat Apr 19 22:48:03 2025 +0700
+
+    first commit

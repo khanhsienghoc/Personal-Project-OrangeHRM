@@ -109,7 +109,6 @@ public class BasePage {
         }
         return by;
     }
-
     private WebElement getElement(WebDriver driver, String locatorType) {
         return driver.findElement(getBylocatorType(locatorType));
     }
@@ -119,8 +118,6 @@ public class BasePage {
     public List<WebElement> getListElement(WebDriver driver, String locatorType, String... dynamicValue) {
         return driver.findElements(getBylocatorType(getDynamicXpath(locatorType, dynamicValue)));
     }
-
-
     private String getDynamicXpath(String locatorType, String... values) {
         if (locatorType.startsWith("xpath=") || locatorType.startsWith("Xpath=") || locatorType.startsWith("XPATH=")) {
             locatorType = String.format(locatorType, (Object[]) values);
@@ -130,11 +127,9 @@ public class BasePage {
     protected void clickToElement(WebDriver driver, String locatorType) {
         getElement(driver, locatorType).click();
     }
-
     protected void clickToElement(WebDriver driver, String locatorType, String... dynamicValues) {
         getElement(driver, getDynamicXpath(locatorType, dynamicValues)).click();
     }
-
     protected void sendKeyToElement(WebDriver driver, String locatorType, String text) {
         WebElement element = getElement(driver, locatorType);
         element.sendKeys(Keys.chord(Keys.CONTROL, "a"));
@@ -152,7 +147,6 @@ public class BasePage {
         wait.until(webDriver -> ((JavascriptExecutor) webDriver)
                 .executeScript("return document.readyState").equals("complete"));
     }
-
     protected String getElementText(WebDriver driver, String locatorType) {
         return getElement(driver, locatorType).getText();
     }
@@ -162,7 +156,6 @@ public class BasePage {
     protected String getElementText(WebDriver driver, String locatorType, String... dynamicValues) {
         return getElement(driver, getDynamicXpath(locatorType, dynamicValues)).getText();
     }
-
     protected void selectItemInDefaultDropDown(WebDriver driver, String locatorType, String text) {
         Select select = new Select(getElement(driver, locatorType));
         select.selectByVisibleText(text);
@@ -171,7 +164,6 @@ public class BasePage {
         Select select = new Select(getElement(driver, getDynamicXpath(locatorType, dynamicValue)));
         select.selectByVisibleText(text);
     }
-
     protected String getFirstSelectedItemDefaultDropDown(WebDriver driver, String locatorType) {
         Select select = new Select(getElement(driver, locatorType));
         return select.getFirstSelectedOption().getText();
@@ -249,7 +241,6 @@ public class BasePage {
             clickToElementByJS(driver, getDynamicXpath(locatorType, dynamicValue));
         }
     }
-
     protected void uncheckTheCheckBox(WebDriver driver, String locatorType) {
         if (isElementSelected(driver, locatorType)) {
             getElement(driver, locatorType).click();
@@ -466,7 +457,6 @@ public class BasePage {
         driver.navigate().refresh();
     }
     private long longTimeOut = GlobalConstants.LONG_TIMEOUT;
-
     /**
      * Inputs text into a textbox located by its name attribute.
      *
@@ -485,7 +475,6 @@ public class BasePage {
         waitListElementInvisible(driver, BasePageUI.LOADING_SPINNER);
         waitElementVisible(driver, BasePageUI.TEXTBOX_BY_NAME, name);
         sendKeyToElement(driver, BasePageUI.TEXTBOX_BY_NAME, text, name);
-        //sendkeyToTextBoxByJS(driver, BasePageUI.TEXTBOX_BY_NAME, text, name);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
     }
     /**
@@ -518,7 +507,6 @@ public class BasePage {
         }
         return (T) this;
     }
-
     /**
      * Click to Button by text
      * @param driver
@@ -556,7 +544,7 @@ public class BasePage {
     @Step("Click '{1}' options in the Profile options dropdown")
     public void clickOnProfileOptionByText(WebDriver driver, String text){
         waitForElementClickable(driver, BasePageUI.PROFILE_OPTION_BY_TEXT, text);
-        clickToElement(driver, BasePageUI.PROFILE_OPTION_BY_TEXT, text);
+        clickToElementByJS(driver, BasePageUI.PROFILE_OPTION_BY_TEXT, text);
     }
     /**
      * Get property of a locator by text box

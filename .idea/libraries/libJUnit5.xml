@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="libJUnit5">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libJUnit5/junit-jupiter-api-5.12.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libJUnit5/junit-jupiter-engine-5.12.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libJUnit5/junit-platform-launcher-1.12.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libJUnit5/opentest4j-1.2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libJUnit5/apiguardian-api-1.1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/HRMOrange/libJUnit5/junit-platform-commons-1.12.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -4,21 +4,21 @@ import common.Common_Employee_Login;
 import commons.BaseTest;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
-import jdk.jfr.Description;
+import io.qameta.allure.Description;
+import io.qameta.allure.testng.AllureTestNg;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Parameters;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import pageObject.*;
+import reportConfigs.AllureTestListener;
 import ultilities.DataUltilities;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+@Listeners({AllureTestNg.class, AllureTestListener.class})
 public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
     @Parameters("browser")
     @BeforeClass
@@ -26,11 +26,12 @@ public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
         log.info("Pre-condition: Open Browser "+ browserName + " and navigate to the URL");
         driver = getBrowserDriver(browserName);
 
-        log.info("Pre-condition: Input username and password");
+        log.info("Pre-condition: Input username with value: " + Common_Employee_Login.username);
         loginPage = PageGeneratorManager.getLoginPage(driver);
         loginPage.inputToTextBoxByText(driver, "Username", Common_Employee_Login.username);
-        loginPage.inputToTextBoxByText(driver, "Password", Common_Employee_Login.password);
 
+        log.info("Pre-condition: Input password with value: " + Common_Employee_Login.password);
+        loginPage.inputToTextBoxByText(driver, "Password", Common_Employee_Login.password);
 
         log.info("Pre-condition: Click Login");
         loginPage.clickToLoginButton();
@@ -51,7 +52,6 @@ public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
         currentDate = fakeData.getCurrentDate();
         updatedComment = fakeData.getComment();
         nationality = fakeData.getNationality();
-
     }
     @Description("Verify employee user is able to view Personal Details")
     @Severity(SeverityLevel.TRIVIAL)
@@ -68,7 +68,6 @@ public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
 
         log.info("Edit_01_Employee_ViewPersonalDetail - Step_04: Verify the title of the form");
         Assertions.assertEquals("Personal Details", myInfo.getPageHeaderByText(driver,"Personal Details"));
-
     }
     @Description("Verify employee user cannot edit restricted fields")
     @Severity(SeverityLevel.CRITICAL)
@@ -134,25 +133,25 @@ public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
         log.info("Edit_04_Employee_EditPersonalDetail - Step_10: Verify a success pop up show");
         Assertions.assertTrue(getPersonalDetails.isSuccessPopUpShow(driver));
 
-        log.info("Edit_04_Employee_EditPersonalDetail - Step_11: Verify the First Name textbox show the lastest value: " + updatedFirstName);
+        log.info("Edit_04_Employee_EditPersonalDetail - Step_11: Verify the First Name textbox show the latest value: " + updatedFirstName);
         Assertions.assertEquals(updatedFirstName,getPersonalDetails.getPropertyOfTextBoxByName(driver, "value", "firstName"));
 
-        log.info("Edit_04_Employee_EditPersonalDetail - Step_12: Verify the Middle Name textbox show the lastest value: " + updatedMiddleName);
+        log.info("Edit_04_Employee_EditPersonalDetail - Step_12: Verify the Middle Name textbox show the latest value: " + updatedMiddleName);
         Assertions.assertEquals(updatedMiddleName,getPersonalDetails.getPropertyOfTextBoxByName(driver, "value", "middleName"));
 
-        log.info("Edit_04_Employee_EditPersonalDetail - Step_13: Verify the Last Name textbox show the lastest value: " + updatedLastName);
+        log.info("Edit_04_Employee_EditPersonalDetail - Step_13: Verify the Last Name textbox show the latest value: " + updatedLastName);
         Assertions.assertEquals(updatedLastName,getPersonalDetails.getPropertyOfTextBoxByName(driver, "value", "lastName"));
 
         log.info("Edit_04_Employee_EditPersonalDetail - Step_14: Verify the Other ID textbox show the latest value: " + otherID);
         Assertions.assertEquals(otherID,getPersonalDetails.getPropertyOfTextBoxByText(driver, "value", "Other Id"));
 
-        log.info("Edit_04_Employee_EditPersonalDetail - Step_15: Verify the License Expiry Date textbox show the lastest value: " + licenseExpiryDate);
+        log.info("Edit_04_Employee_EditPersonalDetail - Step_15: Verify the License Expiry Date textbox show the latest value: " + licenseExpiryDate);
         Assertions.assertEquals(licenseExpiryDate,getPersonalDetails.getPropertyOfTextBoxByText(driver, "value", "License Expiry Date"));
 
-        log.info("Edit_04_Employee_EditPersonalDetail - Step_16: Verify the Nationality dropdown show the lastest value: " + nationality);
+        log.info("Edit_04_Employee_EditPersonalDetail - Step_16: Verify the Nationality dropdown show the latest value: " + nationality);
         Assertions.assertEquals(nationality,getPersonalDetails.getChosenValueFromNationalityDropdownByText("Nationality"));
 
-        log.info("Edit_04_Employee_EditPersonalDetail - Step_17: Verify the Gender radio button checked the lastest value: " + gender);
+        log.info("Edit_04_Employee_EditPersonalDetail - Step_17: Verify the Gender radio button checked the latest value: " + gender);
         Assertions.assertTrue(getPersonalDetails.isRadioButtonSelectedByText(driver, gender));
     }
     @Description("Verify employee user can edit Custom Fields")
@@ -214,7 +213,7 @@ public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
     }
     @Description("Verify employee can edit attachment")
     @Severity(SeverityLevel.NORMAL)
-    @Test
+    @Test()
     public void Edit_08_Employee_EditAttachments(){
         log.info("Edit_08_Employee_EditAttachments - Step_01: Click to the Edit button");
         getPersonalDetails.clickToActionAttachment(driver, fileLessThan1MB, "pencil");
@@ -245,7 +244,7 @@ public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
     }
     @Description("Verify employee can delete an attachment")
     @Severity(SeverityLevel.CRITICAL)
-    @Test
+    @Test()
     public void Edit_09_Employee_DeleteAnAttachment(){
         log.info("Edit_09_Employee_DeleteAnAttachment - Step_01: Click to the Delete button of the attachment name: "+ txtFile );
         getPersonalDetails.clickToActionAttachment(driver, txtFile, "trash");
