@@ -4,7 +4,6 @@ import common.Common_Employee_Login;
 import commons.BaseTest;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
-//import jdk.jfr.Description;
 import io.qameta.allure.Description;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
@@ -134,7 +133,6 @@ public class User_01_Employee_Login extends BaseTest {
 
         log.info("Login_06_Employee_VerifyTabUndisplayed - Step 01 - Verify the 'Maintenance' undisplayed");
         Assertions.assertTrue(homePage.getListMenuTabSize(driver,"Maintenance") < 1);
-
     }
     @AfterClass(alwaysRun = true)
     public void afterClass(){
