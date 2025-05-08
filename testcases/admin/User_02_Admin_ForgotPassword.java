@@ -51,7 +51,7 @@ public class User_02_Admin_ForgotPassword extends BaseTest {
         Assertions.assertEquals("Reset Password", resetPasswordPage.getTitleOfResetPassword());
 
         log.info("Login_03_ForgotPasswordLink - Step 02 - Verify the body text of the Reset Password page");
-        Assertions.assertEquals("Please enter your username to identify your account to reset your password ewfef", resetPasswordPage.getBodyTextOfResetPassword("Please enter your username"));
+        Assertions.assertEquals("Please enter your username to identify your account to reset your password", resetPasswordPage.getBodyTextOfResetPassword("Please enter your username"));
 
         log.info("Login_03_ForgotPasswordLink - Step 03 - Input username");
         resetPasswordPage.inputToTextBoxByText(driver, "Username", GlobalConstants.ADMIN_USERNAME);
