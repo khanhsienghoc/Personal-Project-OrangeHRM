@@ -28,12 +28,13 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public class BaseTest {
     private WebDriver driver;
     protected final Logger log = LoggerFactory.getLogger(getClass());
+    private EnvironmentConfigManager environment = EnvironmentConfigManager.getInstance();
     @BeforeSuite
     public void initBeforeSuite(){
         System.setProperty("allure.results.directory", GlobalConstants.PROJECT_PATH + "/allure-results");
         deleteAllureReport();
     }
-    protected WebDriver getBrowserDriver(String browserName){
+    protected WebDriver getBrowserDriver(String browserName, String envName){
         BrowserList browserList = BrowserList.valueOf(browserName.toUpperCase());
         if(browserList == BrowserList.CHROME){
             WebDriverManager.chromedriver().setup();
@@ -67,7 +68,10 @@ public class BaseTest {
         }
         driver.manage().timeouts().implicitlyWait(GlobalConstants.LONG_TIMEOUT, SECONDS);
         driver.manage().window().maximize();
-        driver.get(GlobalConstants.PORTAL_TESTING_URL);
+//        driver.get(GlobalConstants.PORTAL_TESTING_URL);
+        GlobalConstants.ENV = EnvironmentList.valueOf(envName.toUpperCase());
+        String baseUrl = environment.getBaseUrl();
+        driver.get(baseUrl);
         return driver;
     }
     public WebDriver getDriverInstance() {

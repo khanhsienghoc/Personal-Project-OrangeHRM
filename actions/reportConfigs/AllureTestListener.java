@@ -1,7 +1,10 @@
 package reportConfigs;
 
 import commons.BaseTest;
+import commons.EnvironmentList;
+import commons.GlobalConstants;
 import io.qameta.allure.Allure;
+import io.qameta.allure.Step;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -10,6 +13,7 @@ import org.testng.ITestListener;
 import org.testng.ITestResult;
 
 import io.qameta.allure.Attachment;
+import org.testng.SkipException;
 
 
 public class AllureTestListener implements ITestListener {
@@ -38,6 +42,17 @@ public class AllureTestListener implements ITestListener {
 //        }
 //
 //    }
+@Step("⏭ Skipping DB test due to invalid environment: {env}")
+public static void skipIfNotLocal(EnvironmentList env) {
+    if (env != EnvironmentList.LOCAL) {
+        System.out.println("⚠️ Skipping DB test in ENV: " + env);
+        throw new SkipException("❌ Skipping DB test in ENV = " + env);
+    }
+}
+
+private static void logSkipReasonToConsole() {
+        System.out.println("⚠️ Test skipped due to either demo environment or databaseTesting=false");
+    }
 @Override
 public void onTestFailure(ITestResult result) {
     Object testClass = result.getInstance();
