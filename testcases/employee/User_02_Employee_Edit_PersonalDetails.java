@@ -22,9 +22,9 @@ import java.util.Set;
 public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
     @Parameters("browser")
     @BeforeClass
-    public void beforeClass(String browserName){
-        log.info("Pre-condition: Open Browser "+ browserName + " and navigate to the URL");
-        driver = getBrowserDriver(browserName);
+    public void beforeClass(String browserName, String environmentName){
+        log.info("Pre-conditon: Open Browser "+ browserName + " and navigate to the URL in " + environmentName + " environment");
+        driver = getBrowserDriver(browserName, environmentName);
 
         log.info("Pre-condition: Input username with value: " + Common_Employee_Login.username);
         loginPage = PageGeneratorManager.getLoginPage(driver);
