@@ -1,12 +1,13 @@
 package admin;
 
 import commons.BaseTest;
+import commons.EnvironmentConfigManager;
 import commons.GlobalConstants;
 import io.qameta.allure.testng.AllureTestNg;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.*;
-import pageObject.HomePageObject;
+import pageObject.DashboardPageObject;
 import pageObject.LoginPageObject;
 import pageObject.PageGeneratorManager;
 import reportConfigs.AllureTestListener;
@@ -19,24 +20,26 @@ public class User_01_Admin_Login extends BaseTest {
     public void beforeClass(String browserName, String environmentName){
         log.info("Pre-conditon: Open Browser "+ browserName + " and navigate to the URL in " + environmentName + " environment");
         driver = getBrowserDriver(browserName, environmentName);
+        config = EnvironmentConfigManager.getInstance();
         loginPage = PageGeneratorManager.getLoginPage(driver);
         fakeData = DataUltilities.getData();
 
         invalidUsername = "invalidUsername" + fakeData.getUsername();
         invalidPassword = fakeData.getInvalidPassword();
 
-        switch (GlobalConstants.ENV) {
-            case LOCAL:
-                username = GlobalConstants.LOCAL_ADMIN_USERNAME;
-                password = GlobalConstants.LOCAL_ADMIN_PASSWORD;
-                break;
-            case TEST:
-                username = GlobalConstants.TESTING_ADMIN_USERNAME;
-                password = GlobalConstants.TESTING_ADMIN_PASSWORD;
-                break;
-            default:
-                throw new RuntimeException("❌ Unknown ENV: " + GlobalConstants.ENV);
-        }
+//
+//        switch (GlobalConstants.ENV) {
+//            case LOCAL:
+//                username = GlobalConstants.LOCAL_ADMIN_USERNAME;
+//                password = GlobalConstants.LOCAL_ADMIN_PASSWORD;
+//                break;
+//            case TEST:
+//                username = GlobalConstants.TESTING_ADMIN_USERNAME;
+//                password = GlobalConstants.TESTING_ADMIN_PASSWORD;
+//                break;
+//            default:
+//                throw new RuntimeException("❌ Unknown ENV: " + GlobalConstants.ENV);
+//        }
     }
     @Test
     public void Login_01_Admin_Empty_Username_And_Password(){
@@ -67,7 +70,7 @@ public class User_01_Admin_Login extends BaseTest {
     public void Login_03_Admin_EmptyUsername(){
         log.info("Login_03_Admin_EmptyUsername - Step_01 - Login with empty username");
         loginPage.inputToTextBoxByText(driver, "Username","" );
-        loginPage.inputToTextBoxByText(driver, "Password",password);
+        loginPage.inputToTextBoxByText(driver, "Password",config.getAdminPassword());
 
         log.info("Login_03_Admin_EmptyUsername - Step_02 - Click Login button");
         loginPage.clickToLoginButton();
@@ -78,7 +81,7 @@ public class User_01_Admin_Login extends BaseTest {
     @Test
     public void Login_04_Admin_EmptyPassword(){
         log.info("Login_04_Admin_EmptyPassword - Step_01 - Login with empty username");
-        loginPage.inputToTextBoxByText(driver, "Username",username );
+        loginPage.inputToTextBoxByText(driver, "Username",config.getAdminUserName() );
         loginPage.inputToTextBoxByText(driver, "Password","");
 
         log.info("Login_04_Admin_EmptyPassword - Step_02 - Click Login button");
@@ -92,22 +95,24 @@ public class User_01_Admin_Login extends BaseTest {
         log.info("Login_05_Admin_VerifyPlaceholders - Step_01 - Verify the placeholder of the username textbox is 'Username'");
         Assertions.assertEquals("Username", loginPage.getPropertyOfTextBoxByName(driver, "placeholder","username"));
 
-        log.info("Login_05_Admin_VerifyPlaceholders - Step_02 - Verify the placeholder of the username textbox is 'Username'");
-        Assertions.assertEquals("Username", loginPage.getPropertyOfTextBoxByName(driver, "placeholder","username"));
+        log.info("Login_05_Admin_VerifyPlaceholders - Step_02 - Verify the placeholder of the password textbox is 'Password'");
+        Assertions.assertEquals("Password", loginPage.getPropertyOfTextBoxByName(driver, "placeholder","password"));
     }
     @Test
     public void Login_06_Admin_SuccessLogin(){
         log.info("Login_06_Admin_SuccessLogin - Step_01 - Input the username");
-        loginPage.inputToTextBoxByText(driver, "Username",username );
+        loginPage.inputToTextBoxByText(driver, "Username",config.getAdminUserName() );
+        System.out.println("Admin username : " + config.getAdminUserName());
 
         log.info("Login_06_Admin_SuccessLogin - Step_02 - Input the password");
-        loginPage.inputToTextBoxByText(driver, "Password",password);
+        loginPage.inputToTextBoxByText(driver, "Password",config.getAdminPassword());
+        System.out.println("Admin username : " + config.getAdminPassword());
 
         log.info("Login_06_Admin_SuccessLogin - Step_03 - Click Login button");
         loginPage.clickToLoginButton();
 
         log.info("Login_06_Admin_SuccessLogin - Step_04 - Verify the page header 'Dashboard'");
-        homePage = PageGeneratorManager.getHomePage(driver);
+        homePage = PageGeneratorManager.getDashboardPage(driver);
         Assertions.assertEquals("Dashboard", homePage.getPageHeaderByText(driver,"Dashboard"));
     }
     @Test
@@ -155,5 +160,6 @@ public class User_01_Admin_Login extends BaseTest {
     private DataUltilities fakeData;
     private String invalidUsername, invalidPassword;
     private String username, password;
-    private HomePageObject homePage;
+    private DashboardPageObject homePage;
+    EnvironmentConfigManager config = EnvironmentConfigManager.getInstance();
 }

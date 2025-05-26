@@ -35,6 +35,6 @@ public class BaseDBHelper {
         for (int i = 0; i < params.length; i++) {
             pstmt.setString(i + 1, params[i]);
         }
-        return pstmt.executeQuery(); // Gọi xong bên ngoài phải đóng rs sau khi xài
+        return pstmt.executeQuery();
     }
 }

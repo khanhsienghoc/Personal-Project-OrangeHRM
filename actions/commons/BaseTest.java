@@ -1,7 +1,6 @@
 package commons;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.qameta.allure.Step;
-import io.qameta.allure.testng.AllureTestNg;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -15,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.testng.Reporter;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Listeners;
-import reportConfigs.AllureTestListener;
 import reportConfigs.VerificationFailures;
 
 import java.io.File;
@@ -28,7 +26,6 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public class BaseTest {
     private WebDriver driver;
     protected final Logger log = LoggerFactory.getLogger(getClass());
-    private EnvironmentConfigManager environment = EnvironmentConfigManager.getInstance();
     @BeforeSuite
     public void initBeforeSuite(){
         System.setProperty("allure.results.directory", GlobalConstants.PROJECT_PATH + "/allure-results");
@@ -70,7 +67,7 @@ public class BaseTest {
         driver.manage().window().maximize();
 //        driver.get(GlobalConstants.PORTAL_TESTING_URL);
         GlobalConstants.ENV = EnvironmentList.valueOf(envName.toUpperCase());
-        String baseUrl = environment.getBaseUrl();
+        String baseUrl = EnvironmentConfigManager.getInstance().getBaseUrl();
         driver.get(baseUrl);
         return driver;
     }

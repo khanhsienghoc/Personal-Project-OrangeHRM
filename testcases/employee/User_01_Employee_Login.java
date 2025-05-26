@@ -12,17 +12,17 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-import pageObject.HomePageObject;
+import pageObject.DashboardPageObject;
 import pageObject.LoginPageObject;
 import pageObject.PageGeneratorManager;
 import ultilities.DataUltilities;
 
 public class User_01_Employee_Login extends BaseTest {
-    @Parameters("browser")
+    @Parameters({"browser","environment"})
     @BeforeClass
-    public void beforeClass(String browserName){
+    public void beforeClass(String browserName, String environmentName){
         log.info("Pre-conditon: Open Browser "+ browserName + " and navigate to the URL");
-        driver = getBrowserDriver(browserName);
+        driver = getBrowserDriver(browserName,environmentName);
         loginPage = PageGeneratorManager.getLoginPage(driver);
         fakeData = DataUltilities.getData();
 
@@ -89,7 +89,7 @@ public class User_01_Employee_Login extends BaseTest {
 
         log.info("Login_04_Employee_ValidCredentials - Step 03 - Click Login");
         loginPage.clickToLoginButton();
-        homePage = PageGeneratorManager.getHomePage(driver);
+        homePage = PageGeneratorManager.getDashboardPage(driver);
 
         log.info("Login_04_Employee_ValidCredentials - Step 03 - Verify the page header 'Dashboard'");
         Assertions.assertEquals("Dashboard", homePage.getPageHeaderByText(driver,"Dashboard"));
@@ -142,7 +142,7 @@ public class User_01_Employee_Login extends BaseTest {
     }
     private WebDriver driver;
     private LoginPageObject loginPage;
-    private HomePageObject homePage;
+    private DashboardPageObject homePage;
     private String invalidPassword, invalidUsername;
     private DataUltilities fakeData;
 }

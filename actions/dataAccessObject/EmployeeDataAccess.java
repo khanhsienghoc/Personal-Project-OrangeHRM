@@ -11,18 +11,9 @@ public class EmployeeDataAccess {
     public static EmployeeDataAccess employeeData(){
         return new EmployeeDataAccess();
     }
-    public boolean isEmailExists(String email) {
-        String query = "SELECT emp_number FROM hs_hr_employee WHERE emp_work_email = ?";
-        try (ResultSet rs = dbHelper.executeQuery(query, email)) {
-            return rs.next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-    public boolean isEmployeeExists(String email) {
-        String query = "SELECT emp_number FROM hs_hr_employee WHERE emp_work_email = ?";
-        try (ResultSet rs = dbHelper.executeQuery(query, email)) {
+    public boolean isEmployeeExist(String employeeID) {
+        String query = "select * from orangehrm_db.hs_hr_employee WHERE employee_id = ?";
+        try (ResultSet rs = dbHelper.executeQuery(query, employeeID)) {
             return rs.next();
         } catch (SQLException e) {
             e.printStackTrace();

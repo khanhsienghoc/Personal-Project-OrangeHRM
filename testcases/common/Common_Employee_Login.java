@@ -35,7 +35,7 @@ public class Common_Employee_Login extends BaseTest {
 
         log.info("Pre-condition - Step 04 - Click Login button");
         loginPage.clickToLoginButton();
-        homePage = PageGeneratorManager.getHomePage(driver);
+        homePage = PageGeneratorManager.getDashboardPage(driver);
 
         log.info("Pre-condition - Step 05 - Verify the page title");
         Assertions.assertEquals("OrangeHRM", loginPage.getPageTitle(driver));
@@ -89,7 +89,7 @@ public class Common_Employee_Login extends BaseTest {
 
         log.info("Pre-condition - Step 20 - Click Login");
         loginPage.clickToLoginButton();
-        homePage = PageGeneratorManager.getHomePage(driver);
+        homePage = PageGeneratorManager.getDashboardPage(driver);
 
         log.info("Pre-condition - Step 21 - Verify Page Title");
         Assertions.assertEquals("OrangeHRM", homePage.getPageTitle(driver));
@@ -108,7 +108,7 @@ public class Common_Employee_Login extends BaseTest {
     private WebDriver driver;
     public static String username, password;
     private LoginPageObject loginPage;
-    private HomePageObject homePage;
+    private DashboardPageObject homePage;
     private PIMPageObject pimPage;
     private AddEmployeePageObject getAddEmployeePage;
     public static String firstName, middleName, lastName, employeeID;
