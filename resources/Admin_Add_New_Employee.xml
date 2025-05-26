@@ -5,12 +5,11 @@
         <listener class-name="reportConfigs.MethodListener"></listener>
         <listener class-name="reportConfigs.AllureTestListener"></listener>
     </listeners>
-    <test name="Run on edge">
-        <parameter name="browser" value="edge"/>
+    <test name="Run on chrome">
+        <parameter name="browser" value="chrome"/>
         <parameter name="environment" value="test"></parameter>
         <classes>
-            <class name="common.Common_Employee_Login"></class>
-            <class name="employee.User_01_Employee_Login"/>
+            <class name="admin.User_03_Admin_Add_New_Employee"/>
         </classes>
     </test>
 </suite>

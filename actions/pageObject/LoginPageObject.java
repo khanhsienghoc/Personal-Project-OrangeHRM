@@ -38,4 +38,14 @@ public class LoginPageObject extends BasePage {
         waitElementVisible(driver, LoginPageUI.INVALID_CREDENTIALS_ERROR_MESSAGE);
         return isElementDisplayed(driver, LoginPageUI.INVALID_CREDENTIALS_ERROR_MESSAGE);
     }
+
+    /**
+     * Get the error text
+     * @return String
+     */
+    @Step("Get the text of the error")
+    public String getErrorText(){
+        waitElementVisible(driver, LoginPageUI.INVALID_CREDENTIALS_ERROR_MESSAGE);
+        return getElementText(driver, LoginPageUI.INVALID_CREDENTIALS_ERROR_MESSAGE);
+    }
 }
