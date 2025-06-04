@@ -1,7 +1,6 @@
 package commons;
 import interfaces.BasePageUI;
 import io.qameta.allure.Step;
-import org.checkerframework.checker.fenum.qual.SwingTitlePosition;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.Color;
@@ -486,8 +485,8 @@ public class BasePage {
      */
     @Step("Get the error message of the '{1}' field")
     public String getErrorMessageByName(WebDriver driver, String name) {
-        waitElementVisible(driver, BasePageUI.ERROR_MESSAGE_BY_TEXTBOX_NAME, name);
-        return getElementText(driver, BasePageUI.ERROR_MESSAGE_BY_TEXTBOX_NAME, name);
+        waitElementVisible(driver, BasePageUI.ERROR_MESSAGE_BY_TEXTBOX_TEXT, name);
+        return getElementText(driver, BasePageUI.ERROR_MESSAGE_BY_TEXTBOX_TEXT, name);
     }
     /**
      * Click to the Menu tab by Name
@@ -514,8 +513,11 @@ public class BasePage {
      */
     @Step("Click to '{1}' button")
     public void clickToButtonByText(WebDriver driver, String text){
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(GlobalConstants.SHORT_TIMEOUT));
+        waitListElementInvisible(driver, BasePageUI.LOADING_SPINNER);
         waitForElementClickable(driver, BasePageUI.BUTTON_BY_TEXT, text);
         clickToElementByJS(driver, BasePageUI.BUTTON_BY_TEXT, text);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(GlobalConstants.LONG_TIMEOUT));
     }
     /**
      * Check whether the success pop up shows
@@ -559,11 +561,11 @@ public class BasePage {
         return getAttributeInDOMByJS(driver, BasePageUI.TEXTBOX_BY_TEXT,property,text);
     }
     public String getPropertyOfTextBoxByName(WebDriver driver, String property, String name){
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(GlobalConstants.SHORT_TIMEOUT));
         waitListElementInvisible(driver, BasePageUI.LOADING_SPINNER);
         waitForPageLoad(driver);
         waitElementVisible(driver, BasePageUI.TEXTBOX_BY_NAME, name);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(GlobalConstants.LONG_TIMEOUT));
         return getAttributeValue(driver, BasePageUI.TEXTBOX_BY_NAME,property,name);
     }
     /**

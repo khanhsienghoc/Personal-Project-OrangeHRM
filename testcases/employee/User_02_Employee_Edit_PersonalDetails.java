@@ -20,10 +20,11 @@ import java.util.Set;
 
 @Listeners({AllureTestNg.class, AllureTestListener.class})
 public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
-    @Parameters("browser")
+    @Parameters({"browser","environment"})
     @BeforeClass
     public void beforeClass(String browserName, String environmentName){
         log.info("Pre-conditon: Open Browser "+ browserName + " and navigate to the URL in " + environmentName + " environment");
+        log.info("Pre-condition: Open Browser "+ browserName + " and navigate to the URL");
         driver = getBrowserDriver(browserName, environmentName);
 
         log.info("Pre-condition: Input username with value: " + Common_Employee_Login.username);
@@ -35,7 +36,7 @@ public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
 
         log.info("Pre-condition: Click Login");
         loginPage.clickToLoginButton();
-        homePage = PageGeneratorManager.getHomePage(driver);
+        homePage = PageGeneratorManager.getDashboardPage(driver);
 
         fakeData = DataUltilities.getData();
         updatedFirstName = fakeData.getFirstName();
@@ -320,7 +321,7 @@ public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
     private String updatedFirstName, updatedMiddleName, updatedLastName, nationality, maritalStatus, gender, bloodType, otherID, licenseExpiryDate, comment1, comment2, currentDate, updatedComment;
     private DataUltilities fakeData;
     private static Set<Cookie> LoggedCookies;
-    private HomePageObject homePage;
+    private DashboardPageObject homePage;
     String fileMoreThan1MB = "FileMoreThan1MB.pdf";
     String fileLessThan1MB = "FileLessThan1MB.jpeg";
     String txtFile = "TxtFile.txt";

@@ -10,7 +10,11 @@ import io.qameta.allure.testng.AllureTestNg;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.*;
-import pageObject.HomePageObject;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
+import pageObject.DashboardPageObject;
 import pageObject.LoginPageObject;
 import pageObject.PageGeneratorManager;
 import reportConfigs.AllureTestListener;
@@ -23,6 +27,8 @@ public class User_01_Employee_Login extends BaseTest {
     public void beforeClass(String browserName, String environmentName){
         log.info("Pre-conditon: Open Browser "+ browserName + " and navigate to the URL in " + environmentName + " environment");
         driver = getBrowserDriver(browserName, environmentName);
+        log.info("Pre-conditon: Open Browser "+ browserName + " and navigate to the URL");
+        driver = getBrowserDriver(browserName,environmentName);
         loginPage = PageGeneratorManager.getLoginPage(driver);
         fakeData = DataUltilities.getData();
 
@@ -89,7 +95,7 @@ public class User_01_Employee_Login extends BaseTest {
 
         log.info("Login_04_Employee_ValidCredentials - Step_03 - Click Login");
         loginPage.clickToLoginButton();
-        homePage = PageGeneratorManager.getHomePage(driver);
+        homePage = PageGeneratorManager.getDashboardPage(driver);
 
         log.info("Login_04_Employee_ValidCredentials - Step_03 - Verify the page header 'Dashboard'");
         Assertions.assertEquals("Dashboard", homePage.getPageHeaderByText(driver,"Dashboard"));
@@ -134,7 +140,6 @@ public class User_01_Employee_Login extends BaseTest {
 
         log.info("Login_06_Employee_VerifyTabUndisplayed - Step_01 - Verify the 'Maintenance' undisplayed");
         Assertions.assertTrue(homePage.getListMenuTabSize(driver,"Maintenance") < 1);
-
     }
     @AfterClass(alwaysRun = true)
     public void afterClass(){
@@ -142,7 +147,7 @@ public class User_01_Employee_Login extends BaseTest {
     }
     private WebDriver driver;
     private LoginPageObject loginPage;
-    private HomePageObject homePage;
+    private DashboardPageObject homePage;
     private String invalidPassword, invalidUsername;
     private DataUltilities fakeData;
 }

@@ -1,5 +1,5 @@
 package commons;
 
 public enum EnvironmentList {
-    TEST
+    TEST, LOCAL
 }

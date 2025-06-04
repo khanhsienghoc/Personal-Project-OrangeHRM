@@ -1,6 +1,7 @@
 package admin;
 
 import commons.BaseTest;
+import commons.EnvironmentConfigManager;
 import commons.GlobalConstants;
 import commons.TestGuard;
 import io.qameta.allure.Severity;
@@ -21,6 +22,7 @@ public class User_02_Admin_ForgotPassword extends BaseTest {
     @BeforeClass
     public void beforeClass(String browserName, String environmentName){
         log.info("Pre-conditon: Open Browser "+ browserName + " and navigate to the URL in " + environmentName + " environment");
+        log.info("Pre-condition: Open Browser "+ browserName + " and navigate to the URL");
         driver = getBrowserDriver(browserName, environmentName);
         loginPage = PageGeneratorManager.getLoginPage(driver);
 
@@ -57,6 +59,7 @@ public class User_02_Admin_ForgotPassword extends BaseTest {
 
         log.info("Login_03_ForgotPasswordLink - Step 03 - Input username");
         resetPasswordPage.inputToTextBoxByText(driver, "Username", GlobalConstants.TESTING_ADMIN_USERNAME);
+        resetPasswordPage.inputToTextBoxByText(driver, "Username", config.getAdminUserName());
 
         log.info("Login_03_ForgotPasswordLink - Step 04 - Leave the UserName empty and click Reset Password");
         resetPasswordPage.clickToButtonByText(driver,"Reset Password");
@@ -84,4 +87,5 @@ public class User_02_Admin_ForgotPassword extends BaseTest {
     private WebDriver driver;
     private LoginPageObject loginPage;
     private ResetPasswordPageObject resetPasswordPage;
+    EnvironmentConfigManager config = EnvironmentConfigManager.getInstance();
 }
