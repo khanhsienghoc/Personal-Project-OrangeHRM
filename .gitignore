@@ -1,11 +1,15 @@
 ### IntelliJ IDEA ###
+.idea/
+*.iml
+*.iws
+*.ipr
 out/
-!**/src/main/**/out/
-!**/src/test/**/out/
-# .gitignore
+
+### Maven ###
 target/
 allure-results/
 allure-report/
+
 ### Eclipse ###
 .apt_generated
 .classpath
@@ -15,8 +19,6 @@ allure-report/
 .springBeans
 .sts4-cache
 bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
 
 ### NetBeans ###
 /nbproject/private/
@@ -30,3 +32,17 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### Logs ###
+*.log
+
+### Compiled class files ###
+*.class
+
+### Temp/Backup files ###
+*.tmp
+*.bak
+
+### Other unintentionally added files ###
+h
+*.tash apply
