@@ -26,20 +26,6 @@ public class User_01_Admin_Login extends BaseTest {
 
         invalidUsername = "invalidUsername" + fakeData.getUsername();
         invalidPassword = fakeData.getInvalidPassword();
-
-//
-//        switch (GlobalConstants.ENV) {
-//            case LOCAL:
-//                username = GlobalConstants.LOCAL_ADMIN_USERNAME;
-//                password = GlobalConstants.LOCAL_ADMIN_PASSWORD;
-//                break;
-//            case TEST:
-//                username = GlobalConstants.TESTING_ADMIN_USERNAME;
-//                password = GlobalConstants.TESTING_ADMIN_PASSWORD;
-//                break;
-//            default:
-//                throw new RuntimeException("❌ Unknown ENV: " + GlobalConstants.ENV);
-//        }
     }
     @Test
     public void Login_01_Admin_Empty_Username_And_Password(){
