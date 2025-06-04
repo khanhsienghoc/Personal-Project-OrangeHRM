@@ -196,7 +196,7 @@ public class User_03_Admin_Add_New_Employee extends BaseTest {
         log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_9 - Upload an employee avatar");
         getAddEmployeePage.uploadEmployeeAvatar(GlobalConstants.UPLOAD_FILE + gifFile);
 
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_10 - verify the employee avatar");
+        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_10 - Verify the employee avatar");
         Assertions.assertTrue(getAddEmployeePage.isEmployeeImageUploaded());
 
         log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_11 - Click Save button");
@@ -218,7 +218,6 @@ public class User_03_Admin_Add_New_Employee extends BaseTest {
         log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_16 - Verify Employee ID value is: "+ employeeID);
         Assertions.assertEquals(String.valueOf(employeeID), getPersonalPage.getPropertyOfTextBoxByText(driver, "value","Employee Id"));
     }
-
     @Description("Verify the employee data exist on database")
     @Severity(SeverityLevel.NORMAL)
     @Test()

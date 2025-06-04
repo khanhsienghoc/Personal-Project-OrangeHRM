@@ -3,6 +3,7 @@ import interfaces.BasePageUI;
 import io.qameta.allure.Step;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.Color;
@@ -544,6 +545,14 @@ public class BasePage {
     public boolean isSuccessPopUpShow(WebDriver driver){
         waitElementVisible(driver, BasePageUI.SUCCESS_SAVE_POPUP);
         return isElementDisplayed(driver, BasePageUI.SUCCESS_SAVE_POPUP);
+    }
+
+    /**
+     * Verify whether the Success Message show
+     * @param driver The WebDriver instance in use.
+     */
+    public void verifySuccessMessage(WebDriver driver){
+        Assertions.assertTrue(isSuccessPopUpShow(driver),"Success popup should be displayed");
     }
     /**
      * Clicks on the profile dropdown menu in the page header.
