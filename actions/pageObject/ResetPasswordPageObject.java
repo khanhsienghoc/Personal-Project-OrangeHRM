@@ -10,8 +10,9 @@ public class ResetPasswordPageObject extends BasePage {
         this.driver = driver;
     }
     /**
-     * Get title of the form
-     * @return String
+     * Get the title of the Reset Password form.
+     *
+     * @return The title text of the Reset Password form.
      */
     @Step("Get title of Reset Password form")
     public String getTitleOfResetPassword(){
@@ -19,11 +20,12 @@ public class ResetPasswordPageObject extends BasePage {
         return getElementText(driver, ResetPasswordUI.FORGOT_PASSWORD_TITLE);
     }
     /**
-     * Get the body text of the form by text
-     * @param text
-     * @return String
+     * Get the body text of the Reset Password form by specified text.
+     *
+     * @param text The specific text locator part to identify the body element.
+     * @return The body text of the Reset Password form.
      */
-    @Step("Get body text of Reset Password form")
+    @Step("Get body text '{0}' of Reset Password form")
     public String getBodyTextOfResetPassword(String text){
         waitElementVisible(driver, ResetPasswordUI.FORGOT_PASSWORD_BODY_BY_TEXT, text);
         return getElementText(driver, ResetPasswordUI.FORGOT_PASSWORD_BODY_BY_TEXT, text);

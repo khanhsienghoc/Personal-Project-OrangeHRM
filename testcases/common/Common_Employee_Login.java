@@ -1,6 +1,7 @@
 package common;
 
 import commons.BaseTest;
+import commons.EnvironmentConfigManager;
 import commons.GlobalConstants;
 import io.qameta.allure.testng.AllureTestNg;
 import org.junit.jupiter.api.Assertions;
@@ -18,6 +19,7 @@ public class Common_Employee_Login extends BaseTest {
         log.info("Pre-condition: Open Browser "+ browserName + " and navigate to the URL in " + environmentName + " environment");
 
         driver = getBrowserDriver(browserName, environmentName);
+        config = EnvironmentConfigManager.getInstance();
         loginPage = PageGeneratorManager.getLoginPage(driver);
         fakeData = DataUltilities.getData();
 
@@ -26,78 +28,63 @@ public class Common_Employee_Login extends BaseTest {
         firstName = fakeData.getFirstName();
         middleName = fakeData.getMiddleName();
         lastName = fakeData.getLastName();
+        adminUsername = config.getAdminUserName();
+        adminPassword = config.getAdminPassword();
+        employeeID = fakeData.getEmployeeID();
 
-        log.info("Pre-condition - Step 02 - Input username of the admin with value: " + GlobalConstants.TESTING_ADMIN_USERNAME);
-        loginPage.inputToTextBoxByText(driver, "Username", GlobalConstants.TESTING_ADMIN_USERNAME);
 
-        log.info("Pre-condition - Step 03 - Input password of the admin with value: " + GlobalConstants.TESTING_ADMIN_PASSWORD);
-        loginPage.inputToTextBoxByText(driver, "Password", GlobalConstants.TESTING_ADMIN_PASSWORD);
+        log.info("Pre-condition - Step_02 - Input username of the admin with value: " + adminUsername);
+        loginPage.inputToTextBoxByText(driver, "Username", adminUsername);
 
-        log.info("Pre-condition - Step 04 - Click Login button");
+        log.info("Pre-condition - Step_03 - Input password of the admin with value: " + adminPassword);
+        loginPage.inputToTextBoxByText(driver, "Password", adminPassword);
+
+        log.info("Pre-condition - Step_04 - Click Login button");
         loginPage.clickToLoginButton();
         homePage = PageGeneratorManager.getDashboardPage(driver);
 
-        log.info("Pre-condition - Step 05 - Verify the page title");
+        log.info("Pre-condition - Step_05 - Verify the page title");
         Assertions.assertEquals("OrangeHRM", loginPage.getPageTitle(driver));
 
-        log.info("Pre-condition - Step 06 - Click the PIM tab");
+        log.info("Pre-condition - Step_06 - Click the PIM tab");
         pimPage = homePage.clickToMenuByText(driver, "PIM");
 
-        log.info("Pre-condition - Step 07 - Click Add button to add new employee");
+        log.info("Pre-condition - Step_07 - Click Add button to add new employee");
         pimPage.clickToButtonByText(driver, "Add");
         getAddEmployeePage= PageGeneratorManager.getAddEmployeePage(driver);
 
-        log.info("Pre-condition - Step 08 - Input Employee First Name with value: '"+ firstName +"'" );
-        getAddEmployeePage.InputEmployeeInformationByName("firstName", firstName);
+        log.info("Pre-condition - Step_08 - Input Employee Information");
+        getAddEmployeePage.fillEmployeeInformation(firstName,middleName, lastName, employeeID);
 
-        log.info("Pre-condition - Step 09 - Get the value of 'Employee ID'");
-        employeeID = getAddEmployeePage.getPropertyOfTextBoxByText(driver, "value","Employee Id");
-
-        log.info("Pre-condition - Step 10 - Input Employee Middle Name with value: '" + middleName + "'");
-        getAddEmployeePage.InputEmployeeInformationByName("middleName", middleName);
-
-        log.info("Pre-condition - Step 11 - Input Employee Last Name with value: '" + lastName + "'");
-        getAddEmployeePage.InputEmployeeInformationByName("lastName", lastName);
-
-        log.info("Pre-condition - Step 12 - Click on the toggle 'Create Login Details'");
+        log.info("Pre-condition - Step_09 - Click on the 'Create Login Details' toggle");
         getAddEmployeePage.checkToCreateLoginDetailsToggle();
 
-        log.info("Pre-condition - Step 13 - Input Username with value: " + username);
-        getAddEmployeePage.inputToTextBoxByText(driver, "Username", username);
+        log.info("Pre-condition - Step_09 - Input username, password and confirm password with value '" + username +"' and '" + password +"'");
+        getAddEmployeePage.createLoginDetails(username, password, password);
 
-        log.info("Pre-condition - Step 14 - Input Password and Confirm Password with value: " + password);
-        getAddEmployeePage.inputToTextBoxByText(driver, "Password", password);
-        getAddEmployeePage.inputToTextBoxByText(driver, "Confirm Password", password);
-
-        log.info("Pre-condition - Step 15 - Click Save Button");
+        log.info("Pre-condition - Step_10 - Click Save Button");
         getAddEmployeePage.clickToButtonByText(driver, "Save");
         pimPage = PageGeneratorManager.getPIMPage(driver);
 
-        log.info("Pre-condition - Step 16 - Verify a success pop up show");
+        log.info("Pre-condition - Step_11 - Verify a success pop up show");
         Assertions.assertTrue(pimPage.isSuccessPopUpShow(driver));
 
-        log.info("Pre-condition - Step 17 - Click on Profile Options and click Logout");
+        log.info("Pre-condition - Step_12 - Click on Profile Options and click Logout");
         pimPage.clickOnProfileDropdown(driver);
         pimPage.clickOnProfileOptionByText(driver, "Logout");
         loginPage = PageGeneratorManager.getLoginPage(driver);
 
-        log.info("Pre-condition - Step 18 - Input username of the employee with value: " +username);
-        loginPage.inputToTextBoxByText(driver, "Username", username);
-
-        log.info("Pre-condition - Step 19 - Input password of the employee with value: "+ password);
-        loginPage.inputToTextBoxByText(driver, "Password", password);
-
-        log.info("Pre-condition - Step 20 - Click Login");
-        loginPage.clickToLoginButton();
+        log.info("Pre-condition - Step_13 - Login with username '" + username +"' and password '" + password +"' and click Login button");
+        loginPage.login(username, password);
         homePage = PageGeneratorManager.getDashboardPage(driver);
 
-        log.info("Pre-condition - Step 21 - Verify Page Title");
+        log.info("Pre-condition - Step_14 - Verify Page Title");
         Assertions.assertEquals("OrangeHRM", homePage.getPageTitle(driver));
 
-        log.info("Pre-condition - Step 22 - Click Profile Option");
+        log.info("Pre-condition - Step_15 - Click Profile Option");
         pimPage.clickOnProfileDropdown(driver);
 
-        log.info("Pre-condition - Step 23 - Click Logout");
+        log.info("Pre-condition - Step_16 - Click Logout");
         pimPage.clickOnProfileOptionByText(driver, "Logout");
         closeBrowserAndDriver();
     }
@@ -112,6 +99,8 @@ public class Common_Employee_Login extends BaseTest {
     private PIMPageObject pimPage;
     private AddEmployeePageObject getAddEmployeePage;
     public static String firstName, middleName, lastName, employeeID;
+    private String adminUsername, adminPassword;
     private DataUltilities fakeData;
+    EnvironmentConfigManager config = EnvironmentConfigManager.getInstance();
 
 }

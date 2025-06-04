@@ -13,7 +13,7 @@ public class GlobalConstants {
     // --- Database ---
     public static final String DB_HOST = "localhost";
     public static final String DB_PORT = "3306";
-    public static final String DB_NAME = "orangehrm_test_db";
+    public static final String DB_NAME = "orangehrm_db";
     public static final String DB_USER = "root";
     public static final String DB_PASSWORD = "";
     public static final String DATABASE_TESTING_URL = "jdbc:mysql://" + GlobalConstants.DB_HOST + ":" + GlobalConstants.DB_PORT + "/" + GlobalConstants.DB_NAME;

@@ -3,7 +3,6 @@ package admin;
 import commons.BaseTest;
 import commons.EnvironmentConfigManager;
 import commons.GlobalConstants;
-import commons.TestGuard;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Description;
@@ -21,11 +20,9 @@ public class User_02_Admin_ForgotPassword extends BaseTest {
     @Parameters({"browser","environment"})
     @BeforeClass
     public void beforeClass(String browserName, String environmentName){
-        log.info("Pre-conditon: Open Browser "+ browserName + " and navigate to the URL in " + environmentName + " environment");
         log.info("Pre-condition: Open Browser "+ browserName + " and navigate to the URL");
         driver = getBrowserDriver(browserName, environmentName);
         loginPage = PageGeneratorManager.getLoginPage(driver);
-
     }
     @Description("Verify username is empty")
     @Severity(SeverityLevel.MINOR)
@@ -55,10 +52,9 @@ public class User_02_Admin_ForgotPassword extends BaseTest {
         Assertions.assertEquals("Reset Password", resetPasswordPage.getTitleOfResetPassword());
 
         log.info("Login_03_ForgotPasswordLink - Step 02 - Verify the body text of the Reset Password page");
-        Assertions.assertEquals("Please enter your username to identify your account to reset your password", resetPasswordPage.getBodyTextOfResetPassword("Please enter your username"));
+        Assertions.assertEquals("Please enter your username to identify your account to reset your password ewfef", resetPasswordPage.getBodyTextOfResetPassword("Please enter your username"));
 
         log.info("Login_03_ForgotPasswordLink - Step 03 - Input username");
-        resetPasswordPage.inputToTextBoxByText(driver, "Username", GlobalConstants.TESTING_ADMIN_USERNAME);
         resetPasswordPage.inputToTextBoxByText(driver, "Username", config.getAdminUserName());
 
         log.info("Login_03_ForgotPasswordLink - Step 04 - Leave the UserName empty and click Reset Password");
@@ -72,14 +68,6 @@ public class User_02_Admin_ForgotPassword extends BaseTest {
         Assertions.assertEquals("You can follow that link and select a new password.", resetPasswordPage.getBodyTextOfResetPassword("select a new password."));
         Assertions.assertEquals("Note:\nIf the email does not arrive, please contact your OrangeHRM Administrator.", resetPasswordPage.getBodyTextOfResetPassword("If the email does not arrive"));
     }
-    @Description("Verify database")
-    @Severity(SeverityLevel.TRIVIAL)
-    @Test (groups = "databaseTesting")
-    public void Login_Verify_DB() {
-        TestGuard.skipIfDBDisabled();
-        System.out.println("✅ DB test logic");
-    }
-
     @AfterTest
     public void afterTest(){
         closeBrowserAndDriver();

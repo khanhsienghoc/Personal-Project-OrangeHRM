@@ -11,8 +11,7 @@ public class LoginPageObject extends BasePage {
         this.driver = driver;
     }
     /**
-     * Click to Login Button
-     *
+     * Clicks on the Login button.
      */
     @Step("Click Login button")
     public void clickToLoginButton(){
@@ -20,8 +19,9 @@ public class LoginPageObject extends BasePage {
         clickToElement(driver, LoginPageUI.LOGIN_BUTTON);
     }
     /**
-     * Click 'Forgot Your Password?' Hyperlink
+     * Clicks on the "Forgot your password?" hyperlink.
      *
+     * @return {@link ResetPasswordPageObject} The Reset Password page object.
      */
     @Step("Click 'Forgot your password?'")
     public ResetPasswordPageObject clickForgotPasswordHyperlink(){
@@ -30,22 +30,35 @@ public class LoginPageObject extends BasePage {
         return PageGeneratorManager.getResetPassPage(driver);
     }
     /**
-     * Get the Login failed error message
-     * @return boolean
+     * Checks whether the login failed error message is displayed.
+     *
+     * @return {@code true} if error message is displayed; otherwise {@code false}.
      */
-    @Step("Get the Failed Login error message")
+    @Step("Check if login failed error message is displayed")
     public boolean isLoginFailedErrorMessage(){
         waitElementVisible(driver, LoginPageUI.INVALID_CREDENTIALS_ERROR_MESSAGE);
         return isElementDisplayed(driver, LoginPageUI.INVALID_CREDENTIALS_ERROR_MESSAGE);
     }
-
     /**
-     * Get the error text
-     * @return String
+     * Gets the error message text when login fails.
+     *
+     * @return The error message string.
      */
-    @Step("Get the text of the error")
+    @Step("Get the login failed error message text")
     public String getErrorText(){
         waitElementVisible(driver, LoginPageUI.INVALID_CREDENTIALS_ERROR_MESSAGE);
         return getElementText(driver, LoginPageUI.INVALID_CREDENTIALS_ERROR_MESSAGE);
+    }
+    /**
+     * Logs in using the provided username and password.
+     *
+     * @param username The username to input.
+     * @param password The password to input.
+     */
+    @Step("Login with username '{0}' and password '{1}'")
+    public void login(String username, String password){
+        inputToTextBoxByText(driver, "Username", username);
+        inputToTextBoxByText(driver, "Password", password);
+        clickToLoginButton();
     }
 }
