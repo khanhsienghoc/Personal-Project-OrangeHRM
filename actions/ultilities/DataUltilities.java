@@ -88,5 +88,9 @@ public class DataUltilities {
     public String getNationality() {
         return faker.options().option(nationalityList.toArray(new String[0]));
     }
+    public String getEmployeeID (){
+        int ID = faker.number().numberBetween(10000, 99999);
+        return String.valueOf(ID);
+    }
 
 }

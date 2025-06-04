@@ -4,6 +4,7 @@ import commons.BaseTest;
 import commons.EnvironmentConfigManager;
 import commons.GlobalConstants;
 import dataAccessObject.EmployeeDataAccess;
+import database.BaseDBHelper;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
@@ -15,6 +16,7 @@ import pageObject.*;
 import reportConfigs.AllureTestListener;
 import ultilities.DataUltilities;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,25 +30,20 @@ public class User_03_Admin_Add_New_Employee extends BaseTest {
         log.info("Pre-condition - Step_01 - Open Browser "+ browserName + " and navigate to the URL in " + environmentName + " environment");
         driver = getBrowserDriver(browserName, environmentName);
         config = EnvironmentConfigManager.getInstance();
+        employeeDAo = EmployeeDataAccess.employeeData();
         loginPage = PageGeneratorManager.getLoginPage(driver);
 
-        log.info("Pre-condition - Step_02 - Input Admin Username with value "+config.getAdminUserName());
-        loginPage.inputToTextBoxByText(driver, "Username",config.getAdminUserName() );
-
-        log.info("Pre-condition - Step_02 - Input Admin Password with value "+ config.getAdminPassword());
-        loginPage.inputToTextBoxByText(driver, "Password",config.getAdminPassword() );
-
-        log.info("Pre-condition - Step_03 - Click Login button");
-        loginPage.clickToLoginButton();
+        log.info("Pre-condition - Step_01 - Login with Admin username: '" + config.getAdminPassword() + "and Admin password: '" + config.getAdminPassword() + "and click Login button");
+        loginPage.login(config.getAdminUserName(),config.getAdminPassword() );
         dashboardPage = PageGeneratorManager.getDashboardPage(driver);
 
-        log.info("Pre-condition - Step_04 - Verify the page header 'Dashboard'");
+        log.info("Pre-condition - Step_02 - Verify the page header 'Dashboard'");
         Assertions.assertEquals("Dashboard", dashboardPage.getPageHeaderByText(driver,"Dashboard"));
 
-        log.info("Pre-condition - Step_05 - Click to PIM");
+        log.info("Pre-condition - Step_03 - Click to PIM");
         pimPage = dashboardPage.clickToMenuByText(driver, "PIM");
 
-        log.info("Pre-condition - Step_06 - Click Add button");
+        log.info("Pre-condition - Step_04 - Click Add button");
         pimPage.clickToButtonByText(driver, "Add");
         getAddEmployeePage= PageGeneratorManager.getAddEmployeePage(driver);
 
@@ -57,6 +54,7 @@ public class User_03_Admin_Add_New_Employee extends BaseTest {
         username = fakeData.getUsername();
         password = fakeData.getValidPassword();
         invalidPassword = fakeData.getInvalidPassword();
+        employeeID = fakeData.getEmployeeID();
     }
     @Description("Verify error message when leave required fields empty")
     @Severity(SeverityLevel.NORMAL)
@@ -90,10 +88,10 @@ public class User_03_Admin_Add_New_Employee extends BaseTest {
         log.info("AddNewEmployee_02_VerifyPlaceHolders - Step_01 - Verify the placeholder of the First Name textbox is 'First Name'");
         Assertions.assertEquals("First Name", getAddEmployeePage.getPropertyOfTextBoxByName(driver, "placeholder","firstName"));
 
-        log.info("AddNewEmployee_02_VerifyPlaceHolders - Step_01 - Verify the placeholder of the Middle Name textbox is 'Middle Name'");
+        log.info("AddNewEmployee_02_VerifyPlaceHolders - Step_02 - Verify the placeholder of the Middle Name textbox is 'Middle Name'");
         Assertions.assertEquals("Middle Name", getAddEmployeePage.getPropertyOfTextBoxByName(driver, "placeholder","middleName"));
 
-        log.info("AddNewEmployee_02_VerifyPlaceHolders - Step_01 - Verify the placeholder of the Last Name textbox is 'Last Name'");
+        log.info("AddNewEmployee_02_VerifyPlaceHolders - Step_03 - Verify the placeholder of the Last Name textbox is 'Last Name'");
         Assertions.assertEquals("Last Name", getAddEmployeePage.getPropertyOfTextBoxByName(driver, "placeholder","lastName"));
     }
     @Description("verify input the unmatched password in Confirm Password field")
@@ -101,22 +99,19 @@ public class User_03_Admin_Add_New_Employee extends BaseTest {
     @Test
     public void Admin_AddNewEmployee_03_NotMatchConfirmPassword() {
         log.info("Admin_AddNewEmployee_03_NotMatchConfirmPassword - Step_01 - Input 'First Name' field with value: " + firstName);
-        getAddEmployeePage.InputEmployeeInformationByName("firstName", firstName);
+        getAddEmployeePage.inputEmployeeInformationByName("firstName", firstName);
 
         log.info("Admin_AddNewEmployee_03_NotMatchConfirmPassword - Step_02 - Input 'Middle Name' field with value: " + middleName);
-        getAddEmployeePage.InputEmployeeInformationByName("middleName", middleName);
+        getAddEmployeePage.inputEmployeeInformationByName("middleName", middleName);
 
         log.info("Admin_AddNewEmployee_03_NotMatchConfirmPassword - Step_03 - Input 'Last Name' field with value: " + lastName);
-        getAddEmployeePage.InputEmployeeInformationByName("lastName", lastName);
+        getAddEmployeePage.inputEmployeeInformationByName("lastName", lastName);
 
-        log.info("Admin_AddNewEmployee_03_NotMatchConfirmPassword - Step_04 - Input 'Username' field with value: " + username);
-        getAddEmployeePage.inputToTextBoxByText(driver, "Username", username);
+        log.info("Admin_AddNewEmployee_03_NotMatchConfirmPassword - Step_04 - Input 'Employee ID' field with value: " + employeeID);
+        getAddEmployeePage.inputToTextBoxByText(driver, "Employee Id", employeeID);
 
-        log.info("Admin_AddNewEmployee_03_NotMatchConfirmPassword - Step_05 - Input 'Password' field with value: " + password);
-        getAddEmployeePage.inputToTextBoxByText(driver, "Password", password);
-
-        log.info("Admin_AddNewEmployee_03_NotMatchConfirmPassword - Step_06 - Input value in 'Confirm Password' field with unmatched value: " + invalidPassword);
-        getAddEmployeePage.inputToTextBoxByText(driver, "Confirm Password", invalidPassword);
+        log.info("Admin_AddNewEmployee_03_NotMatchConfirmPassword - Step_05 - Input username with value '" + username + "', password with value '" + password + "' and confirm password with invalid value '"+ invalidPassword + "'");
+        getAddEmployeePage.createLoginDetails(username, password, invalidPassword);
 
         log.info("Admin_AddNewEmployee_03_NotMatchConfirmPassword - Step_06 - Click Save button");
         getAddEmployeePage.clickToButtonByText(driver, "Save");
@@ -173,72 +168,66 @@ public class User_03_Admin_Add_New_Employee extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     @Test
     public void Admin_AddNewEmployee_07_AddNewEmployeeSuccess() {
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step 01 - Click PIM");
+        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_01 - Click PIM");
         pimPage = getAddEmployeePage.clickToMenuByText(driver, "PIM");
 
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step 02 - Click Add");
+        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_02 - Click Add");
         pimPage.clickToButtonByText(driver, "Add");
         getAddEmployeePage= PageGeneratorManager.getAddEmployeePage(driver);
 
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step 03 - Input First Name with value: " + firstName);
-        getAddEmployeePage.InputEmployeeInformationByName("firstName", firstName);
+        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_03 - Input First Name with value: " + firstName);
+        getAddEmployeePage.inputEmployeeInformationByName("firstName", firstName);
 
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step 04 - Input Middle Name with value: " + middleName);
-        getAddEmployeePage.InputEmployeeInformationByName("middleName", middleName);
+        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_04 - Input Middle Name with value: " + middleName);
+        getAddEmployeePage.inputEmployeeInformationByName("middleName", middleName);
 
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step 05 - Input Last Name with value: " + lastName);
-        getAddEmployeePage.InputEmployeeInformationByName("lastName", lastName);
+        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_05 - Input Last Name with value: " + lastName);
+        getAddEmployeePage.inputEmployeeInformationByName("lastName", lastName);
 
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step 06 - Get Employee ID");
-        employeeID = getAddEmployeePage.getPropertyOfTextBoxByText(driver, "_value", "Employee Id");
+        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_06 - Input Employee ID with value: " + employeeID);
+        getAddEmployeePage.inputToTextBoxByText(driver, "Employee Id", employeeID);
 
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step 07 - Click 'Create Login Details' toggle");
+        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_07 - Click 'Create Login Details' toggle");
         getAddEmployeePage.checkToCreateLoginDetailsToggle();
 
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step 08 - Input Username with value: " + username);
-        getAddEmployeePage.inputToTextBoxByText(driver, "Username", username);
+        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_08 - Input username with value '{}', password and confirm password with value '{}'", username, password);
+        getAddEmployeePage.createLoginDetails(username, password, password);
 
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step 09 - Input Password with value: " + password);
-        getAddEmployeePage.inputToTextBoxByText(driver, "Password", password);
-
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step 10 - Input Confirm Password with value: " + password);
-        getAddEmployeePage.inputToTextBoxByText(driver, "Confirm Password", password);
-
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step 10 - Upload an employee avatar");
+        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_9 - Upload an employee avatar");
         getAddEmployeePage.uploadEmployeeAvatar(GlobalConstants.UPLOAD_FILE + gifFile);
 
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step 10 - verify the employee avatar");
+        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_10 - verify the employee avatar");
         Assertions.assertTrue(getAddEmployeePage.isEmployeeImageUploaded());
 
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step 11 - Click Save button");
+        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_11 - Click Save button");
         getAddEmployeePage.clickToButtonByText(driver, "Save");
         getPersonalPage = PageGeneratorManager.getPersonalDetails(driver);
 
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step 12 - Verify success message show");
+        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_12 - Verify success message show");
         Assertions.assertTrue(pimPage.isSuccessPopUpShow(driver));
 
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step 12 - Verify First Name value is: " + firstName);
-        Assertions.assertEquals(firstName, getPersonalPage.getPropertyOfTextBoxByName(driver, "_value","firstName"));
+        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_13 - Verify First Name value is: " + firstName);
+        Assertions.assertEquals(firstName, getPersonalPage.getPropertyOfTextBoxByName(driver, "value","firstName"));
 
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step 12 - Verify Middle Name value is: " + middleName);
-        Assertions.assertEquals(middleName, getPersonalPage.getPropertyOfTextBoxByName(driver, "_value","middleName"));
+        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_14 - Verify Middle Name value is: " + middleName);
+        Assertions.assertEquals(middleName, getPersonalPage.getPropertyOfTextBoxByName(driver, "value","middleName"));
 
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step 12 - Verify Last Name value is: " + lastName);
-        Assertions.assertEquals(lastName, getPersonalPage.getPropertyOfTextBoxByName(driver, "_value","lastName"));
+        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_15 - Verify Last Name value is: " + lastName);
+        Assertions.assertEquals(lastName, getPersonalPage.getPropertyOfTextBoxByName(driver, "value","lastName"));
 
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step 12 - Verify Employee ID value is: "+ employeeID);
-        Assertions.assertEquals(employeeID, getPersonalPage.getPropertyOfTextBoxByText(driver, "_value","Employee Id"));
-
-
+        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_16 - Verify Employee ID value is: "+ employeeID);
+        Assertions.assertEquals(String.valueOf(employeeID), getPersonalPage.getPropertyOfTextBoxByText(driver, "value","Employee Id"));
     }
 
     @Description("Verify the employee data exist on database")
     @Severity(SeverityLevel.NORMAL)
     @Test()
-    public void Admin_AddNewEmployee_08_IsEmployeeExist() {
+    public void Admin_AddNewEmployee_08_IsEmployeeExist() throws SQLException {
         skipIfDBDisabled();
-        log.info("Admin_AddNewEmployee_08_IsEmployeeExist - Step 01 - Verify the employee record exists in database");
-        employeeDAo.isEmployeeExist(employeeID);
+        BaseDBHelper.connect();
+        log.info("Admin_AddNewEmployee_08_IsEmployeeExist - Step_01 - Verify the employee record exists in database with employee id:" + employeeID);
+        boolean isExist = employeeDAo.isEmployeeExist(employeeID);
+        Assertions.assertTrue(isExist, "Employee record does NOT exist in the database!");
     }
 
     private WebDriver driver;
@@ -259,6 +248,7 @@ public class User_03_Admin_Add_New_Employee extends BaseTest {
     private String jpgFileMoreThan1MB = "JpgImageMoreThan1MB.jpg";
     private String employeeID;
     EnvironmentConfigManager config = EnvironmentConfigManager.getInstance();
-    private final EmployeeDataAccess employeeDAo = new EmployeeDataAccess();
+    EmployeeDataAccess employeeDAo = new EmployeeDataAccess();
+
 }
 

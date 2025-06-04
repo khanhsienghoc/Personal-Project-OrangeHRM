@@ -1,6 +1,8 @@
 package commons;
 import interfaces.BasePageUI;
 import io.qameta.allure.Step;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.Color;
@@ -18,6 +20,8 @@ import java.util.Set;
 
 
 public class BasePage {
+    protected static final Logger log = LogManager.getLogger(BasePage.class);
+
     public static BasePage BasePageObject() {
         return new BasePage();
     }
@@ -457,31 +461,37 @@ public class BasePage {
     }
     private long longTimeOut = GlobalConstants.LONG_TIMEOUT;
     /**
-     * Inputs text into a textbox located by its name attribute.
+     * Inputs text into a textbox located by its associated label text.
      *
-     * @param driver WebDriver instance
-     * @param textbox   text attribute of the textbox
-     * @param text   text to input
-     */
+     * @param driver  WebDriver instance in use.
+     * @param textbox The visible text of the label associated with the textbox.
+     * @param text    The value to input into the textbox.*/
     @Step("In the '{1}' field, input the value '{2}'")
     public void inputToTextBoxByText(WebDriver driver, String textbox, String text) {
         waitElementVisible(driver, BasePageUI.TEXTBOX_BY_TEXT, textbox);
         sendKeyToElement(driver, BasePageUI.TEXTBOX_BY_TEXT, text, textbox);
     }
+    /**
+     * Inputs text into a textbox located by its name attribute.
+     *
+     * @param driver WebDriver instance in use.
+     * @param name   The value of the textbox's 'name' attribute.
+     * @param text   The value to input into the textbox.
+     */
     @Step("In the '{1}' field, input the value '{2}'")
     public void inputToTextBoxByName(WebDriver driver, String name, String text) {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-        waitListElementInvisible(driver, BasePageUI.LOADING_SPINNER);
+//        waitListElementInvisible(driver, BasePageUI.LOADING_SPINNER);
         waitElementVisible(driver, BasePageUI.TEXTBOX_BY_NAME, name);
         sendKeyToElement(driver, BasePageUI.TEXTBOX_BY_NAME, text, name);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
     }
     /**
-     * Get the error message of a field its name attribute
+     * Retrieves the error message associated with a textbox located by its name attribute.
      *
-     * @param driver WebDriver instance
-     * @param name   name attribute of the textbox
-     * @return String
+     * @param driver WebDriver instance in use.
+     * @param name   The value of the textbox's 'name' attribute.
+     * @return The error message text associated with the textbox.
      */
     @Step("Get the error message of the '{1}' field")
     public String getErrorMessageByName(WebDriver driver, String name) {
@@ -489,10 +499,14 @@ public class BasePage {
         return getElementText(driver, BasePageUI.ERROR_MESSAGE_BY_TEXTBOX_TEXT, name);
     }
     /**
-     * Click to the Menu tab by Name
-     * @param driver
-     * @param text
-     */
+     * Clicks on a main menu tab identified by its visible text,
+     * then returns the corresponding page object.
+     *
+     * @param <T>    The type of the page object to return (subtype of BasePage).
+     * @param driver The WebDriver instance in use.
+     * @param text   The visible text of the menu tab to click.
+     * @return The page object corresponding to the clicked tab, or the current page if no specific page matches.
+     * */
     @SuppressWarnings("unchecked")
     @Step("Click to the '{1}' tab")
     public <T extends BasePage> T clickToMenuByText(WebDriver driver, String text) {
@@ -507,9 +521,10 @@ public class BasePage {
         return (T) this;
     }
     /**
-     * Click to Button by text
-     * @param driver
-     * @param text (text of them locator)
+     * Clicks on a button identified by its visible text using JavaScript executor.
+     *
+     * @param driver The WebDriver instance in use.
+     * @param text   The visible text of the button to click.
      */
     @Step("Click to '{1}' button")
     public void clickToButtonByText(WebDriver driver, String text){
@@ -520,9 +535,10 @@ public class BasePage {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(GlobalConstants.LONG_TIMEOUT));
     }
     /**
-     * Check whether the success pop up shows
-     * @param driver
-     * @return boolean
+     * Checks whether the success popup is displayed after saving.
+     *
+     * @param driver The WebDriver instance in use.
+     * @return {@code true} if the success popup is visible; {@code false} otherwise.
      */
     @Step("Check whether the success pop up show")
     public boolean isSuccessPopUpShow(WebDriver driver){
@@ -530,8 +546,9 @@ public class BasePage {
         return isElementDisplayed(driver, BasePageUI.SUCCESS_SAVE_POPUP);
     }
     /**
-     * Click on Profile Dropdown
-     * @param driver
+     * Clicks on the profile dropdown menu in the page header.
+     *
+     * @param driver The WebDriver instance in use.
      */
     @Step("Click on Profile Dropdown")
     public void clickOnProfileDropdown(WebDriver driver){
@@ -539,9 +556,10 @@ public class BasePage {
         clickToElement(driver, BasePageUI.PROFILE_DROPDOWN);
     }
     /**
-     * Click on Profile Option by text
-     * @param driver
-     * @param text (text of the locator)
+     * Clicks on an option inside the Profile dropdown by its visible text.
+     *
+     * @param driver WebDriver instance in use.
+     * @param text   The visible text of the profile option to click.
      */
     @Step("Click '{1}' options in the Profile options dropdown")
     public void clickOnProfileOptionByText(WebDriver driver, String text){
@@ -549,30 +567,40 @@ public class BasePage {
         clickToElementByJS(driver, BasePageUI.PROFILE_OPTION_BY_TEXT, text);
     }
     /**
-     * Get property of a locator by text box
-     * @param driver
-     * @param text (text of the TextBox locator)
-     * @param property (property that want to get)
-     * @return String
+     * Retrieves a specific property (attribute) of a textbox located by its label text.
+     *
+     * @param driver   WebDriver instance in use.
+     * @param property The name of the property/attribute to retrieve (e.g., "value", "readonly").
+     * @param text     The visible label text associated with the textbox.
+     * @return The value of the specified property.
      */
     @Step("Get '{1}' attribute the '{2}' textbox")
     public String getPropertyOfTextBoxByText(WebDriver driver, String property, String text){
         waitElementVisible(driver, BasePageUI.TEXTBOX_BY_TEXT, text);
         return getAttributeInDOMByJS(driver, BasePageUI.TEXTBOX_BY_TEXT,property,text);
     }
+
+    /**
+     * Retrieves a specific property (attribute) of a textbox located by its name attribute.
+     *
+     * @param driver   WebDriver instance in use.
+     * @param property The name of the property/attribute to retrieve (e.g., "value", "disabled").
+     * @param name     The value of the 'name' attribute of the textbox.
+     * @return The value of the specified property.
+     */
+    @Step("Get '{1}' attribute the '{2}' textbox")
     public String getPropertyOfTextBoxByName(WebDriver driver, String property, String name){
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(GlobalConstants.SHORT_TIMEOUT));
-        waitListElementInvisible(driver, BasePageUI.LOADING_SPINNER);
-        waitForPageLoad(driver);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(7));
         waitElementVisible(driver, BasePageUI.TEXTBOX_BY_NAME, name);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(GlobalConstants.LONG_TIMEOUT));
-        return getAttributeValue(driver, BasePageUI.TEXTBOX_BY_NAME,property,name);
+        return getAttributeInDOMByJS(driver, BasePageUI.TEXTBOX_BY_NAME,property,name);
     }
     /**
-     * Check whether element displays
-     * @param driver
-     * @param text (text of the locator)
-     * @return boolean
+     * Checks whether a menu tab is displayed based on its visible text.
+     *
+     * @param driver WebDriver instance in use.
+     * @param text   The visible text of the menu tab.
+     * @return {@code true} if the menu tab is displayed; {@code false} otherwise.
      */
     @Step("Verify whether the menu tab name '{1}' displays")
     public boolean isMenuTabDislaysByText(WebDriver driver, String text){
@@ -581,10 +609,11 @@ public class BasePage {
     }
 
     /**
-     * Get Page Header by text
-     * @param driver
-     * @param text (text of the locator)
-     * @return
+     * Retrieves the text content of a page header identified by its visible text.
+     *
+     * @param driver WebDriver instance in use.
+     * @param text   The visible header text used to locate the header element.
+     * @return The actual text content of the header element.
      */
     @Step("Get the Page header of '{1}' page")
     public String getPageHeaderByText(WebDriver driver, String text){
@@ -592,10 +621,11 @@ public class BasePage {
         return getElementText(driver, BasePageUI.HEADER_PAGE_BY_TEXT, text);
     }
     /**
-     * Get the size of the Menu tab by Text
-     * @param driver
-     * @param text (text of the locator)
-     * @return
+     * Gets the number of menu tabs that match the specified visible text.
+     *
+     * @param driver WebDriver instance in use.
+     * @param text   The visible text used to locate the menu tab elements.
+     * @return The number of menu tab elements found.
      */
     @Step("Get the size of the Menu Tab by Text '{1}'")
     public int getListMenuTabSize(WebDriver driver, String text){
@@ -604,12 +634,12 @@ public class BasePage {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(GlobalConstants.LONG_TIMEOUT));
         return size;
     }
-
     /**
-     * In the dropdown, click on the arrow of the dropdown to show all the dropdown value
-     * @param driver
-     * @param dropdownText (dropdown name)
-     * @param expectedValue
+     * Selects a value from a dropdown list by first clicking the dropdown's arrow icon.
+     *
+     * @param driver        WebDriver instance in use.
+     * @param dropdownText  The visible label text of the dropdown.
+     * @param expectedValue The visible text of the dropdown item to be selected.
      */
     @Step("In the '{1}' dropdown, click on the arrow of the dropdown to show all the dropdown value")
     public void selectValueInDropdownByText(WebDriver driver, String dropdownText, String expectedValue){
@@ -618,11 +648,11 @@ public class BasePage {
         waitElementVisible(driver, BasePageUI.DROPDOWN_VALUE_BY_TEXT, expectedValue);
         clickToElement(driver, BasePageUI.DROPDOWN_VALUE_BY_TEXT, expectedValue);
     }
-
     /**
-     * Click on the radio by text
-     * @param driver
-     * @param text (the text of the radio button)
+     * Clicks on a radio button identified by its visible text.
+     *
+     * @param driver WebDriver instance in use.
+     * @param text   The visible text associated with the radio button.
      */
    @Step("Click on the radio '{1}' button")
     public void clickToRadioButtonByText(WebDriver driver, String text){
@@ -630,22 +660,23 @@ public class BasePage {
         clickToElement(driver, BasePageUI.RADIO_BUTTON_BY_TEXT, text);
     }
     /**
-     * In the header, click on the button related to that section
-     * @param driver
-     * @param header (text of the locator). Example: "Add Attachments", "Edit Attachments"
-     * @param buttonText (text of the locator). Example: "Save", "Cancel"
+     * Clicks a button within a specific header section based on the header and button text.
+     *
+     * @param driver     WebDriver instance in use.
+     * @param header     The visible text of the header section (e.g., "Add Attachments").
+     * @param buttonText The visible text of the button (e.g., "Save", "Cancel").
      */
     @Step("In the header '{1}', click on the '{2}' button")
     public void clickOnButtonByHeaderAndByButtonText(WebDriver driver, String header, String buttonText){
         waitElementVisible(driver, BasePageUI.BUTTON_BY_HEADER_AND_BUTTON_TEXT, header, buttonText);
         clickToElement(driver, BasePageUI.BUTTON_BY_HEADER_AND_BUTTON_TEXT, header, buttonText);
     }
-
     /**
-     * Check whether the radio button name is selected
-     * @param driver
-     * @param text (text of the locator)
-     * @return
+     * Checks whether a radio button is selected based on its visible text.
+     *
+     * @param driver WebDriver instance in use.
+     * @param text   The visible text of the radio button.
+     * @return {@code true} if the radio button is selected; {@code false} otherwise.
      */
     @Step("Check whether the radio button name '{1}' is selected")
     public boolean isRadioButtonSelectedByText(WebDriver driver, String text ){
@@ -653,9 +684,10 @@ public class BasePage {
         return isElementSelected(driver, BasePageUI.CHECKED_RADIO_BUTTON_BY_TEXT,text);
     }
     /**
-     * Upload the attachment with the file name
-     * @param driver
-     * @param fileName
+     * Uploads an attachment using the specified file name.
+     *
+     * @param driver   WebDriver instance in use.
+     * @param fileName The name of the file to be uploaded (should exist in the upload folder).
      */
     @Step("Upload the attachment with the file name is '{1}'")
     public void addAttachment(WebDriver driver, String fileName){
@@ -663,9 +695,10 @@ public class BasePage {
         uploadOneFile(driver, BasePageUI.UPLOAD_FILE, GlobalConstants.UPLOAD_FILE + fileName);
     }
     /**
-     * Input the value text to the Comment text box of the attachment
-     * @param driver
-     * @param value
+     * Inputs text into the comment text area in the attachment section.
+     *
+     * @param driver WebDriver instance in use.
+     * @param value  The text value to input into the comment box.
      */
     @Step("Input the value '{1}' to the Comment text box of the attachment")
     public void inputToCommentTextArea(WebDriver driver, String value){
@@ -676,10 +709,11 @@ public class BasePage {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(GlobalConstants.LONG_TIMEOUT));
     }
     /**
-     * Check whether the text box is enabled
-     * @param driver
-     * @param text
-     * @return
+     * Checks whether a textbox is enabled, based on its visible label text.
+     *
+     * @param driver WebDriver instance in use.
+     * @param text   The visible label text of the textbox.
+     * @return {@code true} if the textbox is enabled; {@code false} otherwise.
      */
     @Step("Check whether the text box with name is '{1}' is enabled")
     public boolean isTextboxEnabledByText(WebDriver driver, String text){
@@ -699,10 +733,11 @@ public class BasePage {
         return getElementText(driver, BasePageUI.UPLOADED_FILE_DESCRIPTION_BY_FIELD_AND_TEXT, fieldName,text);
     }
     /**
-     * Get the comment of the uploaded attachment in the Description field by text of the field
-     * @param driver
-     * @param text
-     * @return
+     * Gets the comment of the uploaded attachment in the Description field by label text.
+     *
+     * @param driver WebDriver instance in use.
+     * @param text   The label text of the description field.
+     * @return The comment text.
      */
     @Step("Get the comment of the uploaded attachment in the Description field with the value '{1}'")
     public String getFileCommentByText(WebDriver driver,String text){
@@ -710,10 +745,11 @@ public class BasePage {
         return getElementText(driver, BasePageUI.UPLOADED_FILE_COMMENT_TEXT,text);
     }
     /**
-     *Click a button in the Action columns to whether edit, delete or download the attachment by name of the attachment and class of the button
-     * @param driver
-     * @param fileName: file name that need to edit
-     * @param className: class of the button present the action (pencil, download, trash)
+     * Clicks an action icon (edit, delete, download) in the attachment table by file name and button class.
+     *
+     * @param driver    WebDriver instance in use.
+     * @param fileName  The name of the file to perform the action on.
+     * @param className The class representing the action icon (e.g., pencil, trash, download).
      */
     @Step("Click to the icon to Edit/Delete/Download of the file name '{1}'")
     public void clickToActionAttachment(WebDriver driver, String fileName, String className){
@@ -721,9 +757,10 @@ public class BasePage {
         clickToElement(driver, BasePageUI.EDIT_ATTACHMENT_BY_FILENAME_AND_BUTTONCLASS,fileName, className);
     }
     /**
-     * In the Delete Confirm pop up, choose the option by text of the button
-     * @param driver
-     * @param text
+     * Clicks either "Delete" or "Cancel" button in the delete confirmation popup.
+     *
+     * @param driver WebDriver instance in use.
+     * @param text   The text of the button to click.
      */
     @Step("In the Delete Confirm pop up, choose '{1}'")
     public void clickCancelOrDeleteInConfirmDeletePopup(WebDriver driver, String text){
@@ -731,11 +768,12 @@ public class BasePage {
         clickToElement(driver, BasePageUI.BUTTON_IN_CONFIRM_DELETE_POPUP_BY_TEXT, text);
     }
     /**
-     * Get the Attachment List size of the by field name and file name
-     * @param driver
-     * @param field (field name)
-     * @param text (file name)
-     * @return
+     * Gets the number of uploaded attachments by field name and file name.
+     *
+     * @param driver WebDriver instance in use.
+     * @param field  The name of the form field.
+     * @param text   The name of the uploaded file.
+     * @return The number of matching uploaded attachments.
      */
     @Step("Get the Attachment List size of the field name '{1}' and the file name is '{2}'")
     public int getListAttachmentSizeByFieldAndText(WebDriver driver, String field, String text){
@@ -746,9 +784,10 @@ public class BasePage {
         return size;
     }
     /**
-     * In every uploaded attachment record, click on the checkbox by file name
-     * @param driver
-     * @param fileName
+     * Checks the checkbox corresponding to an uploaded attachment by file name.
+     *
+     * @param driver   WebDriver instance in use.
+     * @param fileName The name of the file.
      */
     @Step("In every uploaded attachment record, click on the checkbox of the file name is '{1}'")
     public void checkToTheCheckBoxOfAttachment(WebDriver driver, String fileName){
@@ -756,9 +795,10 @@ public class BasePage {
         checkTheCheckBox(driver, BasePageUI.CHECKBOX_ATTACHMENT_BY_FILENAME, fileName);
     }
     /**
-     * Check whether the 'Delete Selected' button show up
-     * @param driver
-     * @return true/false
+     * Checks whether the "Delete Selected" button is displayed.
+     *
+     * @param driver WebDriver instance in use.
+     * @return {@code true} if the button is displayed; otherwise {@code false}.
      */
     @Step("Check whether the 'Delete Selected' button show up")
     public boolean isDeleteSelectedButtonDisplay(WebDriver driver){
@@ -766,8 +806,9 @@ public class BasePage {
         return isElementDisplayed(driver, BasePageUI.DELETE_SELECTED_BUTTON);
     }
     /**
-     * After check on the checkbox of the uploaded attachments, a Delete Selected button show, click on the button
-     * @param driver
+     * Clicks the "Delete Selected" button after attachments have been selected.
+     *
+     * @param driver WebDriver instance in use.
      */
     @Step("After check on the checkbox of the uploaded attachments, a Delete Selected button show, click on the button")
     public void clickOnDeleteSelectedButton(WebDriver driver){
@@ -775,9 +816,10 @@ public class BasePage {
         clickToElement(driver, BasePageUI.DELETE_SELECTED_BUTTON);
     }
     /**
-     * Get number of uploaded attachments
-     * @param driver
-     * @return number (int)
+     * Gets the total number of uploaded attachments.
+     *
+     * @param driver WebDriver instance in use.
+     * @return The number of uploaded attachments as a String.
      */
     @Step("Get number of uploaded attachments")
     public String getNumberOfUploadedAttachment(WebDriver driver){
