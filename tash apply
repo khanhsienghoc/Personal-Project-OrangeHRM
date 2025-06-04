@@ -1,0 +1,24 @@
+ actions/commons/BasePage.java                      | 244 [32m++++++++++++[m[31m---------[m
+ actions/commons/GlobalConstants.java               |   2 [32m+[m[31m-[m
+ actions/dataAccessObject/EmployeeDataAccess.java   |  24 [32m+[m[31m-[m
+ actions/dataObject/PersonalDetailsData.java        | 111 [32m++++++++++[m
+ actions/pageObject/AddEmployeePageObject.java      |  54 [32m++++[m[31m-[m
+ actions/pageObject/LoginPageObject.java            |  33 [32m++[m[31m-[m
+ actions/pageObject/MyInfoPageObject.java           |  17 [32m++[m
+ actions/pageObject/PersonalDetailsPageObject.java  |  21 [32m++[m
+ actions/pageObject/ResetPasswordPageObject.java    |  14 [32m+[m[31m-[m
+ actions/ultilities/DataUltilities.java             |   4 [32m+[m
+ interfaces/AddEmployeeUI.java                      |   2 [32m+[m[31m-[m
+ interfaces/BasePageUI.java                         |   2 [32m+[m[31m-[m
+ resources/Admin_Add_New_Employee.xml               |   2 [32m+[m[31m-[m
+ resources/EditEmployeePersonalDetails.xml          |   1 [32m+[m
+ testcases/admin/User_01_Admin_Login.java           | 141 [32m++++[m[31m--------[m
+ testcases/admin/User_02_Admin_ForgotPassword.java  |  26 [32m++[m[31m-[m
+ .../admin/User_03_Admin_Add_New_Employee.java      | 110 [32m+++++[m[31m-----[m
+ testcases/common/Common_Employee_Login.java        |  69 [32m+++[m[31m---[m
+ testcases/employee/User_01_Employee_Login.java     |  98 [32m+++[m[31m------[m
+ .../User_02_Employee_Edit_PersonalDetails.java     | 141 [32m+++++++[m[31m-----[m
+ uploadFiles/GifImageMoreThan1MB.gif                | Bin [31m0[m -> [32m3649209[m bytes
+ uploadFiles/JpgImageMoreThan1MB.jpg                | Bin [31m0[m -> [32m2504642[m bytes
+ uploadFiles/PngImageMoreThan1MB.png                | Bin [31m0[m -> [32m2060826[m bytes
+ 23 files changed, 663 insertions(+), 453 deletions(-)

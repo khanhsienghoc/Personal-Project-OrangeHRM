@@ -16,6 +16,9 @@ import pageObject.LoginPageObject;
 import pageObject.PageGeneratorManager;
 import ultilities.DataUltilities;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class User_01_Employee_Login extends BaseTest {
     @Parameters({"browser","environment"})
     @BeforeClass
@@ -32,107 +35,68 @@ public class User_01_Employee_Login extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     @Test
     public void Login_01_Employee_ValidUsername_And_InvalidPassword(){
-        log.info("Login_01_Employee_ValidUsername_And_InvalidPassword - Step 01 - Input valid username");
-        loginPage.inputToTextBoxByText(driver,"Username", Common_Employee_Login.username );
+        log.info("Login_01_Employee_ValidUsername_And_InvalidPassword - Step_01 - Input username with value '{}' and password with invalid value '{}' and click Login button", Common_Employee_Login.username, invalidPassword);
+        loginPage.login(Common_Employee_Login.username, invalidPassword);
 
-        log.info("Login_01_Employee_ValidUsername_And_InvalidPassword - Step 02 - Input invalid password");
-        loginPage.inputToTextBoxByText(driver,"Password", invalidPassword);
-
-        log.info("Login_01_Employee_ValidUsername_And_InvalidPassword - Step 03 - Click Login");
-        loginPage.clickToLoginButton();
-
-        log.info("Login_01_Employee_ValidUsername_And_InvalidPassword - Step 03 - Verify the 'Invalid credentials' error message displays");
+        log.info("Login_01_Employee_ValidUsername_And_InvalidPassword - Step_02 - Verify the 'Invalid credentials' error message displays");
         Assertions.assertTrue(loginPage.isLoginFailedErrorMessage());
     }
     @Description("Verify login with invalid employee username and valid password")
     @Severity(SeverityLevel.NORMAL)
     @Test
     public void Login_02_Employee_InvalidUsername_And_ValidPassword(){
-        log.info("Login_02_Employee_InvalidUsername_And_ValidPassword - Step 01 - Input invalid username");
-        loginPage.inputToTextBoxByText(driver,"Username", invalidUsername);
+        log.info("Login_02_Employee_InvalidUsername_And_ValidPassword - Step_01 - Input username with invalid value '{}' and password with valid value '{}' and click Login button", invalidUsername, Common_Employee_Login.password);
+        loginPage.login(invalidUsername, Common_Employee_Login.password);
 
-        log.info("Login_02_Employee_InvalidUsername_And_ValidPassword - Step 02 - Input valid password");
-        loginPage.inputToTextBoxByText(driver,"Password", Common_Employee_Login.password );
-
-        log.info("Login_02_Employee_InvalidUsername_And_ValidPassword - Step 03 - Click Login");
-        loginPage.clickToLoginButton();
-
-        log.info("Login_02_Employee_InvalidUsername_And_ValidPassword - Step 03 - Verify the 'Invalid credentials' error message displays");
+        log.info("Login_02_Employee_InvalidUsername_And_ValidPassword - Step_02 - Verify the 'Invalid credentials' error message displays");
         Assertions.assertTrue(loginPage.isLoginFailedErrorMessage());
     }
     @Description("Verify login with invalid employee username and invalid password")
     @Severity(SeverityLevel.NORMAL)
     @Test
     public void Login_03_Employee_InvalidUsername_And_InvalidPassword(){
-        log.info("Login_03_Employee_InvalidUsername_And_InvalidPassword - Step 01 - Input invalid username");
-        loginPage.inputToTextBoxByText(driver,"Username", invalidUsername);
+        log.info("Login_03_Employee_InvalidUsername_And_InvalidPassword - Step_01 - Input username with invalid value '{}' and password with invalid value '{}' and click Login button", invalidUsername, invalidPassword);
+        loginPage.login(invalidUsername, invalidPassword);
 
-        log.info("Login_03_Employee_InvalidUsername_And_InvalidPassword - Step 02 - Input invalid password");
-        loginPage.inputToTextBoxByText(driver,"Password", invalidPassword);
-
-        log.info("Login_03_Employee_InvalidUsername_And_InvalidPassword - Step 03 - Click Login");
-        loginPage.clickToLoginButton();
-
-        log.info("Login_03_Employee_InvalidUsername_And_InvalidPassword - Step 03 - Verify the 'Invalid credentials' error message displays");
+        log.info("Login_03_Employee_InvalidUsername_And_InvalidPassword - Step_02 - Verify the 'Invalid credentials' error message displays");
         Assertions.assertTrue(loginPage.isLoginFailedErrorMessage());
     }
     @Description("Verify login with valid employee username and valid password")
     @Severity(SeverityLevel.CRITICAL)
     @Test
     public void Login_04_Employee_ValidCredentials(){
-        log.info("Login_04_Employee_ValidCredentials - Step 01 - Input valid username");
-        loginPage.inputToTextBoxByText(driver,"Username", Common_Employee_Login.username);
-
-        log.info("Login_04_Employee_ValidCredentials - Step 02 - Input valid password");
-        loginPage.inputToTextBoxByText(driver,"Password", Common_Employee_Login.password);
-
-        log.info("Login_04_Employee_ValidCredentials - Step 03 - Click Login");
-        loginPage.clickToLoginButton();
+        log.info("Login_04_Employee_ValidCredentials - Step_01 - Input username with valid value '{}' and password with valid value '{}' and click Login button", Common_Employee_Login.username, Common_Employee_Login.password);
+        loginPage.login(Common_Employee_Login.username, Common_Employee_Login.password);
         homePage = PageGeneratorManager.getDashboardPage(driver);
 
-        log.info("Login_04_Employee_ValidCredentials - Step 03 - Verify the page header 'Dashboard'");
+        log.info("Login_04_Employee_ValidCredentials - Step_02 - Verify the page header 'Dashboard'");
         Assertions.assertEquals("Dashboard", homePage.getPageHeaderByText(driver,"Dashboard"));
     }
     @Description("Verify that some left tab displayed when login as Employee role")
     @Severity(SeverityLevel.NORMAL)
     @Test(dependsOnMethods = "Login_04_Employee_ValidCredentials")
     public void Login_05_Employee_VerifyTabDisplayed(){
-        log.info("Login_05_Employee_VerifyTabDisplayed - Step 01 - Verify the 'Leave' tab show");
-        Assertions.assertTrue(homePage.isMenuTabDislaysByText(driver,"Leave"));
+        List<String> EXPECTED_MENU_TABS = Arrays.asList(
+                "Leave", "Time", "Time", "My Info",
+                "Performance", "Dashboard", "Directory", "Claim", "Buzz"
+        );
+        for (String tab: EXPECTED_MENU_TABS){
+            log.info("Login_05_Employee_VerifyTabDisplayed - Step_01 - Verify the {} tab displays", tab);
+            Assertions.assertTrue(homePage.isMenuTabDislaysByText(driver,tab));
 
-        log.info("Login_05_Employee_VerifyTabDisplayed - Step 02 - Verify the 'Time' tab show");
-        Assertions.assertTrue(homePage.isMenuTabDislaysByText(driver,"Time"));
-
-        log.info("Login_05_Employee_VerifyTabDisplayed - Step 03 - Verify the 'My Info' tab show");
-        Assertions.assertTrue(homePage.isMenuTabDislaysByText(driver,"My Info"));
-
-        log.info("Login_05_Employee_VerifyTabDisplayed - Step 04 - Verify the 'Performance' tab show");
-        Assertions.assertTrue(homePage.isMenuTabDislaysByText(driver,"Performance"));
-
-        log.info("Login_05_Employee_VerifyTabDisplayed - Step 05 - Verify the 'Dashboard' tab show");
-        Assertions.assertTrue(homePage.isMenuTabDislaysByText(driver,"Dashboard"));
-
-        log.info("Login_05_Employee_VerifyTabDisplayed - Step 06 - Verify the 'Directory' tab show");
-        Assertions.assertTrue(homePage.isMenuTabDislaysByText(driver,"Directory"));
-
-        log.info("Login_05_Employee_VerifyTabDisplayed - Step 07 - Verify the 'Claim' tab show");
-        Assertions.assertTrue(homePage.isMenuTabDislaysByText(driver,"Claim"));
-
-        log.info("Login_05_Employee_VerifyTabDisplayed - Step 08 - Verify the 'Buzz' tab show");
-        Assertions.assertTrue(homePage.isMenuTabDislaysByText(driver,"Buzz"));
+        }
     }
     @Description("Verify that some left tab undisplayed when login as Employee role")
     @Severity(SeverityLevel.NORMAL)
     @Test(dependsOnMethods = "Login_04_Employee_ValidCredentials")
     public void Login_06_Employee_VerifyTabUndisplayed(){
-        log.info("Login_06_Employee_VerifyTabUndisplayed - Step 01 - Verify the 'PIM' undisplayed");
-        Assertions.assertTrue(homePage.getListMenuTabSize(driver,"PIM") < 1);
-
-        log.info("Login_06_Employee_VerifyTabUndisplayed - Step 01 - Verify the 'Recruitment' undisplayed");
-        Assertions.assertTrue(homePage.getListMenuTabSize(driver,"Recruitment") < 1);
-
-        log.info("Login_06_Employee_VerifyTabUndisplayed - Step 01 - Verify the 'Maintenance' undisplayed");
-        Assertions.assertTrue(homePage.getListMenuTabSize(driver,"Maintenance") < 1);
+        List<String> EXPECTED_MENU_TABS = Arrays.asList(
+                "PIM", "Recruitment", "Maintenance"
+        );
+        for (String tab : EXPECTED_MENU_TABS){
+            log.info("Login_06_Employee_VerifyTabUndisplayed - Step_01 - Verify the '{}' tab undisplayed", tab);
+            Assertions.assertTrue(homePage.getListMenuTabSize(driver,tab) < 1);
+        }
 
     }
     @AfterClass(alwaysRun = true)
