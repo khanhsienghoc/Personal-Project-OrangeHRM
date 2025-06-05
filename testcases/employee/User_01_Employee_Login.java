@@ -101,6 +101,7 @@ public class User_01_Employee_Login extends BaseTest {
     }
     @AfterClass(alwaysRun = true)
     public void afterClass(){
+        log.info("Cleaning up: Closing browser and driver");
         closeBrowserAndDriver();
     }
     private WebDriver driver;

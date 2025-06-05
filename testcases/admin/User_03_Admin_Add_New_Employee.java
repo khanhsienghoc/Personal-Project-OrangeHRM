@@ -204,7 +204,7 @@ public class User_03_Admin_Add_New_Employee extends BaseTest {
         getPersonalPage = PageGeneratorManager.getPersonalDetails(driver);
 
         log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_12 - Verify success message show");
-        Assertions.assertTrue(pimPage.isSuccessPopUpShow(driver));
+        pimPage.verifySuccessMessage(driver);
 
         log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_13 - Verify First Name value is: " + firstName);
         Assertions.assertEquals(firstName, getPersonalPage.getPropertyOfTextBoxByName(driver, "value","firstName"));
@@ -228,7 +228,11 @@ public class User_03_Admin_Add_New_Employee extends BaseTest {
         boolean isExist = employeeDAo.isEmployeeExist(employeeID);
         Assertions.assertTrue(isExist, "Employee record does NOT exist in the database!");
     }
-
+    @AfterTest(alwaysRun = true)
+    public void afterTest(){
+        log.info("Cleaning up: Closing browser and driver");
+        closeBrowserAndDriver();
+    }
     private WebDriver driver;
     private LoginPageObject loginPage;
     private DashboardPageObject dashboardPage;

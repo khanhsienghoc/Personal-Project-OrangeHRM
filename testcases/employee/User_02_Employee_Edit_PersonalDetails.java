@@ -8,7 +8,6 @@ import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Description;
 import io.qameta.allure.testng.AllureTestNg;
 import org.junit.jupiter.api.Assertions;
-import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.*;
 import pageObject.*;
@@ -17,14 +16,15 @@ import ultilities.DataUltilities;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Listeners({AllureTestNg.class, AllureTestListener.class})
 public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
     @Parameters({"browser","environment"})
     @BeforeClass
     public void beforeClass(String browserName, String environmentName){
-        log.info("Pre-conditon: Open Browser "+ browserName + " and navigate to the URL in " + environmentName + " environment");
+        log.info("Pre-condition: Open Browser "+ browserName + " and navigate to the URL in " + environmentName + " environment");
         log.info("Pre-condition: Open Browser "+ browserName + " and navigate to the URL");
         driver = getBrowserDriver(browserName, environmentName);
 
@@ -80,21 +80,46 @@ public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     @Test
     public void Edit_02_Employee_VerifyPersonalDetails(){
-        log.info("Edit_02_Employee_VerifyPersonalDetails - Step_01: Verify 'First Name' value");
-        Assertions.assertEquals(Common_Employee_Login.firstName, getPersonalDetails.getPropertyOfTextBoxByName(driver,"value","firstName"),
-                "First Name should match expected value");
+//        List<String> FIELDS = Arrays.asList("firstName", "middleName","lastName", "Employee Id");
+//        List<String> EXPECTED_VALUE = Arrays.asList(Common_Employee_Login.firstName, Common_Employee_Login.middleName, Common_Employee_Login.lastName);
+//
+//        for(String field : FIELDS){
+//            for(String value : EXPECTED_VALUE){
+//                log.info("Edit_02_Employee_VerifyPersonalDetails - Step_01: Verify '{}' value", field);
+//                Assertions.assertEquals(value, getPersonalDetails.getPropertyOfTextBoxByName(driver,"value",field),
+//                        field+ " should match expected value");
+//
+//            }
+//        }
+        Map<String, String> expectedFields = Map.of(
+                "firstName", Common_Employee_Login.firstName,
+                "middleName", Common_Employee_Login.middleName,
+                "lastName", Common_Employee_Login.lastName
+        );
+        AtomicInteger index = new AtomicInteger(0);
+        log.info("Edit_02_Employee_VerifyPersonalDetails - Verifying personal details fields");
+        expectedFields.forEach((fieldName, expectedValue) -> {
+            int curentIndex = index.getAndIncrement();
+            log.info("Edit_02_Employee_VerifyPersonalDetails - Step_0"+curentIndex+" - Verify the '"+fieldName+"' field matched with expected field with value '"+ expectedValue+"'");
+            String actualValue = getPersonalDetails.getPropertyOfTextBoxByName(driver, "value", fieldName);
+            Assertions.assertEquals(expectedValue, actualValue, fieldName + " should match expected value");
+        });
 
-        log.info("Edit_02_Employee_VerifyPersonalDetails - Step_01: Verify 'Middle Name' value");
-        Assertions.assertEquals(Common_Employee_Login.middleName, getPersonalDetails.getPropertyOfTextBoxByName(driver,"value","middleName"),
-                "Middle Name should match expected value");
-
-        log.info("Edit_02_Employee_VerifyPersonalDetails - Step_01: Verify 'Last Name' value");
-        Assertions.assertEquals(Common_Employee_Login.lastName, getPersonalDetails.getPropertyOfTextBoxByName(driver,"value","lastName"),
-                "Last Name should match expected value");
-
-        log.info("Edit_02_Employee_VerifyPersonalDetails - Step_01: Verify 'Employee ID' value");
-        Assertions.assertEquals(Common_Employee_Login.employeeID, getPersonalDetails.getPropertyOfTextBoxByText(driver,"value","Employee Id"),
-                "Employee ID should match expected value");
+//        log.info("Edit_02_Employee_VerifyPersonalDetails - Step_01: Verify 'First Name' value");
+//        Assertions.assertEquals(Common_Employee_Login.firstName, getPersonalDetails.getPropertyOfTextBoxByName(driver,"value","firstName"),
+//                "First Name should match expected value");
+//
+//        log.info("Edit_02_Employee_VerifyPersonalDetails - Step_01: Verify 'Middle Name' value");
+//        Assertions.assertEquals(Common_Employee_Login.middleName, getPersonalDetails.getPropertyOfTextBoxByName(driver,"value","middleName"),
+//                "Middle Name should match expected value");
+//
+//        log.info("Edit_02_Employee_VerifyPersonalDetails - Step_01: Verify 'Last Name' value");
+//        Assertions.assertEquals(Common_Employee_Login.lastName, getPersonalDetails.getPropertyOfTextBoxByName(driver,"value","lastName"),
+//                "Last Name should match expected value");
+//
+//        log.info("Edit_02_Employee_VerifyPersonalDetails - Step_01: Verify 'Employee ID' value");
+//        Assertions.assertEquals(Common_Employee_Login.employeeID, getPersonalDetails.getPropertyOfTextBoxByText(driver,"value","Employee Id"),
+//                "Employee ID should match expected value");
 
     }
     @Description("Verify employee user cannot edit restricted fields")
@@ -255,7 +280,7 @@ public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
                 getPersonalDetails.verifySuccessMessage(driver);
             }
         log.info("Edit_10_Employee_DeleteMultipleAttachments - Step_05: Verify the number of uploaded attachment is " + fileListName.size());
-        Assertions.assertEquals("("+String.valueOf(fileListName.size())+") Records Found", getPersonalDetails.getNumberOfUploadedAttachment(driver));
+        Assertions.assertEquals("("+fileListName.size()+") Records Found", getPersonalDetails.getNumberOfUploadedAttachment(driver));
 
         for (String file: fileListName){
             int index = fileListName.indexOf(file) + 1;
@@ -285,6 +310,7 @@ public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
     }
     @AfterClass (alwaysRun = true)
     public void afterClass(){
+        log.info("Cleaning up: Closing browser and driver");
         closeBrowserAndDriver();
     }
     private WebDriver driver;

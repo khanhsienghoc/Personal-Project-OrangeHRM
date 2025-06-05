@@ -24,6 +24,15 @@ public class PersonalDetailsPageObject extends BasePage {
         waitElementVisible(driver, MyInfoPageUI.NATIONALITY_CHOSEN_VALUE, text);
         return getElementText(driver, MyInfoPageUI.NATIONALITY_CHOSEN_VALUE, text);
     }
+    /**
+     * Fills out the personal details form with the provided data.
+     * This method populates all personal information fields including:
+     * first name, middle name, last name, other ID, license expiry date,
+     * nationality, marital status, and gender.
+     *
+     * @param data The PersonalDetailsData object containing all personal information to be filled.
+     */
+    @Step("Fill personal details form with data: First Name '{data.firstName}', Middle Name '{data.middleName}', Last Name '{data.lastName}', Other ID '{data.otherID}', License Expiry Date '{data.licenseExpiryDate}', Nationality '{data.nationality}', Marital Status '{data.maritalStatus}', Gender '{data.gender}'")
     public void fillPersonalDetailsForm(PersonalDetailsData data) {
         log.info("Input First Name with value '{}'", data.getFirstName());
         inputToTextBoxByName(driver, "firstName", data.getFirstName());
@@ -49,6 +58,16 @@ public class PersonalDetailsPageObject extends BasePage {
         log.info("Choose Gender with value '{}'", data.getGender());
         clickToRadioButtonByText(driver, data.getGender());
     }
+    /**
+     * Verifies that all personal details displayed on the form match the expected data.
+     * This method validates all personal information fields including:
+     * first name, middle name, last name, other ID, license expiry date,
+     * nationality, and gender by comparing actual values with expected values.
+     *
+     * @param data The PersonalDetailsData object containing expected values for verification.
+     * @throws AssertionError if any of the actual values don't match the expected values.
+     */
+    @Step("Verify personal details form with expected data: First Name '{data.firstName}', Middle Name '{data.middleName}', Last Name '{data.lastName}', Other ID '{data.otherID}', License Expiry Date '{data.licenseExpiryDate}', Nationality '{data.nationality}', Gender '{data.gender}'")
     public void verifyPersonalDetails(PersonalDetailsData data){
         log.info("Verify the First Name value is '{}'", data.getFirstName());
         Assertions.assertEquals( data.getFirstName(),getPropertyOfTextBoxByName(driver, "value", "firstName"));

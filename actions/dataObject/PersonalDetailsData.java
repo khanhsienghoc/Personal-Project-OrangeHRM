@@ -35,8 +35,6 @@ public class PersonalDetailsData {
         this.lastName = lastName;
     }
 
-    // Getters and Setters
-
     public String getFirstName() {
         return firstName;
     }

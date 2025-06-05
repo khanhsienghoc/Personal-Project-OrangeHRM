@@ -32,64 +32,58 @@ public class Common_Employee_Login extends BaseTest {
         adminPassword = config.getAdminPassword();
         employeeID = fakeData.getEmployeeID();
 
-
-        log.info("Pre-condition - Step_02 - Input username of the admin with value: " + adminUsername);
-        loginPage.inputToTextBoxByText(driver, "Username", adminUsername);
-
-        log.info("Pre-condition - Step_03 - Input password of the admin with value: " + adminPassword);
-        loginPage.inputToTextBoxByText(driver, "Password", adminPassword);
-
-        log.info("Pre-condition - Step_04 - Click Login button");
-        loginPage.clickToLoginButton();
+        log.info("Pre-condition - Step_01 - Login with Admin data");
+        loginPage.login(adminUsername, adminPassword);
         homePage = PageGeneratorManager.getDashboardPage(driver);
 
-        log.info("Pre-condition - Step_05 - Verify the page title");
+        log.info("Pre-condition - Step_02 - Verify the page title");
         Assertions.assertEquals("OrangeHRM", loginPage.getPageTitle(driver));
 
-        log.info("Pre-condition - Step_06 - Click the PIM tab");
+        log.info("Pre-condition - Step_03 - Click the PIM tab");
         pimPage = homePage.clickToMenuByText(driver, "PIM");
 
-        log.info("Pre-condition - Step_07 - Click Add button to add new employee");
+        log.info("Pre-condition - Step_04 - Click Add button to add new employee");
         pimPage.clickToButtonByText(driver, "Add");
         getAddEmployeePage= PageGeneratorManager.getAddEmployeePage(driver);
 
-        log.info("Pre-condition - Step_08 - Input Employee Information");
+        log.info("Pre-condition - Step_05 - Input Employee Information");
         getAddEmployeePage.fillEmployeeInformation(firstName,middleName, lastName, employeeID);
 
-        log.info("Pre-condition - Step_09 - Click on the 'Create Login Details' toggle");
+        log.info("Pre-condition - Step_06 - Click on the 'Create Login Details' toggle");
         getAddEmployeePage.checkToCreateLoginDetailsToggle();
 
-        log.info("Pre-condition - Step_09 - Input username, password and confirm password with value '" + username +"' and '" + password +"'");
+        log.info("Pre-condition - Step_07 - Input username, password and confirm password with value '" + username +"' and '" + password +"'");
         getAddEmployeePage.createLoginDetails(username, password, password);
 
-        log.info("Pre-condition - Step_10 - Click Save Button");
+        log.info("Pre-condition - Step_08 - Click Save Button");
         getAddEmployeePage.clickToButtonByText(driver, "Save");
         pimPage = PageGeneratorManager.getPIMPage(driver);
 
-        log.info("Pre-condition - Step_11 - Verify a success pop up show");
-        Assertions.assertTrue(pimPage.isSuccessPopUpShow(driver));
+        log.info("Pre-condition - Step_09 - Verify a success pop up show");
+        pimPage.verifySuccessMessage(driver);
 
-        log.info("Pre-condition - Step_12 - Click on Profile Options and click Logout");
+        log.info("Pre-condition - Step_10 - Click on Profile Options and click Logout");
         pimPage.clickOnProfileDropdown(driver);
         pimPage.clickOnProfileOptionByText(driver, "Logout");
         loginPage = PageGeneratorManager.getLoginPage(driver);
 
-        log.info("Pre-condition - Step_13 - Login with username '" + username +"' and password '" + password +"' and click Login button");
+        log.info("Pre-condition - Step_11 - Login with Employee data");
         loginPage.login(username, password);
         homePage = PageGeneratorManager.getDashboardPage(driver);
 
-        log.info("Pre-condition - Step_14 - Verify Page Title");
+        log.info("Pre-condition - Step_12 - Verify Page Title");
         Assertions.assertEquals("OrangeHRM", homePage.getPageTitle(driver));
 
-        log.info("Pre-condition - Step_15 - Click Profile Option");
+        log.info("Pre-condition - Step_13 - Click Profile Option");
         pimPage.clickOnProfileDropdown(driver);
 
-        log.info("Pre-condition - Step_16 - Click Logout");
+        log.info("Pre-condition - Step_14 - Click Logout");
         pimPage.clickOnProfileOptionByText(driver, "Logout");
         closeBrowserAndDriver();
     }
     @AfterTest(alwaysRun = true)
     public void afterTest(){
+        log.info("Cleaning up: Closing browser and driver");
         closeBrowserAndDriver();
     }
     private WebDriver driver;
