@@ -14,6 +14,8 @@ import pageObject.LoginPageObject;
 import pageObject.PageGeneratorManager;
 import pageObject.ResetPasswordPageObject;
 import reportConfigs.AllureTestListener;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Listeners({AllureTestNg.class, AllureTestListener.class})
 public class User_02_Admin_ForgotPassword extends BaseTest {
@@ -72,9 +74,18 @@ public class User_02_Admin_ForgotPassword extends BaseTest {
         Assertions.assertEquals(SUCCESS_TITLE , resetPasswordPage.getTitleOfResetPassword(), "Success page should display correct title");
 
         log.info("Login_03_ForgotPasswordLink - Step 06 - Verify the body text when reset password link sent to email successfully");
-        Assertions.assertEquals(SUCCESS_EMAIL_TEXT , resetPasswordPage.getBodyTextOfResetPassword("A reset password"), "Success page should confirm email was sent");
-        Assertions.assertEquals(FOLLOW_LINK_TEXT , resetPasswordPage.getBodyTextOfResetPassword("select a new password."),"Success page should provide link follow instruction");
-        Assertions.assertEquals(CONTACT_ADMIN_TEXT , resetPasswordPage.getBodyTextOfResetPassword("If the email does not arrive"),"Success page should provide admin contact instruction");
+        Map<String, String> messages = Map.of(
+                SUCCESS_EMAIL_TEXT, "A reset password",
+                FOLLOW_LINK_TEXT , "select a new password.",
+                CONTACT_ADMIN_TEXT, "If the email does not arrive"
+        );
+        AtomicInteger index = new AtomicInteger(0);
+        log.info("AddNewEmployee_02_VerifyPlaceHolders -Verify the placeholder of textboxes");
+        messages.forEach((message, textOfField) -> {
+            int curentIndex = index.getAndIncrement() + 1;
+            log.info("Login_03_ForgotPasswordLink - Step 06.{} - Verify the message '{}' show",curentIndex,message);
+            Assertions.assertEquals(message , resetPasswordPage.getBodyTextOfResetPassword(textOfField),"Success page should show");
+        });
     }
     @AfterTest(alwaysRun = true)
     public void afterTest(){

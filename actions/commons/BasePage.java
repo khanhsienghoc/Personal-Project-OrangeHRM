@@ -551,6 +551,7 @@ public class BasePage {
      * Verify whether the Success Message show
      * @param driver The WebDriver instance in use.
      */
+    @Step("Verify the success message pop up show")
     public void verifySuccessMessage(WebDriver driver){
         Assertions.assertTrue(isSuccessPopUpShow(driver),"Success popup should be displayed");
     }
