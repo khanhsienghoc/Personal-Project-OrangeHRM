@@ -81,9 +81,9 @@ public class User_01_Employee_Login extends BaseTest {
                 "Performance", "Dashboard", "Directory", "Claim", "Buzz"
         );
         for (String tab: EXPECTED_MENU_TABS){
-            log.info("Login_05_Employee_VerifyTabDisplayed - Step_01 - Verify the {} tab displays", tab);
+            int index = EXPECTED_MENU_TABS.indexOf(tab) + 1;
+            log.info("Login_05_Employee_VerifyTabDisplayed - Step_"+index+" - Verify the {} tab displays", tab);
             Assertions.assertTrue(homePage.isMenuTabDislaysByText(driver,tab));
-
         }
     }
     @Description("Verify that some left tab undisplayed when login as Employee role")
@@ -94,13 +94,14 @@ public class User_01_Employee_Login extends BaseTest {
                 "PIM", "Recruitment", "Maintenance"
         );
         for (String tab : EXPECTED_MENU_TABS){
-            log.info("Login_06_Employee_VerifyTabUndisplayed - Step_01 - Verify the '{}' tab undisplayed", tab);
+            int index = EXPECTED_MENU_TABS.indexOf(tab) + 1;
+            log.info("Login_06_Employee_VerifyTabUndisplayed - Step_"+index+" - Verify the '{}' tab undisplayed", tab);
             Assertions.assertTrue(homePage.getListMenuTabSize(driver,tab) < 1);
         }
-
     }
     @AfterClass(alwaysRun = true)
     public void afterClass(){
+        log.info("Cleaning up: Closing browser and driver");
         closeBrowserAndDriver();
     }
     private WebDriver driver;

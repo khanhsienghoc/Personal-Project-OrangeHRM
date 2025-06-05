@@ -101,8 +101,8 @@ public class User_01_Admin_Login extends BaseTest {
                     String.format("'%s' tab should be visible", tabName));
         }
     }
-    @AfterClass(alwaysRun = true)
-    public void afterClass(){
+    @AfterTest(alwaysRun = true)
+    public void afterTest(){
         log.info("Cleaning up: Closing browser and driver");
         closeBrowserAndDriver();
     }

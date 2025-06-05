@@ -56,7 +56,7 @@ public class DataUltilities {
         int month = cal.get(Calendar.MONTH) + 1;
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
-        return String.format("%04d-%02d-%02d", year, day, month);
+        return String.format("%02d-%02d-%04d", day, month, year);
     }
     public String getMaritalStatus(){
         return faker.options().option("Single", "Married", "Other");
@@ -92,5 +92,4 @@ public class DataUltilities {
         int ID = faker.number().numberBetween(10000, 99999);
         return String.valueOf(ID);
     }
-
 }

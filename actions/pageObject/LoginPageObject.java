@@ -57,8 +57,13 @@ public class LoginPageObject extends BasePage {
      */
     @Step("Login with username '{0}' and password '{1}'")
     public void login(String username, String password){
+        log.info("Input Username with value '{}'", username);
         inputToTextBoxByText(driver, "Username", username);
+
+        log.info("Input Password with value '{}'", password);
         inputToTextBoxByText(driver, "Password", password);
+
+        log.info("Click Login Button");
         clickToLoginButton();
     }
 }

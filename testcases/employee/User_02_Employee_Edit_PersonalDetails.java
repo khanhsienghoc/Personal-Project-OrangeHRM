@@ -8,7 +8,6 @@ import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Description;
 import io.qameta.allure.testng.AllureTestNg;
 import org.junit.jupiter.api.Assertions;
-import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.*;
 import pageObject.*;
@@ -17,14 +16,15 @@ import ultilities.DataUltilities;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Listeners({AllureTestNg.class, AllureTestListener.class})
 public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
     @Parameters({"browser","environment"})
     @BeforeClass
     public void beforeClass(String browserName, String environmentName){
-        log.info("Pre-conditon: Open Browser "+ browserName + " and navigate to the URL in " + environmentName + " environment");
+        log.info("Pre-condition: Open Browser "+ browserName + " and navigate to the URL in " + environmentName + " environment");
         log.info("Pre-condition: Open Browser "+ browserName + " and navigate to the URL");
         driver = getBrowserDriver(browserName, environmentName);
 
@@ -39,27 +39,9 @@ public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
         loginPage.clickToLoginButton();
         homePage = PageGeneratorManager.getDashboardPage(driver);
         initializeTestData();
-//
-//        fakeData = DataUltilities.getData();
-//        updatedFirstName = fakeData.getFirstName();
-//        updatedMiddleName = fakeData.getMiddleName();
-//        updatedLastName = fakeData.getLastName();
-//        otherID = fakeData.getOtherID();
-//        licenseExpiryDate = fakeData.getDate();
-//        nationality = fakeData.getNationality();
-//        maritalStatus = fakeData.getMaritalStatus();
-//        gender = fakeData.getGender();
-//        bloodType = fakeData.getBloodType();
-//        comment1 = fakeData.getComment();
-//        comment2 = fakeData.getComment();
-//        currentDate = fakeData.getCurrentDate();
-//        updatedComment = fakeData.getComment();
-//        nationality = fakeData.getNationality();
     }
     private void initializeTestData() {
         DataUltilities fakeData = DataUltilities.getData();
-
-        // Option 1: Using constructor
         testData = new PersonalDetailsData(
                 fakeData.getFirstName(),
                 fakeData.getMiddleName(),
@@ -98,21 +80,46 @@ public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     @Test
     public void Edit_02_Employee_VerifyPersonalDetails(){
-        log.info("Edit_02_Employee_VerifyPersonalDetails - Step_01: Verify 'First Name' value");
-        Assertions.assertEquals(Common_Employee_Login.firstName, getPersonalDetails.getPropertyOfTextBoxByName(driver,"value","firstName"),
-                "First Name should match expected value");
+//        List<String> FIELDS = Arrays.asList("firstName", "middleName","lastName", "Employee Id");
+//        List<String> EXPECTED_VALUE = Arrays.asList(Common_Employee_Login.firstName, Common_Employee_Login.middleName, Common_Employee_Login.lastName);
+//
+//        for(String field : FIELDS){
+//            for(String value : EXPECTED_VALUE){
+//                log.info("Edit_02_Employee_VerifyPersonalDetails - Step_01: Verify '{}' value", field);
+//                Assertions.assertEquals(value, getPersonalDetails.getPropertyOfTextBoxByName(driver,"value",field),
+//                        field+ " should match expected value");
+//
+//            }
+//        }
+        Map<String, String> expectedFields = Map.of(
+                "firstName", Common_Employee_Login.firstName,
+                "middleName", Common_Employee_Login.middleName,
+                "lastName", Common_Employee_Login.lastName
+        );
+        AtomicInteger index = new AtomicInteger(0);
+        log.info("Edit_02_Employee_VerifyPersonalDetails - Verifying personal details fields");
+        expectedFields.forEach((fieldName, expectedValue) -> {
+            int curentIndex = index.getAndIncrement();
+            log.info("Edit_02_Employee_VerifyPersonalDetails - Step_0"+curentIndex+" - Verify the '"+fieldName+"' field matched with expected field with value '"+ expectedValue+"'");
+            String actualValue = getPersonalDetails.getPropertyOfTextBoxByName(driver, "value", fieldName);
+            Assertions.assertEquals(expectedValue, actualValue, fieldName + " should match expected value");
+        });
 
-        log.info("Edit_02_Employee_VerifyPersonalDetails - Step_01: Verify 'Middle Name' value");
-        Assertions.assertEquals(Common_Employee_Login.middleName, getPersonalDetails.getPropertyOfTextBoxByName(driver,"value","middleName"),
-                "Middle Name should match expected value");
-
-        log.info("Edit_02_Employee_VerifyPersonalDetails - Step_01: Verify 'Last Name' value");
-        Assertions.assertEquals(Common_Employee_Login.lastName, getPersonalDetails.getPropertyOfTextBoxByName(driver,"value","lastName"),
-                "Last Name should match expected value");
-
-        log.info("Edit_02_Employee_VerifyPersonalDetails - Step_01: Verify 'Employee ID' value");
-        Assertions.assertEquals(Common_Employee_Login.employeeID, getPersonalDetails.getPropertyOfTextBoxByText(driver,"value","Employee Id"),
-                "Employee ID should match expected value");
+//        log.info("Edit_02_Employee_VerifyPersonalDetails - Step_01: Verify 'First Name' value");
+//        Assertions.assertEquals(Common_Employee_Login.firstName, getPersonalDetails.getPropertyOfTextBoxByName(driver,"value","firstName"),
+//                "First Name should match expected value");
+//
+//        log.info("Edit_02_Employee_VerifyPersonalDetails - Step_01: Verify 'Middle Name' value");
+//        Assertions.assertEquals(Common_Employee_Login.middleName, getPersonalDetails.getPropertyOfTextBoxByName(driver,"value","middleName"),
+//                "Middle Name should match expected value");
+//
+//        log.info("Edit_02_Employee_VerifyPersonalDetails - Step_01: Verify 'Last Name' value");
+//        Assertions.assertEquals(Common_Employee_Login.lastName, getPersonalDetails.getPropertyOfTextBoxByName(driver,"value","lastName"),
+//                "Last Name should match expected value");
+//
+//        log.info("Edit_02_Employee_VerifyPersonalDetails - Step_01: Verify 'Employee ID' value");
+//        Assertions.assertEquals(Common_Employee_Login.employeeID, getPersonalDetails.getPropertyOfTextBoxByText(driver,"value","Employee Id"),
+//                "Employee ID should match expected value");
 
     }
     @Description("Verify employee user cannot edit restricted fields")
@@ -135,59 +142,17 @@ public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     @Test
     public void Edit_04_Employee_EditPersonalDetail(){
-//        log.info("Edit_04_Employee_EditPersonalDetail - Step_01: Input 'First Name' field with value: "+updatedFirstName);
-//         getPersonalDetails.inputToTextBoxByName(driver,"firstName",updatedFirstName);
-//
-//        log.info("Edit_04_Employee_EditPersonalDetail - Step_02: Input 'Middle Name' field with value: "+updatedMiddleName);
-//        getPersonalDetails.inputToTextBoxByName(driver,"middleName",updatedMiddleName);
-//
-//        log.info("Edit_04_Employee_EditPersonalDetail - Step_03: Input 'Last Name' field with value: "+updatedLastName);
-//        getPersonalDetails.inputToTextBoxByName(driver,"lastName",updatedLastName);
-//
-//        log.info("Edit_04_Employee_EditPersonalDetail - Step_04: Input 'Other id' field with value: "+ otherID);
-//        getPersonalDetails.inputToTextBoxByText(driver,"Other Id", otherID);
-//
-//        log.info("Edit_04_Employee_EditPersonalDetail - Step_05: Input 'License Expiry Date' field with value: "+ licenseExpiryDate);
-//        getPersonalDetails.inputToTextBoxByText(driver,"License Expiry Date", licenseExpiryDate);
-//
-//        log.info("Edit_04_Employee_EditPersonalDetail - Step_06: Choose 'Nationality' dropdown with value: "+ nationality);
-//        getPersonalDetails.selectValueInDropdownByText(driver, "Nationality",nationality);
-//
-//        log.info("Edit_04_Employee_EditPersonalDetail - Step_07: Choose 'Marital Status' dropdown with value: "+ maritalStatus);
-//        getPersonalDetails.selectValueInDropdownByText(driver, "Marital Status",maritalStatus);
-//
-//        log.info("Edit_04_Employee_EditPersonalDetail - Step_08: Choose 'Gender' radio button with value: "+ gender);
-//        getPersonalDetails.clickToRadioButtonByText(driver, gender);
-        log.info("Filling personal details form with new data");
+        log.info("Edit_04_Employee_EditPersonalDetail - Step_01: Filling personal details form with new data");
         getPersonalDetails.fillPersonalDetailsForm(testData);
 
-        log.info("Edit_04_Employee_EditPersonalDetail - Step_09: Click Save Button");
+        log.info("Edit_04_Employee_EditPersonalDetail - Step_02: Click Save Button");
         getPersonalDetails.clickOnButtonByHeaderAndByButtonText(driver, "Personal Details", "Save");
 
-        log.info("Edit_04_Employee_EditPersonalDetail - Step_10: Verify a success pop up show");
-        Assertions.assertTrue(getPersonalDetails.isSuccessPopUpShow(driver),
-                "Success popup should be displayed after saving");
+        log.info("Edit_04_Employee_EditPersonalDetail - Step_03: Verify a success pop up show");
+        getPersonalDetails.verifySuccessMessage(driver);
 
-        log.info("Edit_04_Employee_EditPersonalDetail - Step_11: Verify the First Name textbox show the latest value: " + updatedFirstName);
-        Assertions.assertEquals(updatedFirstName,getPersonalDetails.getPropertyOfTextBoxByName(driver, "value", "firstName"));
-
-        log.info("Edit_04_Employee_EditPersonalDetail - Step_12: Verify the Middle Name textbox show the latest value: " + updatedMiddleName);
-        Assertions.assertEquals(updatedMiddleName,getPersonalDetails.getPropertyOfTextBoxByName(driver, "value", "middleName"));
-
-        log.info("Edit_04_Employee_EditPersonalDetail - Step_13: Verify the Last Name textbox show the latest value: " + updatedLastName);
-        Assertions.assertEquals(updatedLastName,getPersonalDetails.getPropertyOfTextBoxByName(driver, "value", "lastName"));
-
-        log.info("Edit_04_Employee_EditPersonalDetail - Step_14: Verify the Other ID textbox show the latest value: " + otherID);
-        Assertions.assertEquals(otherID,getPersonalDetails.getPropertyOfTextBoxByText(driver, "value", "Other Id"));
-
-        log.info("Edit_04_Employee_EditPersonalDetail - Step_15: Verify the License Expiry Date textbox show the latest value: " + licenseExpiryDate);
-        Assertions.assertEquals(licenseExpiryDate,getPersonalDetails.getPropertyOfTextBoxByText(driver, "value", "License Expiry Date"));
-
-        log.info("Edit_04_Employee_EditPersonalDetail - Step_16: Verify the Nationality dropdown show the latest value: " + nationality);
-        Assertions.assertEquals(nationality,getPersonalDetails.getChosenValueFromNationalityDropdownByText("Nationality"));
-
-        log.info("Edit_04_Employee_EditPersonalDetail - Step_17: Verify the Gender radio button checked the latest value: " + gender);
-        Assertions.assertTrue(getPersonalDetails.isRadioButtonSelectedByText(driver, gender));
+        log.info("Edit_04_Employee_EditPersonalDetail - Step_04: Verify Personal Data");
+        getPersonalDetails.verifyPersonalDetails(testData);
     }
     @Description("Verify employee user can edit Custom Fields")
     @Severity(SeverityLevel.NORMAL)
@@ -200,7 +165,7 @@ public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
         getPersonalDetails.clickOnButtonByHeaderAndByButtonText(driver, "Custom Fields", "Save");
 
         log.info("Edit_05_Employee_EditCustomDetails - Step_3: Verify a success pop up show");
-        Assertions.assertTrue(getPersonalDetails.isSuccessPopUpShow(driver));
+        getPersonalDetails.verifySuccessMessage(driver);
 
         log.info("Edit_04_Employee_EditPersonalDetail - Step_4: Verify the Blood type dropdown show the latest value: " + testData.getBloodType());
         Assertions.assertEquals(testData.getBloodType(),getPersonalDetails.getChosenValueFromNationalityDropdownByText("Blood Type"));
@@ -233,7 +198,7 @@ public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
         getPersonalDetails.clickOnButtonByHeaderAndByButtonText(driver, "Add Attachment", "Save");
 
         log.info("Edit_07_Employee_AddAttachments - Step_4: Verify a success pop up show");
-        Assertions.assertTrue(getPersonalDetails.isSuccessPopUpShow(driver), "Success popup should be displayed after adding attachment");
+        getPersonalDetails.verifySuccessMessage(driver);
 
         log.info("Edit_07_Employee_AddAttachments - Step_5: Verify the attachment name after uploaded");
         Assertions.assertEquals(fileLessThan1MB, getPersonalDetails.getFileDescriptionByFieldAndByText(driver,"File Name",fileLessThan1MB ));
@@ -264,7 +229,7 @@ public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
         getPersonalDetails.clickOnButtonByHeaderAndByButtonText(driver, "Edit Attachment", "Save");
 
         log.info("Edit_08_Employee_EditAttachments - Step_4: Verify a success pop up show");
-        Assertions.assertTrue(getPersonalDetails.isSuccessPopUpShow(driver));
+        getPersonalDetails.verifySuccessMessage(driver);
 
         log.info("Edit_08_Employee_EditAttachments - Step_5: Verify the attachment name after uploaded");
         Assertions.assertEquals(txtFile, getPersonalDetails.getFileDescriptionByFieldAndByText(driver,"File Name",txtFile ));
@@ -289,7 +254,7 @@ public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
         getPersonalDetails.clickCancelOrDeleteInConfirmDeletePopup(driver,"Yes, Delete");
 
         log.info("Edit_09_Employee_DeleteAnAttachment - Step_4: Verify a success pop up show");
-        Assertions.assertTrue(getPersonalDetails.isSuccessPopUpShow(driver));
+        getPersonalDetails.verifySuccessMessage(driver);
 
         log.info("Edit_09_Employee_DeleteAnAttachment - Step_4: Verify the attachment disappear");
         Assertions.assertTrue(getPersonalDetails.getListAttachmentSizeByFieldAndText(driver,"File Name", txtFile) < 1);
@@ -312,17 +277,15 @@ public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
                 getPersonalDetails.clickOnButtonByHeaderAndByButtonText(driver, "Add Attachment", "Save");
 
                 log.info("Edit_10_Employee_DeleteMultipleAttachments - Step_04." + index + ": Verify a success pop up show");
-                Assertions.assertTrue(getPersonalDetails.isSuccessPopUpShow(driver));
-
+                getPersonalDetails.verifySuccessMessage(driver);
             }
         log.info("Edit_10_Employee_DeleteMultipleAttachments - Step_05: Verify the number of uploaded attachment is " + fileListName.size());
-        Assertions.assertEquals("("+String.valueOf(fileListName.size())+") Records Found", getPersonalDetails.getNumberOfUploadedAttachment(driver));
+        Assertions.assertEquals("("+fileListName.size()+") Records Found", getPersonalDetails.getNumberOfUploadedAttachment(driver));
 
         for (String file: fileListName){
             int index = fileListName.indexOf(file) + 1;
             log.info("Edit_10_Employee_DeleteMultipleAttachments - Step_06."+index+": Check to the checkbox of the file name: " + file);
             getPersonalDetails.checkToTheCheckBoxOfAttachment(driver, file);
-
         }
         log.info("Edit_10_Employee_DeleteMultipleAttachments - Step_07: Verify the Delete Selected show up");
         Assertions.assertTrue(getPersonalDetails.isDeleteSelectedButtonDisplay(driver));
@@ -334,7 +297,7 @@ public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
         getPersonalDetails.clickCancelOrDeleteInConfirmDeletePopup(driver,"Yes, Delete");
 
         log.info("Edit_10_Employee_DeleteMultipleAttachments - Step_10: Verify a success pop up show");
-        Assertions.assertTrue(getPersonalDetails.isSuccessPopUpShow(driver));
+        getPersonalDetails.verifySuccessMessage(driver);
 
         log.info("Edit_10_Employee_DeleteMultipleAttachments - Step_11: Verify the number of uploaded attachment show 'No Records Found'");
         Assertions.assertEquals("No Records Found", getPersonalDetails.getNumberOfUploadedAttachment(driver));
@@ -347,14 +310,14 @@ public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
     }
     @AfterClass (alwaysRun = true)
     public void afterClass(){
+        log.info("Cleaning up: Closing browser and driver");
         closeBrowserAndDriver();
     }
     private WebDriver driver;
     private LoginPageObject loginPage;
     private MyInfoPageObject myInfo;
     private PersonalDetailsPageObject getPersonalDetails;
-    private String updatedFirstName, updatedMiddleName, updatedLastName, nationality, maritalStatus, gender, bloodType, otherID, licenseExpiryDate, comment1, comment2, currentDate, updatedComment;
-    private DataUltilities fakeData;
+    private String comment1, comment2, currentDate, updatedComment;
     private DashboardPageObject homePage;
     private PersonalDetailsData testData;
     String fileMoreThan1MB = "FileMoreThan1MB.pdf";
