@@ -1,6 +1,5 @@
 package admin;
 
-import common.Common_Employee_Login;
 import commons.BaseTest;
 import commons.EnvironmentConfigManager;
 import commons.GlobalConstants;
@@ -217,7 +216,7 @@ public class User_03_Admin_Add_New_Employee extends BaseTest {
         BaseDBHelper.connect();
         log.info("Admin_AddNewEmployee_08_IsEmployeeExist - Step_01 - Verify the employee record exists in database with employee id:" + employeeID);
         boolean isExist = employeeDAo.isEmployeeExist(employeeID);
-        Assertions.assertTrue(isExist, "Employee record does NOT exist in the database!");
+        Assertions.assertTrue(isExist, "Employee record does NOT exist in the database");
     }
     @AfterTest(alwaysRun = true)
     public void afterTest(){

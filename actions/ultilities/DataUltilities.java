@@ -14,7 +14,6 @@ public class DataUltilities {
     private Faker faker;
     private String date;
     private List<String> nationalityList;
-
     public static DataUltilities getData(){
         return new DataUltilities();
     }
@@ -56,7 +55,7 @@ public class DataUltilities {
         int month = cal.get(Calendar.MONTH) + 1;
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
-        return String.format("%02d-%02d-%04d", day, month, year);
+        return String.format("%04d-%02d-%02d", year, day, month);
     }
     public String getMaritalStatus(){
         return faker.options().option("Single", "Married", "Other");
