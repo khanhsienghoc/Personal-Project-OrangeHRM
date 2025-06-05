@@ -7,9 +7,11 @@ import io.qameta.allure.Step;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 
+import java.util.Map;
+
 public class PersonalDetailsPageObject extends BasePage {
     private final WebDriver driver;
-
+    private static PersonalDetailsData data;
     public PersonalDetailsPageObject(WebDriver driver){
         this.driver = driver;
     }
@@ -20,9 +22,9 @@ public class PersonalDetailsPageObject extends BasePage {
      * @return The chosen nationality value displayed in the dropdown.
      */
     @Step("Get the chosen value from Nationality dropdown by text '{0}'")
-    public String getChosenValueFromNationalityDropdownByText(String text){
-        waitElementVisible(driver, MyInfoPageUI.NATIONALITY_CHOSEN_VALUE, text);
-        return getElementText(driver, MyInfoPageUI.NATIONALITY_CHOSEN_VALUE, text);
+    public String getChosenValueFromDropdownByText(String text){
+        waitElementVisible(driver, MyInfoPageUI.DROPDOWN_CHOSEN_VALUE_BY_TEXT, text);
+        return getElementText(driver, MyInfoPageUI.DROPDOWN_CHOSEN_VALUE_BY_TEXT, text);
     }
     /**
      * Fills out the personal details form with the provided data.
@@ -34,27 +36,31 @@ public class PersonalDetailsPageObject extends BasePage {
      */
     @Step("Fill personal details form with data: First Name '{data.firstName}', Middle Name '{data.middleName}', Last Name '{data.lastName}', Other ID '{data.otherID}', License Expiry Date '{data.licenseExpiryDate}', Nationality '{data.nationality}', Marital Status '{data.maritalStatus}', Gender '{data.gender}'")
     public void fillPersonalDetailsForm(PersonalDetailsData data) {
-        log.info("Input First Name with value '{}'", data.getFirstName());
-        inputToTextBoxByName(driver, "firstName", data.getFirstName());
-
-        log.info("Input Middle Name with value '{}'", data.getMiddleName());
-        inputToTextBoxByName(driver, "middleName", data.getMiddleName());
-
-        log.info("Input Last Name with value '{}'", data.getLastName());
-        inputToTextBoxByName(driver, "lastName", data.getLastName());
-
-        log.info("Input Other ID with value '{}'", data.getOtherID());
-        inputToTextBoxByText(driver, "Other Id", data.getOtherID());
-
-        log.info("Input License Expiry Date with value '{}'", data.getLicenseExpiryDate());
-        inputToTextBoxByText(driver, "License Expiry Date", data.getLicenseExpiryDate());
-
-        log.info("Choose Nationality with value '{}'", data.getNationality());
-        selectValueInDropdownByText(driver, "Nationality", data.getNationality());
-
-        log.info("Choose Marital Status with value '{}'", data.getMaritalStatus());
-        selectValueInDropdownByText(driver, "Marital Status", data.getMaritalStatus());
-
+        Map<String, String> textFieldsByName = Map.of(
+                "firstName",data.getFirstName(),
+                "middleName", data.getMiddleName(),
+                "lastName", data.getLastName()
+        );
+        textFieldsByName.forEach((field, value) ->{
+            log.info("Input {} field with value '{}'", field, value);
+            inputToTextBoxByName(driver, field, value);
+        });
+        Map<String, String> textFieldsByText = Map.of(
+                "Other Id",data.getOtherID(),
+                "License Expiry Date", data.getLicenseExpiryDate()
+        );
+        textFieldsByText.forEach((field, value) ->{
+            log.info("Input {} field with value '{}'", field, value);
+            inputToTextBoxByText(driver, field, value);
+        });
+        Map<String, String> dropdowns = Map.of(
+                "Nationality", data.getNationality(),
+                "Marital Status", data.getMaritalStatus()
+        );
+        dropdowns.forEach((field, value) ->{
+            log.info("Choose {} dropdown with value '{}'", field, value);
+            selectValueInDropdownByText(driver, field, value);
+        });
         log.info("Choose Gender with value '{}'", data.getGender());
         clickToRadioButtonByText(driver, data.getGender());
     }
@@ -69,24 +75,31 @@ public class PersonalDetailsPageObject extends BasePage {
      */
     @Step("Verify personal details form with expected data: First Name '{data.firstName}', Middle Name '{data.middleName}', Last Name '{data.lastName}', Other ID '{data.otherID}', License Expiry Date '{data.licenseExpiryDate}', Nationality '{data.nationality}', Gender '{data.gender}'")
     public void verifyPersonalDetails(PersonalDetailsData data){
-        log.info("Verify the First Name value is '{}'", data.getFirstName());
-        Assertions.assertEquals( data.getFirstName(),getPropertyOfTextBoxByName(driver, "value", "firstName"));
-
-        log.info("Verify the Middle Name value is '{}'", data.getMiddleName());
-        Assertions.assertEquals(data.getMiddleName(),getPropertyOfTextBoxByName(driver, "value", "middleName"));
-
-        log.info("Verify the Last Name value is '{}'", data.getLastName());
-        Assertions.assertEquals(data.getLastName(),getPropertyOfTextBoxByName(driver, "value", "lastName"));
-
-        log.info("Verify the Other ID value is '{}'", data.getOtherID());
-        Assertions.assertEquals(data.getOtherID(),getPropertyOfTextBoxByText(driver, "value", "Other Id"));
-
-        log.info("Verify the License Expiry Date value is '{}'", data.getLicenseExpiryDate());
-        Assertions.assertEquals(data.getLicenseExpiryDate(),getPropertyOfTextBoxByText(driver, "value", "License Expiry Date"));
-
-        log.info("Verify the Nationality value is '{}'", data.getNationality());
-        Assertions.assertEquals(data.getNationality(),getChosenValueFromNationalityDropdownByText("Nationality"));
-
+        Map<String, String> textFieldsByName = Map.of(
+                "firstName",data.getFirstName(),
+                "middleName", data.getMiddleName(),
+                "lastName", data.getLastName()
+        );
+        textFieldsByName.forEach((field, value) ->{
+            log.info("Verify the {} value is '{}'", field, value);
+            Assertions.assertEquals(value,getPropertyOfTextBoxByName(driver, "value", field));
+        });
+        Map<String, String> textFieldsByText = Map.of(
+                "Other Id",data.getOtherID(),
+                "License Expiry Date", data.getLicenseExpiryDate()
+        );
+        textFieldsByText.forEach((field, value) ->{
+            log.info("Verify the {} value is '{}'", field, value);
+            Assertions.assertEquals(value,getPropertyOfTextBoxByText(driver, "value", field));
+        });
+        Map<String, String> dropdowns = Map.of(
+                "Nationality", data.getNationality(),
+                "Marital Status", data.getMaritalStatus()
+        );
+        dropdowns.forEach((field, value) ->{
+            log.info("Verify the {} value is '{}'", field, value);
+            Assertions.assertEquals(value,getChosenValueFromDropdownByText(field));
+        });
         log.info("Verify the Gender value is '{}'", data.getGender());
         Assertions.assertTrue(isRadioButtonSelectedByText(driver, data.getGender()), data.getGender());
     }
