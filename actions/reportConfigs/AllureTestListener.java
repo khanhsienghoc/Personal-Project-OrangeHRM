@@ -2,7 +2,6 @@ package reportConfigs;
 
 import commons.BaseTest;
 import commons.EnvironmentList;
-import commons.GlobalConstants;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import org.openqa.selenium.OutputType;
@@ -26,47 +25,28 @@ public class AllureTestListener implements ITestListener {
     public static byte[] saveScreenshotPNG(String testName, WebDriver driver) {
         return (byte[]) ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
     }
-
-
-//    @Override
-//    public void onTestFailure(ITestResult iTestResult) {
-//        Object testClass = iTestResult.getInstance();
-//        WebDriver driver = ((BaseTest) testClass).getDriverInstance();
-//        if (driver != null) {
-//            if (iTestResult != null && iTestResult.getTestContext() != null) {
-//                System.out.println("📸 Capturing screenshot for " + iTestResult.getName());
-//                saveScreenshotPNG(iTestResult.getName(), driver);
-//            }
-//        } else {
-//            System.out.println("🚨 WebDriver is null, skipping screenshot.");
-//        }
-//
-//    }
-@Step("⏭ Skipping DB test due to invalid environment: {env}")
-public static void skipIfNotLocal(EnvironmentList env) {
-    if (env != EnvironmentList.LOCAL) {
-        System.out.println("⚠️ Skipping DB test in ENV: " + env);
-        throw new SkipException("❌ Skipping DB test in ENV = " + env);
+    @Step("⏭ Skipping DB test due to invalid environment: {env}")
+    public static void skipIfNotLocal(EnvironmentList env) {
+        if (env != EnvironmentList.LOCAL) {
+            System.out.println("⚠️ Skipping DB test in ENV: " + env);
+            throw new SkipException("❌ Skipping DB test in ENV = " + env);
+        }
     }
-}
-
-private static void logSkipReasonToConsole() {
-        System.out.println("⚠️ Test skipped due to either demo environment or databaseTesting=false");
+    private static void logSkipReasonToConsole() {
+            System.out.println("⚠️ Test skipped due to either demo environment or databaseTesting=false");
+        }
+    @Override
+    public void onTestFailure(ITestResult result) {
+        Object testClass = result.getInstance();
+        WebDriver driver = ((BaseTest) testClass).getDriverInstance();
+        if (driver != null) {
+            byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+            Allure.getLifecycle().addAttachment("Screenshot on failure", "image/png", "png", screenshot);
+            System.out.println("✅ Screenshot attached via Allure lifecycle API");
+        } else {
+            System.out.println("🚨 WebDriver is null, skipping screenshot.");
+        }
     }
-@Override
-public void onTestFailure(ITestResult result) {
-    Object testClass = result.getInstance();
-    WebDriver driver = ((BaseTest) testClass).getDriverInstance();
-    if (driver != null) {
-        byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-
-        // Add screenshot manually to current test
-        Allure.getLifecycle().addAttachment("Screenshot on failure", "image/png", "png", screenshot);
-        System.out.println("✅ Screenshot attached via Allure lifecycle API");
-    } else {
-        System.out.println("🚨 WebDriver is null, skipping screenshot.");
-    }
-}
 
     @Override
     public void onStart(ITestContext iTestContext) {

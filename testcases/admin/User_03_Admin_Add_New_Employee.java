@@ -19,6 +19,8 @@ import ultilities.DataUltilities;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static commons.TestGuard.skipIfDBDisabled;
 
@@ -81,42 +83,37 @@ public class User_03_Admin_Add_New_Employee extends BaseTest {
         log.info("AddNewEmployee_01_EmptyFields - Step_07 - Verify the error message in the Confirm Password field");
         Assertions.assertEquals("Passwords do not match", getAddEmployeePage.getErrorMessageByName(driver, "Confirm Password"));
     }
-    @Description("Verify First Name, Middle Name and Last Name fields are empty")
+    @Description("Verify placeholder First Name, Middle Name and Last Name fields")
     @Severity(SeverityLevel.NORMAL)
     @Test
     public void Admin_AddNewEmployee_02_VerifyPlaceHolders() {
-        log.info("AddNewEmployee_02_VerifyPlaceHolders - Step_01 - Verify the placeholder of the First Name textbox is 'First Name'");
-        Assertions.assertEquals("First Name", getAddEmployeePage.getPropertyOfTextBoxByName(driver, "placeholder","firstName"));
-
-        log.info("AddNewEmployee_02_VerifyPlaceHolders - Step_02 - Verify the placeholder of the Middle Name textbox is 'Middle Name'");
-        Assertions.assertEquals("Middle Name", getAddEmployeePage.getPropertyOfTextBoxByName(driver, "placeholder","middleName"));
-
-        log.info("AddNewEmployee_02_VerifyPlaceHolders - Step_03 - Verify the placeholder of the Last Name textbox is 'Last Name'");
-        Assertions.assertEquals("Last Name", getAddEmployeePage.getPropertyOfTextBoxByName(driver, "placeholder","lastName"));
+        Map<String, String> expectedFields = Map.of(
+                "firstName", "First Name",
+                "middleName","Middle Name",
+                "lastName", "Last Name"
+        );
+        AtomicInteger index = new AtomicInteger(0);
+        log.info("AddNewEmployee_02_VerifyPlaceHolders -Verify the placeholder of textboxes");
+        expectedFields.forEach((fieldName, expectedValue) -> {
+            int curentIndex = index.getAndIncrement() + 1;
+            log.info("Edit_02_Employee_VerifyPersonalDetails - Step_0"+curentIndex+" - Verify the '"+expectedValue+"' field matched with the placeholder with value '"+ expectedValue+"'");
+            Assertions.assertEquals(expectedValue, getAddEmployeePage.getPropertyOfTextBoxByName(driver, "placeholder",fieldName));
+        });
     }
     @Description("verify input the unmatched password in Confirm Password field")
     @Severity(SeverityLevel.CRITICAL)
     @Test
     public void Admin_AddNewEmployee_03_NotMatchConfirmPassword() {
-        log.info("Admin_AddNewEmployee_03_NotMatchConfirmPassword - Step_01 - Input 'First Name' field with value: " + firstName);
-        getAddEmployeePage.inputEmployeeInformationByName("firstName", firstName);
+        log.info("Admin_AddNewEmployee_03_NotMatchConfirmPassword - Step_01 - Input Employee Ìnformation");
+        getAddEmployeePage.fillEmployeeInformation(firstName, middleName, lastName, employeeID);
 
-        log.info("Admin_AddNewEmployee_03_NotMatchConfirmPassword - Step_02 - Input 'Middle Name' field with value: " + middleName);
-        getAddEmployeePage.inputEmployeeInformationByName("middleName", middleName);
-
-        log.info("Admin_AddNewEmployee_03_NotMatchConfirmPassword - Step_03 - Input 'Last Name' field with value: " + lastName);
-        getAddEmployeePage.inputEmployeeInformationByName("lastName", lastName);
-
-        log.info("Admin_AddNewEmployee_03_NotMatchConfirmPassword - Step_04 - Input 'Employee ID' field with value: " + employeeID);
-        getAddEmployeePage.inputToTextBoxByText(driver, "Employee Id", employeeID);
-
-        log.info("Admin_AddNewEmployee_03_NotMatchConfirmPassword - Step_05 - Input username with value '" + username + "', password with value '" + password + "' and confirm password with invalid value '"+ invalidPassword + "'");
+        log.info("Admin_AddNewEmployee_03_NotMatchConfirmPassword - Step_02 - Input username with value '" + username + "', password with value '" + password + "' and confirm password with invalid value '"+ invalidPassword + "'");
         getAddEmployeePage.createLoginDetails(username, password, invalidPassword);
 
-        log.info("Admin_AddNewEmployee_03_NotMatchConfirmPassword - Step_06 - Click Save button");
+        log.info("Admin_AddNewEmployee_03_NotMatchConfirmPassword - Step_03 - Click Save button");
         getAddEmployeePage.clickToButtonByText(driver, "Save");
 
-        log.info("Admin_AddNewEmployee_03_NotMatchConfirmPassword - Step_07 - Verify the error message in the Confirm Password field");
+        log.info("Admin_AddNewEmployee_03_NotMatchConfirmPassword - Step_04 - Verify the error message in the Confirm Password field");
         Assertions.assertEquals("Passwords do not match", loginPage.getErrorMessageByName(driver, "Confirm Password"));
     }
     @Description("verify upload invalid files in the Employee avatar")
@@ -175,47 +172,40 @@ public class User_03_Admin_Add_New_Employee extends BaseTest {
         pimPage.clickToButtonByText(driver, "Add");
         getAddEmployeePage= PageGeneratorManager.getAddEmployeePage(driver);
 
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_03 - Input First Name with value: " + firstName);
-        getAddEmployeePage.inputEmployeeInformationByName("firstName", firstName);
+        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_03 - Input Employee Information include First Name, Middle Name, Last Name and Employee ID");
+        getAddEmployeePage.fillEmployeeInformation(firstName, middleName, lastName, employeeID);
 
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_04 - Input Middle Name with value: " + middleName);
-        getAddEmployeePage.inputEmployeeInformationByName("middleName", middleName);
-
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_05 - Input Last Name with value: " + lastName);
-        getAddEmployeePage.inputEmployeeInformationByName("lastName", lastName);
-
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_06 - Input Employee ID with value: " + employeeID);
-        getAddEmployeePage.inputToTextBoxByText(driver, "Employee Id", employeeID);
-
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_07 - Click 'Create Login Details' toggle");
+        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_04 - Click 'Create Login Details' toggle");
         getAddEmployeePage.checkToCreateLoginDetailsToggle();
 
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_08 - Input username with value '{}', password and confirm password with value '{}'", username, password);
+        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_05 - Input username with value '{}', password and confirm password with value '{}'", username, password);
         getAddEmployeePage.createLoginDetails(username, password, password);
 
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_9 - Upload an employee avatar");
+        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_06 - Upload an employee avatar");
         getAddEmployeePage.uploadEmployeeAvatar(GlobalConstants.UPLOAD_FILE + gifFile);
 
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_10 - Verify the employee avatar");
+        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_07 - Verify the employee avatar");
         Assertions.assertTrue(getAddEmployeePage.isEmployeeImageUploaded());
 
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_11 - Click Save button");
+        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_08 - Click Save button");
         getAddEmployeePage.clickToButtonByText(driver, "Save");
         getPersonalPage = PageGeneratorManager.getPersonalDetails(driver);
 
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_12 - Verify success message show");
+        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_09 - Verify success message show");
         pimPage.verifySuccessMessage(driver);
 
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_13 - Verify First Name value is: " + firstName);
-        Assertions.assertEquals(firstName, getPersonalPage.getPropertyOfTextBoxByName(driver, "value","firstName"));
+        Map<String, String> expectedFields = Map.of(
+                firstName,"firstName",
+                middleName, "middleName",
+                lastName, "lastName"
+        );
+        AtomicInteger index = new AtomicInteger(1);
+        expectedFields.forEach((expectedField, fieldName) -> {
+            log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_10." + index + " Verify the " + fieldName +" matched the value '"+expectedField + "'" );
+            Assertions.assertEquals(expectedField, getPersonalPage.getPropertyOfTextBoxByName(driver, "value",fieldName));
+        });
 
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_14 - Verify Middle Name value is: " + middleName);
-        Assertions.assertEquals(middleName, getPersonalPage.getPropertyOfTextBoxByName(driver, "value","middleName"));
-
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_15 - Verify Last Name value is: " + lastName);
-        Assertions.assertEquals(lastName, getPersonalPage.getPropertyOfTextBoxByName(driver, "value","lastName"));
-
-        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_16 - Verify Employee ID value is: "+ employeeID);
+        log.info("Admin_AddNewEmployee_07_AddNewEmployeeSuccess - Step_11 - Verify Employee ID value is: "+ employeeID);
         Assertions.assertEquals(String.valueOf(employeeID), getPersonalPage.getPropertyOfTextBoxByText(driver, "value","Employee Id"));
     }
     @Description("Verify the employee data exist on database")
@@ -226,7 +216,7 @@ public class User_03_Admin_Add_New_Employee extends BaseTest {
         BaseDBHelper.connect();
         log.info("Admin_AddNewEmployee_08_IsEmployeeExist - Step_01 - Verify the employee record exists in database with employee id:" + employeeID);
         boolean isExist = employeeDAo.isEmployeeExist(employeeID);
-        Assertions.assertTrue(isExist, "Employee record does NOT exist in the database!");
+        Assertions.assertTrue(isExist, "Employee record does NOT exist in the database");
     }
     @AfterTest(alwaysRun = true)
     public void afterTest(){

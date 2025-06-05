@@ -40,24 +40,6 @@ public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
         homePage = PageGeneratorManager.getDashboardPage(driver);
         initializeTestData();
     }
-    private void initializeTestData() {
-        DataUltilities fakeData = DataUltilities.getData();
-        testData = new PersonalDetailsData(
-                fakeData.getFirstName(),
-                fakeData.getMiddleName(),
-                fakeData.getLastName(),
-                fakeData.getOtherID(),
-                fakeData.getDate(),
-                fakeData.getNationality(),
-                fakeData.getMaritalStatus(),
-                fakeData.getGender(),
-                fakeData.getBloodType()
-        );
-        comment1 = fakeData.getComment();
-        comment2 = fakeData.getComment();
-        currentDate = fakeData.getCurrentDate();
-        updatedComment = fakeData.getComment();
-    }
     @Description("Verify employee user is able to view Personal Details")
     @Severity(SeverityLevel.TRIVIAL)
     @Test
@@ -80,17 +62,6 @@ public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
     @Severity(SeverityLevel.CRITICAL)
     @Test
     public void Edit_02_Employee_VerifyPersonalDetails(){
-//        List<String> FIELDS = Arrays.asList("firstName", "middleName","lastName", "Employee Id");
-//        List<String> EXPECTED_VALUE = Arrays.asList(Common_Employee_Login.firstName, Common_Employee_Login.middleName, Common_Employee_Login.lastName);
-//
-//        for(String field : FIELDS){
-//            for(String value : EXPECTED_VALUE){
-//                log.info("Edit_02_Employee_VerifyPersonalDetails - Step_01: Verify '{}' value", field);
-//                Assertions.assertEquals(value, getPersonalDetails.getPropertyOfTextBoxByName(driver,"value",field),
-//                        field+ " should match expected value");
-//
-//            }
-//        }
         Map<String, String> expectedFields = Map.of(
                 "firstName", Common_Employee_Login.firstName,
                 "middleName", Common_Employee_Login.middleName,
@@ -99,44 +70,23 @@ public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
         AtomicInteger index = new AtomicInteger(0);
         log.info("Edit_02_Employee_VerifyPersonalDetails - Verifying personal details fields");
         expectedFields.forEach((fieldName, expectedValue) -> {
-            int curentIndex = index.getAndIncrement();
-            log.info("Edit_02_Employee_VerifyPersonalDetails - Step_0"+curentIndex+" - Verify the '"+fieldName+"' field matched with expected field with value '"+ expectedValue+"'");
+            int currentIndex = index.getAndIncrement() + 1;
+            log.info("Edit_02_Employee_VerifyPersonalDetails - Step_0"+currentIndex+" - Verify the '"+fieldName+"' field matched with expected field with value '"+ expectedValue+"'");
             String actualValue = getPersonalDetails.getPropertyOfTextBoxByName(driver, "value", fieldName);
             Assertions.assertEquals(expectedValue, actualValue, fieldName + " should match expected value");
         });
-
-//        log.info("Edit_02_Employee_VerifyPersonalDetails - Step_01: Verify 'First Name' value");
-//        Assertions.assertEquals(Common_Employee_Login.firstName, getPersonalDetails.getPropertyOfTextBoxByName(driver,"value","firstName"),
-//                "First Name should match expected value");
-//
-//        log.info("Edit_02_Employee_VerifyPersonalDetails - Step_01: Verify 'Middle Name' value");
-//        Assertions.assertEquals(Common_Employee_Login.middleName, getPersonalDetails.getPropertyOfTextBoxByName(driver,"value","middleName"),
-//                "Middle Name should match expected value");
-//
-//        log.info("Edit_02_Employee_VerifyPersonalDetails - Step_01: Verify 'Last Name' value");
-//        Assertions.assertEquals(Common_Employee_Login.lastName, getPersonalDetails.getPropertyOfTextBoxByName(driver,"value","lastName"),
-//                "Last Name should match expected value");
-//
-//        log.info("Edit_02_Employee_VerifyPersonalDetails - Step_01: Verify 'Employee ID' value");
-//        Assertions.assertEquals(Common_Employee_Login.employeeID, getPersonalDetails.getPropertyOfTextBoxByText(driver,"value","Employee Id"),
-//                "Employee ID should match expected value");
-
     }
     @Description("Verify employee user cannot edit restricted fields")
     @Severity(SeverityLevel.MINOR)
     @Test
     public void Edit_03_Employee_DisabledFields(){
-        log.info("Edit_03_Employee_DisabledFields - Step_01: Verify 'Employee ID' field is disabled");
-        Assertions.assertFalse(getPersonalDetails.isTextboxEnabledByText(driver,"Employee Id"),
-                "Employee ID field should be disabled");
-
-        log.info("Edit_03_Employee_DisabledFields - Step_02: Verify 'Driver's License Number' field is disabled");
-        Assertions.assertFalse(getPersonalDetails.isTextboxEnabledByText(driver,"Driver's License Number"),
-                "Driver's License Number field should be disabled");
-
-        log.info("Edit_03_Employee_DisabledFields - Step_03: Verify 'Date of Birth' field is disabled");
-        Assertions.assertFalse(getPersonalDetails.isTextboxEnabledByText(driver,"Date of Birth"),
-                "Date of Birth field should be disabled");
+        List<String> fields = Arrays.asList("Employee Id","Driver's License Number" ,"Date of Birth");
+        for (String field : fields){
+            int index = fields.indexOf(field) + 1;
+            log.info("Edit_03_Employee_DisabledFields - Step_0"+index+": Verify "+field+" field is disabled");
+            Assertions.assertFalse(getPersonalDetails.isTextboxEnabledByText(driver,field),
+                    field +" field should be disabled");
+        }
     }
     @Description("Verify employee user can edit Personal Details")
     @Severity(SeverityLevel.NORMAL)
@@ -168,7 +118,7 @@ public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
         getPersonalDetails.verifySuccessMessage(driver);
 
         log.info("Edit_04_Employee_EditPersonalDetail - Step_4: Verify the Blood type dropdown show the latest value: " + testData.getBloodType());
-        Assertions.assertEquals(testData.getBloodType(),getPersonalDetails.getChosenValueFromNationalityDropdownByText("Blood Type"));
+        Assertions.assertEquals(testData.getBloodType(),getPersonalDetails.getChosenValueFromDropdownByText("Blood Type"));
     }
     @Description("Verify employee user can edit Custom Fields")
     @Severity(SeverityLevel.NORMAL)
@@ -312,6 +262,24 @@ public class User_02_Employee_Edit_PersonalDetails extends BaseTest {
     public void afterClass(){
         log.info("Cleaning up: Closing browser and driver");
         closeBrowserAndDriver();
+    }
+    private void initializeTestData() {
+        DataUltilities fakeData = DataUltilities.getData();
+        testData = new PersonalDetailsData(
+                fakeData.getFirstName(),
+                fakeData.getMiddleName(),
+                fakeData.getLastName(),
+                fakeData.getOtherID(),
+                fakeData.getDate(),
+                fakeData.getNationality(),
+                fakeData.getMaritalStatus(),
+                fakeData.getGender(),
+                fakeData.getBloodType()
+        );
+        comment1 = fakeData.getComment();
+        comment2 = fakeData.getComment();
+        currentDate = fakeData.getCurrentDate();
+        updatedComment = fakeData.getComment();
     }
     private WebDriver driver;
     private LoginPageObject loginPage;
