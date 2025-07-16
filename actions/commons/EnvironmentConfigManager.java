@@ -2,7 +2,6 @@ package commons;
 
 public class EnvironmentConfigManager {
     private final EnvironmentList env;
-
     public EnvironmentConfigManager(EnvironmentList env) {
         this.env = env;
     }
